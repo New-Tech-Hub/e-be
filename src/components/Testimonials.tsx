@@ -1,0 +1,192 @@
+import { useState, useEffect } from "react";
+import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+
+const Testimonials = () => {
+  const [currentTestimonial, setCurrentTestimonial] = useState(0);
+
+  const testimonials = [
+    {
+      id: 1,
+      name: "Sarah Johnson",
+      role: "Fashion Enthusiast",
+      location: "New York, NY",
+      rating: 5,
+      text: "Ebeth Boutique is absolutely amazing! I can shop for designer clothes and grab my weekly groceries all in one place. The quality is outstanding and the service is impeccable.",
+      avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face"
+    },
+    {
+      id: 2,
+      name: "Michael Chen",
+      role: "Business Professional", 
+      location: "San Francisco, CA",
+      rating: 5,
+      text: "The convenience factor is unbeatable. I love how they combine luxury shopping with everyday essentials. Their weekly deals are fantastic, and everything arrives perfectly packaged.",
+      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face"
+    },
+    {
+      id: 3,
+      name: "Emma Rodriguez",
+      role: "Working Mom",
+      location: "Austin, TX", 
+      rating: 5,
+      text: "As a busy mom, Ebeth Boutique saves me so much time! I can shop for my wardrobe and household needs simultaneously. The fresh produce quality rivals any high-end grocery store.",
+      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face"
+    },
+    {
+      id: 4,
+      name: "David Kumar",
+      role: "Food Blogger",
+      location: "Los Angeles, CA",
+      rating: 5,
+      text: "I'm impressed by their curated selection of artisanal foods and premium ingredients. Plus, I can pick up stylish accessories while I'm at it. Truly a unique shopping experience!",
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face"
+    },
+    {
+      id: 5,
+      name: "Lisa Park",
+      role: "Interior Designer",
+      location: "Miami, FL",
+      rating: 5,
+      text: "The aesthetic and quality of everything at Ebeth Boutique is simply stunning. From their fashion pieces to household items, everything reflects excellent taste and craftsmanship.",
+      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=face"
+    }
+  ];
+
+  const nextTestimonial = () => {
+    setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+  };
+
+  const prevTestimonial = () => {
+    setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+  };
+
+  // Auto-advance testimonials
+  useEffect(() => {
+    const timer = setInterval(nextTestimonial, 7000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const currentTestimonialData = testimonials[currentTestimonial];
+
+  return (
+    <section className="py-16 bg-gradient-elegant">
+      <div className="container mx-auto px-4">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+            Customer Love Stories
+          </h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            See what our amazing customers say about their Ebeth Boutique experience
+          </p>
+        </div>
+
+        {/* Main Testimonial */}
+        <div className="max-w-4xl mx-auto mb-8">
+          <Card className="relative p-8 md:p-12 border-0 shadow-elegant bg-background overflow-hidden">
+            <div className="absolute top-4 right-4 opacity-10">
+              <Quote className="h-20 w-20 text-gold" />
+            </div>
+            
+            <div className="relative z-10">
+              <div className="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8">
+                {/* Avatar */}
+                <div className="flex-shrink-0">
+                  <img
+                    src={currentTestimonialData.avatar}
+                    alt={currentTestimonialData.name}
+                    className="w-20 h-20 rounded-full object-cover shadow-card"
+                  />
+                </div>
+
+                {/* Content */}
+                <div className="flex-grow text-center md:text-left">
+                  {/* Rating */}
+                  <div className="flex justify-center md:justify-start items-center space-x-1 mb-4">
+                    {[...Array(currentTestimonialData.rating)].map((_, i) => (
+                      <Star key={i} className="h-5 w-5 text-gold fill-gold" />
+                    ))}
+                  </div>
+
+                  {/* Testimonial Text */}
+                  <blockquote className="text-lg md:text-xl text-foreground mb-6 italic leading-relaxed">
+                    "{currentTestimonialData.text}"
+                  </blockquote>
+
+                  {/* Author Info */}
+                  <div>
+                    <h4 className="font-semibold text-foreground text-lg">
+                      {currentTestimonialData.name}
+                    </h4>
+                    <p className="text-muted-foreground">
+                      {currentTestimonialData.role} • {currentTestimonialData.location}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Card>
+
+          {/* Navigation */}
+          <div className="flex justify-center items-center space-x-4 mt-6">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={prevTestimonial}
+              className="rounded-full bg-secondary hover:bg-gold hover:text-black transition-smooth"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </Button>
+
+            {/* Indicators */}
+            <div className="flex space-x-2">
+              {testimonials.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentTestimonial(index)}
+                  className={`w-2 h-2 rounded-full transition-smooth ${
+                    index === currentTestimonial 
+                      ? 'bg-gold' 
+                      : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'
+                  }`}
+                />
+              ))}
+            </div>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={nextTestimonial}
+              className="rounded-full bg-secondary hover:bg-gold hover:text-black transition-smooth"
+            >
+              <ChevronRight className="h-5 w-5" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Customer Stats */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+          <div>
+            <div className="text-3xl font-bold text-gold mb-2">50k+</div>
+            <div className="text-muted-foreground">Happy Customers</div>
+          </div>
+          <div>
+            <div className="text-3xl font-bold text-gold mb-2">4.9★</div>
+            <div className="text-muted-foreground">Average Rating</div>
+          </div>
+          <div>
+            <div className="text-3xl font-bold text-gold mb-2">98%</div>
+            <div className="text-muted-foreground">Satisfaction Rate</div>
+          </div>
+          <div>
+            <div className="text-3xl font-bold text-gold mb-2">24/7</div>
+            <div className="text-muted-foreground">Customer Support</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Testimonials;

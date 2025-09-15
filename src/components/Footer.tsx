@@ -1,0 +1,195 @@
+import { Link } from "react-router-dom";
+import { Mail, Phone, MapPin, Facebook, Instagram, Twitter, Youtube, Heart } from "lucide-react";
+import logo from "@/assets/ebeth-logo.jpg";
+
+const Footer = () => {
+  const currentYear = new Date().getFullYear();
+
+  const quickLinks = [
+    { name: "About Us", href: "/about" },
+    { name: "Contact", href: "/contact" },
+    { name: "FAQ", href: "/faq" },
+    { name: "Size Guide", href: "/size-guide" },
+    { name: "Careers", href: "/careers" },
+    { name: "Blog", href: "/blog" },
+  ];
+
+  const policies = [
+    { name: "Privacy Policy", href: "/privacy" },
+    { name: "Terms & Conditions", href: "/terms" },
+    { name: "Return Policy", href: "/returns" },
+    { name: "Shipping Info", href: "/shipping" },
+    { name: "Cookie Policy", href: "/cookies" },
+  ];
+
+  const categories = [
+    { name: "Women's Fashion", href: "/clothing/women" },
+    { name: "Men's Fashion", href: "/clothing/men" },
+    { name: "Accessories", href: "/accessories" },
+    { name: "Fresh Groceries", href: "/groceries" },
+    { name: "Household Items", href: "/household" },
+    { name: "Weekly Specials", href: "/specials" },
+  ];
+
+  const socialLinks = [
+    { name: "Facebook", href: "#", icon: Facebook },
+    { name: "Instagram", href: "#", icon: Instagram },
+    { name: "Twitter", href: "#", icon: Twitter },
+    { name: "YouTube", href: "#", icon: Youtube },
+  ];
+
+  return (
+    <footer className="bg-black text-white">
+      {/* Main Footer Content */}
+      <div className="container mx-auto px-4 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {/* Brand Section */}
+          <div className="lg:col-span-1">
+            <Link to="/" className="flex items-center space-x-3 mb-6">
+              <img 
+                src={logo} 
+                alt="Ebeth Boutique & Exclusive Store" 
+                className="h-12 w-12 rounded-full object-cover"
+              />
+              <div>
+                <h3 className="text-xl font-bold text-gold">Ebeth Boutique</h3>
+                <p className="text-sm text-white/70">& Exclusive Store</p>
+              </div>
+            </Link>
+            
+            <p className="text-white/80 mb-6 leading-relaxed">
+              Where boutique elegance meets everyday convenience. Discover luxury fashion 
+              and quality essentials all in one beautiful destination.
+            </p>
+
+            {/* Contact Info */}
+            <div className="space-y-3">
+              <div className="flex items-center space-x-3">
+                <Phone className="h-4 w-4 text-gold" />
+                <span className="text-sm text-white/80">+1 (555) 123-4567</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <Mail className="h-4 w-4 text-gold" />
+                <span className="text-sm text-white/80">hello@ebethboutique.com</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <MapPin className="h-4 w-4 text-gold" />
+                <span className="text-sm text-white/80">123 Fashion Ave, NY 10001</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Quick Links */}
+          <div>
+            <h4 className="text-lg font-semibold text-gold mb-6">Quick Links</h4>
+            <ul className="space-y-3">
+              {quickLinks.map((link) => (
+                <li key={link.name}>
+                  <Link 
+                    to={link.href}
+                    className="text-white/80 hover:text-gold transition-smooth text-sm"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Shop Categories */}
+          <div>
+            <h4 className="text-lg font-semibold text-gold mb-6">Shop Categories</h4>
+            <ul className="space-y-3">
+              {categories.map((category) => (
+                <li key={category.name}>
+                  <Link 
+                    to={category.href}
+                    className="text-white/80 hover:text-gold transition-smooth text-sm"
+                  >
+                    {category.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Policies & Social */}
+          <div>
+            <h4 className="text-lg font-semibold text-gold mb-6">Policies</h4>
+            <ul className="space-y-3 mb-8">
+              {policies.map((policy) => (
+                <li key={policy.name}>
+                  <Link 
+                    to={policy.href}
+                    className="text-white/80 hover:text-gold transition-smooth text-sm"
+                  >
+                    {policy.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+
+            {/* Social Media */}
+            <h5 className="text-md font-semibold text-gold mb-4">Follow Us</h5>
+            <div className="flex space-x-4">
+              {socialLinks.map((social) => {
+                const IconComponent = social.icon;
+                return (
+                  <a
+                    key={social.name}
+                    href={social.href}
+                    className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-gold hover:text-black transition-smooth"
+                    aria-label={social.name}
+                  >
+                    <IconComponent className="h-5 w-5" />
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom Bar */}
+      <div className="border-t border-white/20">
+        <div className="container mx-auto px-4 py-6">
+          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <div className="flex items-center space-x-4 text-sm text-white/80">
+              <span>&copy; {currentYear} Ebeth Boutique & Exclusive Store. All rights reserved.</span>
+            </div>
+            
+            <div className="flex items-center space-x-2 text-sm text-white/80">
+              <span>Made with</span>
+              <Heart className="h-4 w-4 text-red-500 fill-red-500" />
+              <span>for our customers</span>
+            </div>
+          </div>
+
+          {/* Security & Trust Badges */}
+          <div className="mt-6 pt-6 border-t border-white/10">
+            <div className="flex flex-wrap justify-center items-center gap-6 text-xs text-white/60">
+              <span className="flex items-center space-x-2">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span>SSL Secured</span>
+              </span>
+              <span className="flex items-center space-x-2">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span>Safe Payments</span>
+              </span>
+              <span className="flex items-center space-x-2">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span>30-Day Returns</span>
+              </span>
+              <span className="flex items-center space-x-2">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span>24/7 Support</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;

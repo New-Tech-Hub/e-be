@@ -1,13 +1,42 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { Helmet } from "react-helmet-async";
+import Header from "@/components/Header";
+import HeroSection from "@/components/HeroSection";
+import FeaturedCategories from "@/components/FeaturedCategories";
+import WeeklyDeals from "@/components/WeeklyDeals";
+import Testimonials from "@/components/Testimonials";
+import Newsletter from "@/components/Newsletter";
+import Footer from "@/components/Footer";
 
 const Index = () => {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+    <>
+      <Helmet>
+        <title>Ebeth Boutique & Exclusive Store - Luxury Fashion & Quality Groceries</title>
+        <meta 
+          name="description" 
+          content="Shop premium fashion, accessories, and fresh groceries at Ebeth Boutique. Where boutique elegance meets everyday convenience. Free shipping over $75." 
+        />
+        <meta name="keywords" content="boutique fashion, luxury clothing, fresh groceries, accessories, household essentials, weekly deals" />
+        <meta property="og:title" content="Ebeth Boutique & Exclusive Store - Premium Shopping Experience" />
+        <meta property="og:description" content="Discover luxury fashion and quality essentials in one elegant destination. Shop curated collections with boutique-level service." />
+        <meta property="og:type" content="website" />
+        <link rel="canonical" href="https://ebethboutique.com" />
+      </Helmet>
+
+      <div className="min-h-screen bg-background">
+        <Header />
+        
+        <main>
+          <HeroSection />
+          <FeaturedCategories />
+          <WeeklyDeals />
+          <Testimonials />
+          <Newsletter />
+        </main>
+        
+        <Footer />
       </div>
-    </div>
+    </>
   );
 };
 

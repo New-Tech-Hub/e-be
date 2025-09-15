@@ -1,0 +1,135 @@
+import { useState, useEffect } from "react";
+import { ChevronLeft, ChevronRight, ShoppingBag, Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import heroImage1 from "@/assets/hero-boutique.jpg";
+import heroImage2 from "@/assets/fashion-hero.jpg";
+import heroImage3 from "@/assets/grocery-hero.jpg";
+
+const HeroSection = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const slides = [
+    {
+      image: heroImage1,
+      title: "Where Boutique Meets Convenience",
+      subtitle: "Discover luxury fashion & everyday essentials in one elegant destination",
+      cta: "Shop Collection",
+      accent: "New Arrivals Weekly"
+    },
+    {
+      image: heroImage2,
+      title: "Curated Fashion Collection",
+      subtitle: "Handpicked pieces for the modern, sophisticated woman",
+      cta: "Explore Fashion",
+      accent: "Premium Quality"
+    },
+    {
+      image: heroImage3,
+      title: "Fresh Groceries & Essentials",
+      subtitle: "Quality household items delivered with boutique-level service",
+      cta: "Shop Groceries",
+      accent: "Daily Fresh Delivery"
+    }
+  ];
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  };
+
+  // Auto-advance slides
+  useEffect(() => {
+    const timer = setInterval(nextSlide, 6000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <section className="relative h-[70vh] md:h-[80vh] overflow-hidden bg-gradient-hero">
+      {/* Background Images */}
+      {slides.map((slide, index) => (
+        <div
+          key={index}
+          className={`absolute inset-0 transition-opacity duration-1000 ${
+            index === currentSlide ? 'opacity-100' : 'opacity-0'
+          }`}
+        >
+          <img
+            src={slide.image}
+            alt={slide.title}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-black/40" />
+        </div>
+      ))}
+
+      {/* Content Overlay */}
+      <div className="relative z-10 container mx-auto px-4 h-full flex items-center">
+        <div className="max-w-2xl animate-fade-in">
+          <div className="flex items-center space-x-2 mb-4">
+            <Sparkles className="h-5 w-5 text-gold animate-pulse" />
+            <span className="text-gold font-semibold text-sm tracking-wide uppercase">
+              {slides[currentSlide].accent}
+            </span>
+          </div>
+          
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
+            {slides[currentSlide].title}
+          </h1>
+          
+          <p className="text-lg md:text-xl text-white/90 mb-8 leading-relaxed">
+            {slides[currentSlide].subtitle}
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4">
+            <Button variant="gold" size="lg" className="text-lg px-8 py-3 h-auto">
+              <ShoppingBag className="mr-2 h-5 w-5" />
+              {slides[currentSlide].cta}
+            </Button>
+            <Button variant="gold-outline" size="lg" className="text-lg px-8 py-3 h-auto">
+              View All Categories
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* Navigation Arrows */}
+      <button
+        onClick={prevSlide}
+        className="absolute left-4 top-1/2 transform -translate-y-1/2 z-20 p-3 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-smooth"
+        aria-label="Previous slide"
+      >
+        <ChevronLeft className="h-6 w-6 text-white" />
+      </button>
+      <button
+        onClick={nextSlide}
+        className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20 p-3 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-smooth"
+        aria-label="Next slide"
+      >
+        <ChevronRight className="h-6 w-6 text-white" />
+      </button>
+
+      {/* Slide Indicators */}
+      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-20">
+        <div className="flex space-x-3">
+          {slides.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentSlide(index)}
+              className={`w-3 h-3 rounded-full transition-smooth ${
+                index === currentSlide 
+                  ? 'bg-gold shadow-gold' 
+                  : 'bg-white/50 hover:bg-white/70'
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default HeroSection;
