@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, ShoppingBag, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import heroImage1 from "@/assets/hero-boutique.jpg";
-import heroImage2 from "@/assets/fashion-hero.jpg";
-import heroImage3 from "@/assets/grocery-hero.jpg";
+import heroImage1 from "@/assets/hero-fashion-collection.jpg";
+import heroImage2 from "@/assets/hero-african-collection.jpg";
+import heroImage3 from "@/assets/hero-jewelry-gifts.jpg";
 
 const HeroSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -11,24 +11,24 @@ const HeroSection = () => {
   const slides = [
     {
       image: heroImage1,
-      title: "Where Boutique Meets Convenience",
-      subtitle: "Discover luxury fashion & everyday essentials in one elegant destination",
-      cta: "Shop Collection",
-      accent: "New Arrivals Weekly"
+      title: "Fashion & Accessories Collection",
+      subtitle: "Discover elegant shoes, designer bags, corporate & casual wear for every occasion",
+      cta: "Shop Fashion",
+      accent: "Latest Arrivals"
     },
     {
       image: heroImage2,
-      title: "Curated Fashion Collection",
-      subtitle: "Handpicked pieces for the modern, sophisticated woman",
-      cta: "Explore Fashion",
-      accent: "Premium Quality"
+      title: "African Attires & Traditional Wear",
+      subtitle: "Beautiful African attires, wrappers, George wears & traditional clothing",
+      cta: "Explore African Collection",
+      accent: "Cultural Elegance"
     },
     {
       image: heroImage3,
-      title: "Fresh Groceries & Essentials",
-      subtitle: "Quality household items delivered with boutique-level service",
-      cta: "Shop Groceries",
-      accent: "Daily Fresh Delivery"
+      title: "Jewelry & Gift Collections",
+      subtitle: "Exquisite jewelry pieces, gift boxes & accessories for special moments",
+      cta: "Shop Jewelry",
+      accent: "Perfect Gifts"
     }
   ];
 
