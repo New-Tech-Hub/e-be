@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, ShoppingBag, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import heroImage1 from "@/assets/hero-fashion-collection.jpg";
-import heroImage2 from "@/assets/hero-african-collection.jpg";
-import heroImage3 from "@/assets/hero-jewelry-gifts.jpg";
+import heroImage1 from "@/assets/hero-bags-collection.jpg";
+import heroImage2 from "@/assets/hero-formal-wear.jpg";
+import heroImage3 from "@/assets/hero-beverages.jpg";
 
 const HeroSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -11,24 +11,24 @@ const HeroSection = () => {
   const slides = [
     {
       image: heroImage1,
-      title: "Fashion & Accessories Collection",
-      subtitle: "Discover elegant shoes, designer bags, corporate & casual wear for every occasion",
-      cta: "Shop Fashion",
-      accent: "Latest Arrivals"
+      title: "Premium Bags & Travel Collection",
+      subtitle: "Luxury traveling bags, elegant women's handbags, and premium luggage for every journey",
+      cta: "Shop Bags",
+      accent: "Travel Ready"
     },
     {
       image: heroImage2,
-      title: "African Attires & Traditional Wear",
-      subtitle: "Beautiful African attires, wrappers, George wears & traditional clothing",
-      cta: "Explore African Collection",
-      accent: "Cultural Elegance"
+      title: "Formal Wear & Business Attire",
+      subtitle: "Professional suits, dress shoes, elegant ties, and corporate wear for success",
+      cta: "Shop Formal Wear",
+      accent: "Business Class"
     },
     {
       image: heroImage3,
-      title: "Jewelry & Gift Collections",
-      subtitle: "Exquisite jewelry pieces, gift boxes & accessories for special moments",
-      cta: "Shop Jewelry",
-      accent: "Perfect Gifts"
+      title: "Premium Beverages Collection",
+      subtitle: "Fine wines, premium water, and luxury beverages for every occasion",
+      cta: "Shop Beverages",
+      accent: "Quality Drinks"
     }
   ];
 
