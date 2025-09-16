@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight, ShoppingBag, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import heroImage1 from "@/assets/hero-bags-collection.jpg";
@@ -14,21 +15,24 @@ const HeroSection = () => {
       title: "Premium Bags & Travel Collection",
       subtitle: "Luxury traveling bags, elegant women's handbags, and premium luggage for every journey",
       cta: "Shop Bags",
-      accent: "Travel Ready"
+      accent: "Travel Ready",
+      href: "/accessories"
     },
     {
       image: heroImage2,
       title: "Formal Wear & Business Attire",
       subtitle: "Professional suits, dress shoes, elegant ties, and corporate wear for success",
       cta: "Shop Formal Wear",
-      accent: "Business Class"
+      accent: "Business Class",
+      href: "/clothing"
     },
     {
       image: heroImage3,
       title: "Premium Beverages Collection",
       subtitle: "Fine wines, premium water, and luxury beverages for every occasion",
       cta: "Shop Beverages",
-      accent: "Quality Drinks"
+      accent: "Quality Drinks",
+      href: "/groceries"
     }
   ];
 
@@ -84,13 +88,17 @@ const HeroSection = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4">
-            <Button variant="gold" size="lg" className="text-lg px-8 py-3 h-auto">
-              <ShoppingBag className="mr-2 h-5 w-5" />
-              {slides[currentSlide].cta}
-            </Button>
-            <Button variant="gold-outline" size="lg" className="text-lg px-8 py-3 h-auto">
-              View All Categories
-            </Button>
+            <Link to={slides[currentSlide].href}>
+              <Button variant="gold" size="lg" className="text-lg px-8 py-3 h-auto">
+                <ShoppingBag className="mr-2 h-5 w-5" />
+                {slides[currentSlide].cta}
+              </Button>
+            </Link>
+            <Link to="/specials">
+              <Button variant="gold-outline" size="lg" className="text-lg px-8 py-3 h-auto">
+                View All Categories
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

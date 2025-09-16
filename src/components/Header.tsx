@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ShoppingCart, Menu, Search, User, Heart, X } from "lucide-react";
+import { ShoppingCart, Menu, Search, User, Heart, X, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import logo from "@/assets/ebeth-logo.jpg";
+import SignupModal from "./SignupModal";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [cartCount] = useState(3); // Mock cart count
+  const [isSignupOpen, setIsSignupOpen] = useState(false);
 
   const navigation = [
     { name: "Clothing", href: "/clothing" },
@@ -66,13 +68,33 @@ const Header = () => {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="icon" className="hidden md:flex">
+          <div className="flex items-center space-x-2">
+            {/* Desktop Auth Buttons */}
+            <div className="hidden md:flex items-center space-x-2">
+              <Button variant="ghost" size="icon">
+                <User className="h-5 w-5" />
+              </Button>
+              <Button variant="ghost" size="icon">
+                <Heart className="h-5 w-5" />
+              </Button>
+              <Button variant="outline" size="sm">
+                Login
+              </Button>
+              <Button 
+                size="sm" 
+                variant="default"
+                onClick={() => setIsSignupOpen(true)}
+              >
+                <UserPlus className="h-4 w-4 mr-1" />
+                Sign Up
+              </Button>
+            </div>
+            
+            {/* Mobile User Icon */}
+            <Button variant="ghost" size="icon" className="md:hidden">
               <User className="h-5 w-5" />
             </Button>
-            <Button variant="ghost" size="icon" className="hidden md:flex">
-              <Heart className="h-5 w-5" />
-            </Button>
+            
             <Button variant="ghost" size="icon" className="relative">
               <ShoppingCart className="h-5 w-5" />
               {cartCount > 0 && (
@@ -118,6 +140,19 @@ const Header = () => {
                 </Link>
               ))}
               <hr className="border-border" />
+              <Button 
+                className="w-full mb-3" 
+                onClick={() => {
+                  setIsSignupOpen(true);
+                  setIsMenuOpen(false);
+                }}
+              >
+                <UserPlus className="h-4 w-4 mr-2" />
+                Sign Up
+              </Button>
+              <Link to="/account" className="block py-2 text-foreground hover:text-gold transition-smooth">
+                Login
+              </Link>
               <Link to="/account" className="block py-2 text-foreground hover:text-gold transition-smooth">
                 My Account
               </Link>
@@ -128,6 +163,12 @@ const Header = () => {
           </div>
         )}
       </div>
+
+      {/* Signup Modal */}
+      <SignupModal 
+        isOpen={isSignupOpen} 
+        onClose={() => setIsSignupOpen(false)} 
+      />
     </header>
   );
 };
