@@ -6,25 +6,25 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   const quickLinks = [
-    { name: "About Us", href: "/about" },
-    { name: "Contact", href: "/contact" },
-    { name: "FAQ", href: "/faq" },
-    { name: "Size Guide", href: "/size-guide" },
-    { name: "Careers", href: "/careers" },
-    { name: "Blog", href: "/blog" },
+    { name: "About Us", href: "/" },
+    { name: "Contact", href: "/" },
+    { name: "FAQ", href: "/" },
+    { name: "Size Guide", href: "/" },
+    { name: "Careers", href: "/" },
+    { name: "Blog", href: "/" },
   ];
 
   const policies = [
-    { name: "Privacy Policy", href: "/privacy" },
-    { name: "Terms & Conditions", href: "/terms" },
-    { name: "Return Policy", href: "/returns" },
-    { name: "Shipping Info", href: "/shipping" },
-    { name: "Cookie Policy", href: "/cookies" },
+    { name: "Privacy Policy", href: "/" },
+    { name: "Terms & Conditions", href: "/" },
+    { name: "Return Policy", href: "/" },
+    { name: "Shipping Info", href: "/" },
+    { name: "Cookie Policy", href: "/" },
   ];
 
   const categories = [
-    { name: "Women's Fashion", href: "/clothing/women" },
-    { name: "Men's Fashion", href: "/clothing/men" },
+    { name: "Women's Fashion", href: "/clothing" },
+    { name: "Men's Fashion", href: "/clothing" },
     { name: "Accessories", href: "/accessories" },
     { name: "Fresh Groceries", href: "/groceries" },
     { name: "Household Items", href: "/household" },
