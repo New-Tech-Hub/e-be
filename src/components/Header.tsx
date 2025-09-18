@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu, Search, User, Heart, X, UserPlus, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import LoginModal from "./LoginModal";
 import CartButton from "./CartButton";
 import SearchBar from "./SearchBar";
 import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -32,13 +33,31 @@ const Header = () => {
     setIsSignupOpen(true);
   };
 
-  const navigation = [
-    { name: "Clothing", href: "/clothing" },
-    { name: "Accessories", href: "/accessories" },
-    { name: "Groceries", href: "/groceries" },
-    { name: "Household", href: "/household" },
-    { name: "Specials", href: "/specials" },
-  ];
+  const [categories, setCategories] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const { data } = await supabase
+        .from('categories')
+        .select('name, slug')
+        .eq('is_active', true)
+        .order('name')
+        .limit(5);
+      
+      setCategories(data || []);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
+
+  const navigation = categories.map(cat => ({
+    name: cat.name,
+    href: `/products/${cat.slug}`
+  }));
 
   return (
     <header className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
