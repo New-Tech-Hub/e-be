@@ -7,8 +7,7 @@ const CustomerCare = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleWhatsAppClick = () => {
-    // WhatsApp number will be added by user later
-    const whatsappNumber = "+2348000000000"; // Placeholder
+    const whatsappNumber = "+2349092034816";
     const message = "Hello! I need assistance with my order from Ebeth Boutique.";
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
@@ -60,14 +59,14 @@ const CustomerCare = () => {
 
               {/* Phone Support */}
               <Button
-                onClick={() => window.location.href = "tel:+2348000000000"}
+                onClick={() => window.location.href = "tel:+2349092034816"}
                 variant="outline"
                 className="w-full justify-start gap-3 h-12 border-blue-500 hover:bg-blue-50 hover:border-blue-600"
               >
                 <Phone className="h-5 w-5 text-blue-600" />
                 <div className="text-left">
                   <div className="font-medium text-blue-700">Call Us</div>
-                  <div className="text-xs text-blue-600">+234 800 000 0000</div>
+                  <div className="text-xs text-blue-600">+234 909 203 4816</div>
                 </div>
               </Button>
 
