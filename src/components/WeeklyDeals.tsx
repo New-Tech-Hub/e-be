@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Star, Heart, ShoppingCart, Timer, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -191,8 +192,10 @@ const WeeklyDeals = () => {
 
         {/* View More Deals */}
         <div className="text-center mt-12">
-          <Button variant="gold-outline" size="lg">
-            View All Weekly Deals
+          <Button variant="gold-outline" size="lg" asChild>
+            <Link to="/specials">
+              View All Weekly Deals
+            </Link>
           </Button>
         </div>
       </div>

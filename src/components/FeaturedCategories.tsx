@@ -107,9 +107,11 @@ const FeaturedCategories = () => {
           <p className="text-black/80 mb-6 max-w-md mx-auto">
             Get 30% off when you shop both fashion and grocery categories in a single order
           </p>
-          <Button variant="outline" className="border-2 border-black text-black hover:bg-black hover:text-gold">
-            Shop Mixed Collection
-            <ArrowRight className="ml-2 h-4 w-4" />
+          <Button variant="outline" className="border-2 border-black text-black hover:bg-black hover:text-gold" asChild>
+            <Link to="/specials">
+              Shop Mixed Collection
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
           </Button>
         </div>
       </div>

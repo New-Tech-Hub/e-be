@@ -150,13 +150,13 @@ const Header = () => {
                 <UserPlus className="h-4 w-4 mr-2" />
                 Sign Up
               </Button>
-              <Link to="/account" className="block py-2 text-foreground hover:text-gold transition-smooth">
+              <Link to="/account" className="block py-2 text-foreground hover:text-gold transition-smooth" onClick={() => setIsMenuOpen(false)}>
                 Login
               </Link>
-              <Link to="/account" className="block py-2 text-foreground hover:text-gold transition-smooth">
+              <Link to="/account" className="block py-2 text-foreground hover:text-gold transition-smooth" onClick={() => setIsMenuOpen(false)}>
                 My Account
               </Link>
-              <Link to="/wishlist" className="block py-2 text-foreground hover:text-gold transition-smooth">
+              <Link to="/wishlist" className="block py-2 text-foreground hover:text-gold transition-smooth" onClick={() => setIsMenuOpen(false)}>
                 Wishlist
               </Link>
             </nav>

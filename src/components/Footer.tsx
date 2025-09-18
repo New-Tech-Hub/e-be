@@ -6,20 +6,20 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   const quickLinks = [
-    { name: "About Us", href: "/" },
-    { name: "Contact", href: "/" },
-    { name: "FAQ", href: "/" },
-    { name: "Size Guide", href: "/" },
-    { name: "Careers", href: "/" },
+    { name: "About Us", href: "/about" },
+    { name: "Contact", href: "/contact" },
+    { name: "FAQ", href: "/contact" },
+    { name: "Size Guide", href: "/contact" },
+    { name: "Careers", href: "/contact" },
     { name: "Blog", href: "/" },
   ];
 
   const policies = [
-    { name: "Privacy Policy", href: "/" },
-    { name: "Terms & Conditions", href: "/" },
-    { name: "Return Policy", href: "/" },
-    { name: "Shipping Info", href: "/" },
-    { name: "Cookie Policy", href: "/" },
+    { name: "Privacy Policy", href: "/contact" },
+    { name: "Terms & Conditions", href: "/contact" },
+    { name: "Return Policy", href: "/contact" },
+    { name: "Shipping Info", href: "/contact" },
+    { name: "Cookie Policy", href: "/contact" },
   ];
 
   const categories = [
