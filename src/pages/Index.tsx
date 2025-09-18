@@ -5,6 +5,7 @@ import FeaturedCategories from "@/components/FeaturedCategories";
 import WeeklyDeals from "@/components/WeeklyDeals";
 import Testimonials from "@/components/Testimonials";
 import Newsletter from "@/components/Newsletter";
+import InstagramFeed from "@/components/InstagramFeed";
 import Footer from "@/components/Footer";
 
 const Index = () => {
@@ -31,7 +32,14 @@ const Index = () => {
           <FeaturedCategories />
           <WeeklyDeals />
           <Testimonials />
-          <Newsletter />
+        {/* Instagram Feed */}
+        <section className="py-20 bg-muted/20">
+          <div className="container mx-auto px-4">
+            <InstagramFeed />
+          </div>
+        </section>
+
+        <Newsletter />
         </main>
         
         <Footer />

@@ -270,10 +270,9 @@ const Products = () => {
                   <Button 
                     className="w-full gap-2" 
                     size="sm"
-                    onClick={() => addToCart(product.id)}
+                    onClick={() => window.location.href = `/product/${product.id}`}
                   >
-                    <ShoppingCart className="h-4 w-4" />
-                    Add to Cart
+                    View Details
                   </Button>
                 </div>
               </Card>

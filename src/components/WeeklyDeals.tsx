@@ -1,12 +1,14 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useCart } from "@/hooks/useCart";
 import { Star, Heart, ShoppingCart, Timer, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Link } from "react-router-dom";
 
 const WeeklyDeals = () => {
   const [likedItems, setLikedItems] = useState<string[]>([]);
+  const { addToCart } = useCart();
 
   const deals = [
     {
@@ -181,7 +183,11 @@ const WeeklyDeals = () => {
                 </div>
 
                 {/* Add to Cart Button */}
-                <Button variant="gold" size="sm" className="w-full text-xs">
+                <Button 
+                  className="w-full gap-2" 
+                  size="sm"
+                  onClick={() => addToCart(deal.id)}
+                >
                   <ShoppingCart className="mr-2 h-3 w-3" />
                   Add to Cart
                 </Button>

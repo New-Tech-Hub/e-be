@@ -18,6 +18,7 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Admin from "./pages/Admin";
 import Checkout from "./pages/Checkout";
+import ProductDetail from "./pages/ProductDetail";
 
 const queryClient = new QueryClient();
 
@@ -61,6 +62,7 @@ const App = () => (
                   <Wishlist />
                 </ProtectedRoute>
               } />
+              <Route path="/product/:productId" element={<ProductDetail />} />
               <Route path="/admin" element={
                 <ProtectedRoute>
                   <Admin />

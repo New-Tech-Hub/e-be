@@ -7,6 +7,7 @@ import logo from "@/assets/ebeth-logo.jpg";
 import SignupModal from "./SignupModal";
 import LoginModal from "./LoginModal";
 import CartButton from "./CartButton";
+import SearchBar from "./SearchBar";
 import { useAuth } from "@/hooks/useAuth";
 
 const Header = () => {
@@ -78,13 +79,7 @@ const Header = () => {
 
           {/* Search Bar - Desktop */}
           <div className="hidden md:flex items-center space-x-4 flex-1 max-w-md mx-8">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-              <Input
-                placeholder="Search boutique & grocery items..."
-                className="pl-10 bg-secondary/50 border-border focus:border-gold"
-              />
-            </div>
+            <SearchBar className="flex-1" />
           </div>
 
           {/* Action Buttons */}
@@ -174,13 +169,7 @@ const Header = () => {
 
         {/* Mobile Search */}
         <div className="md:hidden py-3 border-t border-border">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-            <Input
-              placeholder="Search products..."
-              className="pl-10 bg-secondary/50"
-            />
-          </div>
+          <SearchBar />
         </div>
 
         {/* Mobile Navigation */}
