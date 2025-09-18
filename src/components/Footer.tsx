@@ -32,8 +32,8 @@ const Footer = () => {
   ];
 
   const socialLinks = [
-    { name: "Facebook", href: "https://www.facebook.com/ebethstores", icon: Facebook },
-    { name: "Instagram", href: "https://www.instagram.com/ebethstores", icon: Instagram },
+    { name: "Facebook", href: "https://www.facebook.com/ebethstores?mibextid=ZbWKwL", icon: Facebook },
+    { name: "Instagram", href: "https://www.instagram.com/ebeth_stores?igsh=cW01OXpicW51Y3gz", icon: Instagram },
     { name: "Twitter", href: "#", icon: Twitter },
     { name: "YouTube", href: "#", icon: Youtube },
   ];
@@ -66,7 +66,7 @@ const Footer = () => {
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
                 <Phone className="h-4 w-4 text-gold" />
-                <span className="text-sm text-white/80">+1 (555) 123-4567</span>
+                <span className="text-sm text-white/80">09092034816</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="h-4 w-4 text-gold" />
@@ -74,7 +74,7 @@ const Footer = () => {
               </div>
               <div className="flex items-center space-x-3">
                 <MapPin className="h-4 w-4 text-gold" />
-                <span className="text-sm text-white/80">123 Fashion Ave, NY 10001</span>
+                <span className="text-sm text-white/80">Atlantic Mall, 40 Ajose Adeogun Street Utako-Abuja</span>
               </div>
             </div>
           </div>
