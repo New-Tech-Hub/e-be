@@ -14,107 +14,217 @@ const Products = () => {
   const [likedItems, setLikedItems] = useState<string[]>([]);
   const { addToCart } = useCart();
 
-  // Mock products data - this would come from your database
+  // Demo products data - inspired by hero section categories
   const getProductsByCategory = (cat: string) => {
     const productData = {
       clothing: [
         {
           id: "1",
-          name: "Designer Summer Dress",
-          price: 89.99,
-          originalPrice: 120.00,
-          image: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400&h=400&fit=crop",
-          rating: 4.8,
-          reviews: 124,
-          category: "Women's Fashion"
+          name: "Premium Business Suit - Charcoal Grey",
+          price: 45999.99,
+          originalPrice: 52999.99,
+          image: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&h=400&fit=crop",
+          rating: 4.9,
+          reviews: 189,
+          category: "Men's Formal Wear"
         },
         {
           id: "2", 
-          name: "Classic Business Suit",
-          price: 299.99,
-          originalPrice: 399.99,
-          image: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&h=400&fit=crop",
-          rating: 4.9,
-          reviews: 89,
-          category: "Men's Fashion"
+          name: "Executive Dress Shirt - Egyptian Cotton",
+          price: 8999.99,
+          originalPrice: 12999.99,
+          image: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=400&h=400&fit=crop",
+          rating: 4.8,
+          reviews: 267,
+          category: "Men's Shirts"
         },
         {
           id: "3",
-          name: "Elegant Evening Gown",
-          price: 159.99,
-          originalPrice: 199.99,
+          name: "Elegant Cocktail Dress - Black",
+          price: 15999.99,
+          originalPrice: 22999.99,
           image: "https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=400&h=400&fit=crop",
           rating: 4.7,
+          reviews: 198,
+          category: "Women's Formal"
+        },
+        {
+          id: "4",
+          name: "Professional Blazer - Navy Blue",
+          price: 25999.99,
+          originalPrice: 32999.99,
+          image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
+          rating: 4.6,
+          reviews: 145,
+          category: "Women's Business"
+        },
+        {
+          id: "5",
+          name: "Silk Tie Collection - 3 Pack",
+          price: 7999.99,
+          originalPrice: 11999.99,
+          image: "https://images.unsplash.com/photo-1581803118522-7b72a50f7e9f?w=400&h=400&fit=crop",
+          rating: 4.8,
+          reviews: 321,
+          category: "Men's Accessories"
+        },
+        {
+          id: "6",
+          name: "Italian Leather Dress Shoes",
+          price: 18999.99,
+          originalPrice: 25999.99,
+          image: "https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?w=400&h=400&fit=crop",
+          rating: 4.9,
+          reviews: 278,
+          category: "Men's Shoes"
+        },
+        {
+          id: "7",
+          name: "Designer High Heels - Patent Leather",
+          price: 12999.99,
+          originalPrice: 17999.99,
+          image: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=400&h=400&fit=crop",
+          rating: 4.5,
           reviews: 156,
-          category: "Women's Fashion"
+          category: "Women's Shoes"
+        },
+        {
+          id: "8",
+          name: "Casual Sneakers - Premium White",
+          price: 9999.99,
+          originalPrice: 13999.99,
+          image: "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400&h=400&fit=crop",
+          rating: 4.7,
+          reviews: 432,
+          category: "Casual Shoes"
         }
       ],
       accessories: [
         {
-          id: "4",
-          name: "Luxury Leather Handbag", 
-          price: 199.99,
-          originalPrice: 249.99,
+          id: "9",
+          name: "Luxury Leather Handbag - Italian Crafted", 
+          price: 35999.99,
+          originalPrice: 45999.99,
           image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=400&fit=crop",
-          rating: 4.6,
-          reviews: 78,
-          category: "Bags"
+          rating: 4.8,
+          reviews: 189,
+          category: "Premium Bags"
         },
         {
-          id: "5",
-          name: "Diamond Stud Earrings",
-          price: 89.99,
-          originalPrice: 120.00,
+          id: "10",
+          name: "Executive Travel Briefcase",
+          price: 28999.99,
+          originalPrice: 35999.99,
+          image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=400&fit=crop",
+          rating: 4.9,
+          reviews: 156,
+          category: "Business Bags"
+        },
+        {
+          id: "11",
+          name: "Designer Watch - Swiss Movement",
+          price: 125999.99,
+          originalPrice: 149999.99,
+          image: "https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=400&h=400&fit=crop",
+          rating: 4.9,
+          reviews: 267,
+          category: "Luxury Watches"
+        },
+        {
+          id: "12",
+          name: "Pearl Necklace Set",
+          price: 15999.99,
+          originalPrice: 22999.99,
           image: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=400&fit=crop",
-          rating: 4.8,
-          reviews: 92,
-          category: "Jewelry"
+          rating: 4.7,
+          reviews: 198,
+          category: "Fine Jewelry"
         }
       ],
       groceries: [
         {
-          id: "6",
-          name: "Organic Fresh Vegetables",
-          price: 24.99,
-          originalPrice: 29.99,
-          image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=400&h=400&fit=crop",
-          rating: 4.5,
-          reviews: 234,
-          category: "Fresh Produce"
+          id: "13",
+          name: "Premium Wine Collection - Vintage Red",
+          price: 8999.99,
+          originalPrice: 12999.99,
+          image: "https://images.unsplash.com/photo-1569529465841-dfecdab7503b?w=400&h=400&fit=crop",
+          rating: 4.8,
+          reviews: 145,
+          category: "Fine Wines"
         },
         {
-          id: "7",
-          name: "Premium Coffee Beans",
-          price: 18.99,
-          originalPrice: 22.99,
+          id: "14",
+          name: "Artisanal Coffee Beans - Ethiopian Origin",
+          price: 3999.99,
+          originalPrice: 4999.99,
           image: "https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=400&h=400&fit=crop",
           rating: 4.9,
+          reviews: 287,
+          category: "Premium Beverages"
+        },
+        {
+          id: "15",
+          name: "Imported Sparkling Water - 12 Pack",
+          price: 2499.99,
+          originalPrice: 2999.99,
+          image: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=400&fit=crop",
+          rating: 4.6,
+          reviews: 198,
+          category: "Luxury Beverages"
+        },
+        {
+          id: "16",
+          name: "Organic Fruit Basket - Premium Selection",
+          price: 5999.99,
+          originalPrice: 7999.99,
+          image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=400&h=400&fit=crop",
+          rating: 4.5,
           reviews: 167,
-          category: "Beverages"
+          category: "Fresh Organic"
         }
       ],
       household: [
         {
-          id: "8",
-          name: "Premium Cleaning Kit",
-          price: 39.99,
-          originalPrice: 49.99,
+          id: "17",
+          name: "Premium Home Cleaning Set",
+          price: 8999.99,
+          originalPrice: 11999.99,
           image: "https://images.unsplash.com/photo-1563453392212-326f5e854473?w=400&h=400&fit=crop",
-          rating: 4.4,
-          reviews: 89,
-          category: "Cleaning"
+          rating: 4.6,
+          reviews: 123,
+          category: "Household Care"
+        },
+        {
+          id: "18",
+          name: "Luxury Bathroom Essentials Kit",
+          price: 12999.99,
+          originalPrice: 16999.99,
+          image: "https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?w=400&h=400&fit=crop",
+          rating: 4.7,
+          reviews: 189,
+          category: "Personal Care"
         }
       ],
       specials: [
         {
-          id: "9",
-          name: "Weekly Deal Bundle",
-          price: 99.99,
-          originalPrice: 149.99,
+          id: "19",
+          name: "Executive Wardrobe Bundle",
+          price: 89999.99,
+          originalPrice: 129999.99,
+          image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=400&fit=crop",
+          rating: 4.9,
+          reviews: 267,
+          category: "Premium Bundle"
+        },
+        {
+          id: "20",
+          name: "Luxury Lifestyle Package",
+          price: 199999.99,
+          originalPrice: 249999.99,
           image: "https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=400&h=400&fit=crop",
-          rating: 4.7,
-          reviews: 203,
-          category: "Bundle Deal"
+          rating: 4.8,
+          reviews: 156,
+          category: "VIP Collection"
         }
       ]
     };
