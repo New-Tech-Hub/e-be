@@ -50,12 +50,17 @@ const Products = () => {
   }, [category]);
 
   const fetchProducts = async (reset = false) => {
-    if (!category) return;
+    if (!category) {
+      setLoading(false);
+      return;
+    }
     
     const pageToFetch = reset ? 1 : currentPage;
     setLoading(true);
     
     try {
+      console.log('Fetching category:', category);
+      
       // Single optimized query combining category and products
       const { data: categoryData, error: categoryError } = await supabase
         .from('categories')
@@ -64,13 +69,17 @@ const Products = () => {
         .eq('is_active', true)
         .maybeSingle();
 
+      console.log('Category data:', categoryData, 'Error:', categoryError);
+
       if (categoryError) throw categoryError;
 
       if (!categoryData) {
+        console.log('Category not found:', category);
         setCategoryInfo(null);
         setProducts([]);
         setTotalProducts(0);
         setHasMore(false);
+        setLoading(false);
         return;
       }
 
