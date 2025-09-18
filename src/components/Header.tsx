@@ -44,7 +44,7 @@ const Header = () => {
       {/* Top announcement bar */}
       <div className="bg-gradient-gold py-2 text-center">
         <p className="text-sm font-medium text-black">
-          Free shipping on orders over $75 • New arrivals weekly!
+          Free shipping on orders over ₦150,000 • New arrivals weekly!
         </p>
       </div>
 

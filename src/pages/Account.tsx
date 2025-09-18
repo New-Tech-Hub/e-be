@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { User, Settings, Package, Heart, LogOut } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const Account = () => {
   const { user, signOut } = useAuth();
@@ -45,9 +45,11 @@ const Account = () => {
                 <p className="text-muted-foreground mb-4">
                   Manage your personal information and preferences
                 </p>
-                <Button variant="outline" className="w-full">
-                  Edit Profile
-                </Button>
+                <Link to="/profile">
+                  <Button variant="outline" className="w-full">
+                    Edit Profile
+                  </Button>
+                </Link>
               </Card>
 
               <Card className="p-6 hover:shadow-elegant transition-smooth">
@@ -60,9 +62,11 @@ const Account = () => {
                 <p className="text-muted-foreground mb-4">
                   View your order history and track current orders
                 </p>
-                <Button variant="outline" className="w-full">
-                  View Orders
-                </Button>
+                <Link to="/orders">
+                  <Button variant="outline" className="w-full">
+                    View Orders
+                  </Button>
+                </Link>
               </Card>
 
               <Card className="p-6 hover:shadow-elegant transition-smooth">
@@ -75,9 +79,11 @@ const Account = () => {
                 <p className="text-muted-foreground mb-4">
                   View your saved items and favorites
                 </p>
-                <Button variant="outline" className="w-full">
-                  View Wishlist
-                </Button>
+                <Link to="/wishlist">
+                  <Button variant="outline" className="w-full">
+                    View Wishlist
+                  </Button>
+                </Link>
               </Card>
 
               <Card className="p-6 hover:shadow-elegant transition-smooth">
@@ -90,9 +96,11 @@ const Account = () => {
                 <p className="text-muted-foreground mb-4">
                   Manage your account settings and notifications
                 </p>
-                <Button variant="outline" className="w-full">
-                  Account Settings
-                </Button>
+                <Link to="/settings">
+                  <Button variant="outline" className="w-full">
+                    Account Settings
+                  </Button>
+                </Link>
               </Card>
 
               <Card className="p-6 hover:shadow-elegant transition-smooth">
