@@ -25,33 +25,35 @@ const CategorySidebar = () => {
 
   const fetchCategories = async () => {
     try {
-      // Try optimized RPC first, fallback to basic query
-      let categoriesData: Category[] = [];
-      
-      try {
-        const { data: rpcData, error: rpcError } = await supabase
-          .rpc('get_categories_with_product_count');
+      // Use basic query with manual product count for better TypeScript compatibility
+      const { data: basicData, error: basicError } = await supabase
+        .from('categories')
+        .select('id, name, slug, description, image_url')
+        .eq('is_active', true)
+        .order('name');
 
-        if (rpcError) throw rpcError;
-        categoriesData = rpcData || [];
-      } catch (rpcError) {
-        // Fallback to basic query if RPC doesn't exist
-        console.log('Using fallback query for categories');
-        const { data: basicData, error: basicError } = await supabase
-          .from('categories')
-          .select('id, name, slug, description, image_url')
-          .eq('is_active', true)
-          .order('name');
-
-        if (basicError) throw basicError;
-        
-        // Set product_count to 0 for all categories as fallback
-        categoriesData = (basicData || []).map(cat => ({ ...cat, product_count: 0 }));
-      }
+      if (basicError) throw basicError;
       
-      setCategories(categoriesData);
+      // Get product counts for each category in parallel
+      const categoriesWithCounts = await Promise.all(
+        (basicData || []).map(async (category) => {
+          const { count } = await supabase
+            .from('products')
+            .select('*', { count: 'exact', head: true })
+            .eq('category_id', category.id)
+            .eq('is_active', true);
+          
+          return {
+            ...category,
+            product_count: count || 0
+          };
+        })
+      );
+      
+      setCategories(categoriesWithCounts);
     } catch (error) {
       console.error('Error fetching categories:', error);
+      setCategories([]);
     } finally {
       setLoading(false);
     }

@@ -113,7 +113,10 @@ const Products = () => {
 
       if (productsError) throw productsError;
 
-      const newProducts = productsData || [];
+      const newProducts = (productsData || []).map(product => ({
+        ...product,
+        gallery: product.gallery || []
+      }));
       
       if (reset) {
         setProducts(newProducts);
