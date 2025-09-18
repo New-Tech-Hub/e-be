@@ -17,6 +17,8 @@ import Wishlist from "./pages/Wishlist";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Admin from "./pages/Admin";
+import AdminProducts from "./pages/AdminProducts";
+import AdminCategories from "./pages/AdminCategories";
 import Checkout from "./pages/Checkout";
 import ProductDetail from "./pages/ProductDetail";
 
@@ -32,11 +34,10 @@ const App = () => (
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
-              <Route path="/clothing" element={<Products />} />
-              <Route path="/accessories" element={<Products />} />
-              <Route path="/groceries" element={<Products />} />
-              <Route path="/household" element={<Products />} />
-              <Route path="/specials" element={<Products />} />
+              <Route path="/products/:category" element={<Products />} />
+              <Route path="/product/:productId" element={<ProductDetail />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
               <Route path="/account" element={
                 <ProtectedRoute>
                   <Account />
@@ -62,10 +63,19 @@ const App = () => (
                   <Wishlist />
                 </ProtectedRoute>
               } />
-              <Route path="/product/:productId" element={<ProductDetail />} />
               <Route path="/admin" element={
                 <ProtectedRoute>
                   <Admin />
+                </ProtectedRoute>
+              } />
+              <Route path="/admin/products" element={
+                <ProtectedRoute>
+                  <AdminProducts />
+                </ProtectedRoute>
+              } />
+              <Route path="/admin/categories" element={
+                <ProtectedRoute>
+                  <AdminCategories />
                 </ProtectedRoute>
               } />
               <Route path="/checkout" element={
@@ -73,9 +83,12 @@ const App = () => (
                   <Checkout />
                 </ProtectedRoute>
               } />
-              <Route path="/about" element={<About />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/:category" element={<Products />} />
+              {/* Legacy category routes for backward compatibility */}
+              <Route path="/clothing" element={<Products />} />
+              <Route path="/accessories" element={<Products />} />
+              <Route path="/groceries" element={<Products />} />
+              <Route path="/household" element={<Products />} />
+              <Route path="/specials" element={<Products />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

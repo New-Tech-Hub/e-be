@@ -19,7 +19,7 @@ interface Product {
   price: number;
   description: string;
   image_url: string;
-  gallery: any[];
+  gallery: any; // Change from any[] to any to match Json type
   stock_quantity: number;
   is_active: boolean;
   category_id: string;

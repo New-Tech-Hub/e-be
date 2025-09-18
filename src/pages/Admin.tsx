@@ -242,59 +242,54 @@ const Admin = () => {
                 </TabsList>
 
                 <TabsContent value="products" className="space-y-6">
-                  <div className="flex justify-between items-center">
-                    <h2 className="text-2xl font-semibold">Product Management</h2>
-                    <Link to="/admin/products/new">
-                      <Button>
-                        <Plus className="h-4 w-4 mr-2" />
-                        Add Product
-                      </Button>
-                    </Link>
-                  </div>
+          <div className="flex justify-between items-center">
+            <h2 className="text-2xl font-semibold">Product Management</h2>
+            <div className="flex gap-2">
+              <Link to="/admin/products">
+                <Button>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Manage Products
+                </Button>
+              </Link>
+              <Link to="/admin/categories">
+                <Button variant="outline">
+                  <Package className="h-4 w-4 mr-2" />
+                  Manage Categories
+                </Button>
+              </Link>
+            </div>
+          </div>
 
-                  <Card>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Name</TableHead>
-                          <TableHead>Category</TableHead>
-                          <TableHead>Price</TableHead>
-                          <TableHead>Stock</TableHead>
-                          <TableHead>Status</TableHead>
-                          <TableHead>Actions</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {products.slice(0, 10).map((product) => (
-                          <TableRow key={product.id}>
-                            <TableCell className="font-medium">{product.name}</TableCell>
-                            <TableCell>{product.categories?.name || 'Uncategorized'}</TableCell>
-                            <TableCell>{formatCurrency(product.price)}</TableCell>
-                            <TableCell>{product.stock_quantity}</TableCell>
-                            <TableCell>
-                              <Badge variant={product.is_active ? "default" : "secondary"}>
-                                {product.is_active ? 'Active' : 'Inactive'}
-                              </Badge>
-                            </TableCell>
-                            <TableCell>
-                              <div className="flex space-x-2">
-                                <Button variant="ghost" size="sm">
-                                  <Eye className="h-4 w-4" />
-                                </Button>
-                                <Button variant="ghost" size="sm">
-                                  <Edit className="h-4 w-4" />
-                                </Button>
-                                <Button variant="ghost" size="sm" className="text-destructive">
-                                  <Trash2 className="h-4 w-4" />
-                                </Button>
-                              </div>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </Card>
-                </TabsContent>
+          <Card>
+            <div className="p-6 text-center">
+              <h3 className="text-lg font-semibold mb-2">Product & Category Management</h3>
+              <p className="text-muted-foreground mb-4">
+                Use the buttons above to manage your products and categories with full CRUD operations, 
+                including bulk CSV upload for products.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                <div className="text-left">
+                  <h4 className="font-medium mb-2">Product Features:</h4>
+                  <ul className="text-sm text-muted-foreground space-y-1">
+                    <li>• Create, edit, and delete products</li>
+                    <li>• Bulk import via CSV</li>
+                    <li>• Stock management</li>
+                    <li>• Category assignment</li>
+                  </ul>
+                </div>
+                <div className="text-left">
+                  <h4 className="font-medium mb-2">Category Features:</h4>
+                  <ul className="text-sm text-muted-foreground space-y-1">
+                    <li>• Create and manage categories</li>
+                    <li>• SEO-friendly slugs</li>
+                    <li>• Product count tracking</li>
+                    <li>• Enable/disable categories</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </Card>
+        </TabsContent>
 
                 <TabsContent value="orders" className="space-y-6">
                   <h2 className="text-2xl font-semibold">Order Management</h2>
