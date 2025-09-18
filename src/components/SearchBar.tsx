@@ -134,8 +134,8 @@ const SearchBar = ({ onClose, className = "" }: SearchBarProps) => {
         )}
       </form>
 
-      {showResults && (
-        <Card className="absolute top-full left-0 right-0 mt-2 z-50 max-h-96 overflow-y-auto">
+      {showResults && query.length >= 2 && (
+        <Card className="absolute top-full left-0 right-0 mt-2 z-50 max-h-96 overflow-y-auto bg-background border shadow-lg">
           {loading ? (
             <div className="p-4 text-center">
               <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-gold mx-auto"></div>
