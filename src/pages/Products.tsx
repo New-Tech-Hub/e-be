@@ -12,6 +12,7 @@ import { useCart } from "@/hooks/useCart";
 const Products = () => {
   const { category } = useParams();
   const [likedItems, setLikedItems] = useState<string[]>([]);
+  const { addToCart } = useCart();
 
   // Mock products data - this would come from your database
   const getProductsByCategory = (cat: string) => {
@@ -266,7 +267,11 @@ const Products = () => {
                     </div>
                   </div>
                   
-                  <Button className="w-full gap-2" size="sm">
+                  <Button 
+                    className="w-full gap-2" 
+                    size="sm"
+                    onClick={() => addToCart(product.id)}
+                  >
                     <ShoppingCart className="h-4 w-4" />
                     Add to Cart
                   </Button>

@@ -5,10 +5,12 @@ import Footer from "@/components/Footer";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useCart } from "@/hooks/useCart";
 import { Heart, ShoppingCart, X } from "lucide-react";
 import { useState } from "react";
 
 const Wishlist = () => {
+  const { addToCart } = useCart();
   const [wishlistItems, setWishlistItems] = useState([
     {
       id: "1",
@@ -134,24 +136,24 @@ const Wishlist = () => {
                         </div>
                       </div>
                       
-              <Button 
-                className="w-full gap-2" 
-                size="sm"
-                disabled={!item.inStock}
-                asChild={item.inStock}
-              >
-                {item.inStock ? (
-                  <Link to={`/${item.category.toLowerCase()}`}>
-                    <ShoppingCart className="h-4 w-4 mr-2" />
-                    Add to Cart
-                  </Link>
-                ) : (
-                  <>
-                    <ShoppingCart className="h-4 w-4" />
-                    Out of Stock
-                  </>
-                )}
-              </Button>
+                <Button 
+                  className="w-full gap-2" 
+                  size="sm"
+                  disabled={!item.inStock}
+                  onClick={() => item.inStock && addToCart(item.id)}
+                >
+                  {item.inStock ? (
+                    <>
+                      <ShoppingCart className="h-4 w-4 mr-2" />
+                      Add to Cart
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingCart className="h-4 w-4" />
+                      Out of Stock
+                    </>
+                  )}
+                </Button>
                     </div>
                   </Card>
                 ))}
