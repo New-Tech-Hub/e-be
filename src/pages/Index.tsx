@@ -7,6 +7,7 @@ import Testimonials from "@/components/Testimonials";
 import Newsletter from "@/components/Newsletter";
 import InstagramFeed from "@/components/InstagramFeed";
 import Footer from "@/components/Footer";
+import CustomerCare from "@/components/CustomerCare";
 
 const Index = () => {
   return (
@@ -43,6 +44,7 @@ const Index = () => {
         </main>
         
         <Footer />
+        <CustomerCare />
       </div>
     </>
   );
