@@ -21,6 +21,7 @@ import AdminProducts from "./pages/AdminProducts";
 import AdminCategories from "./pages/AdminCategories";
 import Checkout from "./pages/Checkout";
 import ProductDetail from "./pages/ProductDetail";
+import Search from "./pages/Search";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +35,7 @@ const App = () => (
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
+              <Route path="/search" element={<Search />} />
               <Route path="/products/:category" element={<Products />} />
               <Route path="/product/:productId" element={<ProductDetail />} />
               <Route path="/about" element={<About />} />

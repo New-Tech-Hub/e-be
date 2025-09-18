@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface Product {
   id: string;
@@ -28,6 +28,7 @@ const SearchBar = ({ onClose, className = "" }: SearchBarProps) => {
   const [results, setResults] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
   const [showResults, setShowResults] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (query.length < 2) {
@@ -78,6 +79,17 @@ const SearchBar = ({ onClose, className = "" }: SearchBarProps) => {
     onClose?.();
   };
 
+  const handleSearch = (e?: React.FormEvent) => {
+    e?.preventDefault();
+    if (query.trim().length >= 2) {
+      navigate(`/search?q=${encodeURIComponent(query.trim())}`);
+      setQuery("");
+      setResults([]);
+      setShowResults(false);
+      onClose?.();
+    }
+  };
+
   const formatCurrency = (amount: number, currency: string = 'NGN') => {
     if (currency === 'NGN') {
       return `₦${amount.toLocaleString()}`;
@@ -87,8 +99,11 @@ const SearchBar = ({ onClose, className = "" }: SearchBarProps) => {
 
   return (
     <div className={`relative ${className}`}>
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+      <form onSubmit={handleSearch} className="relative">
+        <Search 
+          className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4 cursor-pointer" 
+          onClick={handleSearch}
+        />
         <Input
           type="text"
           placeholder="Search products..."
@@ -96,9 +111,15 @@ const SearchBar = ({ onClose, className = "" }: SearchBarProps) => {
           onChange={(e) => setQuery(e.target.value)}
           className="pl-10 pr-10"
           onFocus={() => query.length >= 2 && setShowResults(true)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleSearch(e);
+            }
+          }}
         />
         {query && (
           <Button
+            type="button"
             variant="ghost"
             size="sm"
             className="absolute right-1 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0"
@@ -111,7 +132,7 @@ const SearchBar = ({ onClose, className = "" }: SearchBarProps) => {
             <X className="h-3 w-3" />
           </Button>
         )}
-      </div>
+      </form>
 
       {showResults && (
         <Card className="absolute top-full left-0 right-0 mt-2 z-50 max-h-96 overflow-y-auto">
