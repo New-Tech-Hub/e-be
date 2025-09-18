@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ShoppingCart, Menu, Search, User, Heart, X, UserPlus, LogOut } from "lucide-react";
+import { Menu, Search, User, Heart, X, UserPlus, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import logo from "@/assets/ebeth-logo.jpg";
 import SignupModal from "./SignupModal";
 import LoginModal from "./LoginModal";
+import CartButton from "./CartButton";
 import { useAuth } from "@/hooks/useAuth";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [cartCount] = useState(3); // Mock cart count
   const [isSignupOpen, setIsSignupOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const { user, signOut, loading } = useAuth();
@@ -160,14 +160,7 @@ const Header = () => {
               </Button>
             )}
             
-            <Button variant="ghost" size="icon" className="relative">
-              <ShoppingCart className="h-5 w-5" />
-              {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-gold text-black text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                  {cartCount}
-                </span>
-              )}
-            </Button>
+            <CartButton />
             <Button
               variant="ghost"
               size="icon"

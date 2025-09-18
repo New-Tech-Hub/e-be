@@ -16,6 +16,8 @@ import Settings from "./pages/Settings";
 import Wishlist from "./pages/Wishlist";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import Admin from "./pages/Admin";
+import Checkout from "./pages/Checkout";
 
 const queryClient = new QueryClient();
 
@@ -57,6 +59,16 @@ const App = () => (
               <Route path="/wishlist" element={
                 <ProtectedRoute>
                   <Wishlist />
+                </ProtectedRoute>
+              } />
+              <Route path="/admin" element={
+                <ProtectedRoute>
+                  <Admin />
+                </ProtectedRoute>
+              } />
+              <Route path="/checkout" element={
+                <ProtectedRoute>
+                  <Checkout />
                 </ProtectedRoute>
               } />
               <Route path="/about" element={<About />} />
