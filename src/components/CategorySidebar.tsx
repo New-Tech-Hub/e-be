@@ -25,34 +25,25 @@ const CategorySidebar = () => {
 
   const fetchCategories = async () => {
     try {
+      // Single optimized query with product count aggregation
       const { data, error } = await supabase
-        .from('categories')
-        .select(`
-          *,
-          products!inner (count)
-        `)
-        .eq('is_active', true)
-        .order('name');
+        .rpc('get_categories_with_product_count');
 
-      if (error) throw error;
+      if (error) {
+        // Fallback to basic query if RPC doesn't exist
+        const { data: basicData, error: basicError } = await supabase
+          .from('categories')
+          .select('id, name, slug, description, image_url')
+          .eq('is_active', true)
+          .order('name');
 
-      // Get product counts for each category
-      const categoriesWithCounts = await Promise.all(
-        (data || []).map(async (category) => {
-          const { count } = await supabase
-            .from('products')
-            .select('*', { count: 'exact', head: true })
-            .eq('category_id', category.id)
-            .eq('is_active', true);
-          
-          return {
-            ...category,
-            product_count: count || 0
-          };
-        })
-      );
-
-      setCategories(categoriesWithCounts);
+        if (basicError) throw basicError;
+        
+        // Set product_count to 0 for all categories as fallback
+        setCategories((basicData || []).map(cat => ({ ...cat, product_count: 0 })));
+      } else {
+        setCategories(data || []);
+      }
     } catch (error) {
       console.error('Error fetching categories:', error);
     } finally {

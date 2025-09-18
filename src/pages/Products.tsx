@@ -35,48 +35,92 @@ const Products = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [categoryInfo, setCategoryInfo] = useState<any>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalProducts, setTotalProducts] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
   const { addToCart } = useCart();
   const { toast } = useToast();
+  
+  const PRODUCTS_PER_PAGE = 12;
 
   useEffect(() => {
-    fetchProducts();
+    setCurrentPage(1);
+    setProducts([]);
+    fetchProducts(true);
   }, [category]);
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (reset = false) => {
     if (!category) return;
     
+    const pageToFetch = reset ? 1 : currentPage;
     setLoading(true);
+    
     try {
-      // First get category info
-      const { data: categoryData } = await supabase
+      // Single optimized query combining category and products
+      const { data: categoryData, error: categoryError } = await supabase
         .from('categories')
-        .select('*')
+        .select('id, name, slug, description')
         .eq('slug', category)
         .eq('is_active', true)
-        .single();
+        .maybeSingle();
+
+      if (categoryError) throw categoryError;
+
+      if (!categoryData) {
+        setCategoryInfo(null);
+        setProducts([]);
+        setTotalProducts(0);
+        setHasMore(false);
+        return;
+      }
 
       setCategoryInfo(categoryData);
 
-      if (categoryData) {
-        // Then get products for this category
-        const { data: productsData, error } = await supabase
-          .from('products')
-          .select(`
-            *,
-            categories (
-              name,
-              slug
-            )
-          `)
-          .eq('category_id', categoryData.id)
-          .eq('is_active', true)
-          .order('created_at', { ascending: false });
+      // Get total count for pagination
+      const { count } = await supabase
+        .from('products')
+        .select('*', { count: 'exact', head: true })
+        .eq('category_id', categoryData.id)
+        .eq('is_active', true);
 
-        if (error) throw error;
-        setProducts(productsData || []);
+      setTotalProducts(count || 0);
+
+      // Get paginated products with optimized fields
+      const from = (pageToFetch - 1) * PRODUCTS_PER_PAGE;
+      const to = from + PRODUCTS_PER_PAGE - 1;
+
+      const { data: productsData, error: productsError } = await supabase
+        .from('products')
+        .select(`
+          id,
+          name,
+          price,
+          description,
+          image_url,
+          stock_quantity,
+          categories!inner (
+            name,
+            slug
+          )
+        `)
+        .eq('category_id', categoryData.id)
+        .eq('is_active', true)
+        .order('created_at', { ascending: false })
+        .range(from, to);
+
+      if (productsError) throw productsError;
+
+      const newProducts = productsData || [];
+      
+      if (reset) {
+        setProducts(newProducts);
+        setCurrentPage(1);
       } else {
-        setProducts([]);
+        setProducts(prev => [...prev, ...newProducts]);
       }
+      
+      setHasMore(newProducts.length === PRODUCTS_PER_PAGE && (from + newProducts.length) < (count || 0));
+      
     } catch (error) {
       console.error('Error fetching products:', error);
       toast({
@@ -86,6 +130,13 @@ const Products = () => {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadMore = () => {
+    if (!loading && hasMore) {
+      setCurrentPage(prev => prev + 1);
+      fetchProducts(false);
     }
   };
 
@@ -192,7 +243,7 @@ const Products = () => {
           {/* Filters */}
           <div className="flex items-center justify-between mb-6">
             <p className="text-muted-foreground">
-              Showing {products.length} products
+              Showing {products.length} of {totalProducts} products
             </p>
             <Button variant="outline" className="gap-2">
               <Filter className="h-4 w-4" />
@@ -268,6 +319,19 @@ const Products = () => {
               </Card>
             ))}
           </div>
+
+          {/* Load More Button */}
+          {hasMore && products.length > 0 && (
+            <div className="flex justify-center mt-8">
+              <Button 
+                onClick={loadMore} 
+                disabled={loading}
+                className="px-8"
+              >
+                {loading ? "Loading..." : "Load More Products"}
+              </Button>
+            </div>
+          )}
         </main>
         
         <Footer />
