@@ -53,7 +53,7 @@ const SearchBar = ({ onClose, className = "" }: SearchBarProps) => {
               slug
             )
           `)
-          .ilike('name', `%${query}%`)
+          .or(`name.ilike.%${query}%,description.ilike.%${query}%,categories.name.ilike.%${query}%`)
           .eq('is_active', true)
           .limit(8);
 
@@ -153,7 +153,7 @@ const SearchBar = ({ onClose, className = "" }: SearchBarProps) => {
               {results.map((product) => (
                 <Link
                   key={product.id}
-                  to={`/${product.categories?.slug || 'products'}`}
+                  to={`/products/${product.categories?.slug || 'general'}`}
                   onClick={handleResultClick}
                   className="flex items-center space-x-3 p-2 hover:bg-muted rounded-lg transition-colors"
                 >

@@ -48,23 +48,23 @@ const Search = () => {
   const searchProducts = async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase
-        .from('products')
-        .select(`
-          id,
-          name,
-          description,
-          price,
-          image_url,
-          currency,
-          slug,
-          categories (
+        const { data, error } = await supabase
+          .from('products')
+          .select(`
+            id,
             name,
-            slug
-          )
-        `)
-        .ilike('name', `%${query}%`)
-        .eq('is_active', true);
+            description,
+            price,
+            image_url,
+            currency,
+            slug,
+            categories (
+              name,
+              slug
+            )
+          `)
+          .or(`name.ilike.%${query}%,description.ilike.%${query}%,categories.name.ilike.%${query}%`)
+          .eq('is_active', true);
 
       if (error) throw error;
       

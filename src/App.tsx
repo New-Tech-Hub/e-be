@@ -91,6 +91,17 @@ const App = () => (
               <Route path="/groceries" element={<Products />} />
               <Route path="/household" element={<Products />} />
               <Route path="/specials" element={<Products />} />
+              {/* Category routes for all active categories */}
+              <Route path="/formal-wear" element={<Products />} />
+              <Route path="/bags-luggage" element={<Products />} />
+              <Route path="/beauty-personal-care" element={<Products />} />
+              <Route path="/beverages" element={<Products />} />
+              <Route path="/electronics-gadgets" element={<Products />} />
+              <Route path="/fashion-clothing" element={<Products />} />
+              <Route path="/food-beverages" element={<Products />} />
+              <Route path="/make-up-kits" element={<Products />} />
+              <Route path="/home-living" element={<Products />} />
+              <Route path="/sports-fitness" element={<Products />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
