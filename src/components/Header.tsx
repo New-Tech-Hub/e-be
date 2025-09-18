@@ -1,15 +1,35 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { ShoppingCart, Menu, Search, User, Heart, X, UserPlus } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { ShoppingCart, Menu, Search, User, Heart, X, UserPlus, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import logo from "@/assets/ebeth-logo.jpg";
 import SignupModal from "./SignupModal";
+import LoginModal from "./LoginModal";
+import { useAuth } from "@/hooks/useAuth";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [cartCount] = useState(3); // Mock cart count
   const [isSignupOpen, setIsSignupOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const { user, signOut, loading } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
+  };
+
+  const handleSwitchToLogin = () => {
+    setIsSignupOpen(false);
+    setIsLoginOpen(true);
+  };
+
+  const handleSwitchToSignup = () => {
+    setIsLoginOpen(false);
+    setIsSignupOpen(true);
+  };
 
   const navigation = [
     { name: "Clothing", href: "/clothing" },
@@ -71,29 +91,74 @@ const Header = () => {
           <div className="flex items-center space-x-2">
             {/* Desktop Auth Buttons */}
             <div className="hidden md:flex items-center space-x-2">
-              <Button variant="ghost" size="icon">
-                <User className="h-5 w-5" />
-              </Button>
-              <Button variant="ghost" size="icon">
-                <Heart className="h-5 w-5" />
-              </Button>
-              <Button variant="outline" size="sm">
-                Login
-              </Button>
-              <Button 
-                size="sm" 
-                variant="default"
-                onClick={() => setIsSignupOpen(true)}
-              >
-                <UserPlus className="h-4 w-4 mr-1" />
-                Sign Up
-              </Button>
+              {user ? (
+                <>
+                  <Link to="/account">
+                    <Button variant="ghost" size="icon">
+                      <User className="h-5 w-5" />
+                    </Button>
+                  </Link>
+                  <Link to="/wishlist">
+                    <Button variant="ghost" size="icon">
+                      <Heart className="h-5 w-5" />
+                    </Button>
+                  </Link>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={handleSignOut}
+                  >
+                    <LogOut className="h-4 w-4 mr-1" />
+                    Sign Out
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button variant="ghost" size="icon" disabled={loading}>
+                    <User className="h-5 w-5" />
+                  </Button>
+                  <Button variant="ghost" size="icon" disabled={loading}>
+                    <Heart className="h-5 w-5" />
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => setIsLoginOpen(true)}
+                    disabled={loading}
+                  >
+                    Login
+                  </Button>
+                  <Button 
+                    size="sm" 
+                    variant="default"
+                    onClick={() => setIsSignupOpen(true)}
+                    disabled={loading}
+                  >
+                    <UserPlus className="h-4 w-4 mr-1" />
+                    Sign Up
+                  </Button>
+                </>
+              )}
             </div>
             
             {/* Mobile User Icon */}
-            <Button variant="ghost" size="icon" className="md:hidden">
-              <User className="h-5 w-5" />
-            </Button>
+            {user ? (
+              <Link to="/account">
+                <Button variant="ghost" size="icon" className="md:hidden">
+                  <User className="h-5 w-5" />
+                </Button>
+              </Link>
+            ) : (
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="md:hidden"
+                onClick={() => setIsLoginOpen(true)}
+                disabled={loading}
+              >
+                <User className="h-5 w-5" />
+              </Button>
+            )}
             
             <Button variant="ghost" size="icon" className="relative">
               <ShoppingCart className="h-5 w-5" />
@@ -140,34 +205,67 @@ const Header = () => {
                 </Link>
               ))}
               <hr className="border-border" />
-              <Button 
-                className="w-full mb-3" 
-                onClick={() => {
-                  setIsSignupOpen(true);
-                  setIsMenuOpen(false);
-                }}
-              >
-                <UserPlus className="h-4 w-4 mr-2" />
-                Sign Up
-              </Button>
-              <Link to="/account" className="block py-2 text-foreground hover:text-gold transition-smooth" onClick={() => setIsMenuOpen(false)}>
-                Login
-              </Link>
-              <Link to="/account" className="block py-2 text-foreground hover:text-gold transition-smooth" onClick={() => setIsMenuOpen(false)}>
-                My Account
-              </Link>
-              <Link to="/wishlist" className="block py-2 text-foreground hover:text-gold transition-smooth" onClick={() => setIsMenuOpen(false)}>
-                Wishlist
-              </Link>
+              {user ? (
+                <>
+                  <Link to="/account" className="block py-2 text-foreground hover:text-gold transition-smooth" onClick={() => setIsMenuOpen(false)}>
+                    My Account
+                  </Link>
+                  <Link to="/wishlist" className="block py-2 text-foreground hover:text-gold transition-smooth" onClick={() => setIsMenuOpen(false)}>
+                    Wishlist
+                  </Link>
+                  <Button 
+                    className="w-full mt-3" 
+                    variant="outline"
+                    onClick={() => {
+                      handleSignOut();
+                      setIsMenuOpen(false);
+                    }}
+                  >
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Sign Out
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button 
+                    className="w-full mb-3" 
+                    onClick={() => {
+                      setIsLoginOpen(true);
+                      setIsMenuOpen(false);
+                    }}
+                    disabled={loading}
+                  >
+                    Login
+                  </Button>
+                  <Button 
+                    className="w-full" 
+                    variant="outline"
+                    onClick={() => {
+                      setIsSignupOpen(true);
+                      setIsMenuOpen(false);
+                    }}
+                    disabled={loading}
+                  >
+                    <UserPlus className="h-4 w-4 mr-2" />
+                    Sign Up
+                  </Button>
+                </>
+              )}
             </nav>
           </div>
         )}
       </div>
 
-      {/* Signup Modal */}
+      {/* Auth Modals */}
       <SignupModal 
         isOpen={isSignupOpen} 
-        onClose={() => setIsSignupOpen(false)} 
+        onClose={() => setIsSignupOpen(false)}
+        onSwitchToLogin={handleSwitchToLogin}
+      />
+      <LoginModal 
+        isOpen={isLoginOpen} 
+        onClose={() => setIsLoginOpen(false)}
+        onSwitchToSignup={handleSwitchToSignup}
       />
     </header>
   );

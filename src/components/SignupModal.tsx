@@ -1,16 +1,19 @@
 import { useState } from "react";
-import { X, Mail, User, Lock, Eye, EyeOff } from "lucide-react";
+import { Mail, User, Lock, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useToast } from "@/components/ui/use-toast";
+import { useAuth } from "@/hooks/useAuth";
+import { sanitizeInput, isValidEmail, validatePassword, validateName } from "@/utils/sanitize";
 
 interface SignupModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSwitchToLogin: () => void;
 }
 
-const SignupModal = ({ isOpen, onClose }: SignupModalProps) => {
+const SignupModal = ({ isOpen, onClose, onSwitchToLogin }: SignupModalProps) => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "", 
@@ -22,9 +25,45 @@ const SignupModal = ({ isOpen, onClose }: SignupModalProps) => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const { signUp } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Sanitize inputs
+    const sanitizedEmail = sanitizeInput(formData.email).toLowerCase();
+    const sanitizedFirstName = sanitizeInput(formData.firstName);
+    const sanitizedLastName = sanitizeInput(formData.lastName);
+    
+    // Validate inputs
+    if (!isValidEmail(sanitizedEmail)) {
+      toast({
+        title: "Invalid Email",
+        description: "Please enter a valid email address.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    const firstNameValidation = validateName(sanitizedFirstName);
+    if (!firstNameValidation.isValid) {
+      toast({
+        title: "Invalid First Name",
+        description: firstNameValidation.message,
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    const lastNameValidation = validateName(sanitizedLastName);
+    if (!lastNameValidation.isValid) {
+      toast({
+        title: "Invalid Last Name",
+        description: lastNameValidation.message,
+        variant: "destructive"
+      });
+      return;
+    }
     
     if (formData.password !== formData.confirmPassword) {
       toast({
@@ -35,10 +74,11 @@ const SignupModal = ({ isOpen, onClose }: SignupModalProps) => {
       return;
     }
 
-    if (formData.password.length < 6) {
+    const passwordValidation = validatePassword(formData.password);
+    if (!passwordValidation.isValid) {
       toast({
-        title: "Password Too Short",
-        description: "Password must be at least 6 characters long.",
+        title: "Password Requirements Not Met",
+        description: passwordValidation.message,
         variant: "destructive"
       });
       return;
@@ -46,23 +86,35 @@ const SignupModal = ({ isOpen, onClose }: SignupModalProps) => {
 
     setIsLoading(true);
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    const { error } = await signUp(
+      sanitizedEmail, 
+      formData.password, 
+      sanitizedFirstName, 
+      sanitizedLastName
+    );
     
-    toast({
-      title: "Welcome to Ebeth Boutique!",
-      description: "Your account has been created successfully. Check your email to verify your account."
-    });
+    if (error) {
+      toast({
+        title: "Signup Failed",
+        description: error,
+        variant: "destructive"
+      });
+    } else {
+      toast({
+        title: "Welcome to Ebeth Boutique!",
+        description: "Account created successfully. Please check your email to verify your account."
+      });
+      onClose();
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+        confirmPassword: ""
+      });
+    }
     
     setIsLoading(false);
-    onClose();
-    setFormData({
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-      confirmPassword: ""
-    });
   };
 
   const handleInputChange = (field: string, value: string) => {
@@ -175,7 +227,10 @@ const SignupModal = ({ isOpen, onClose }: SignupModalProps) => {
 
         <div className="text-center text-sm text-muted-foreground mt-4">
           Already have an account?{" "}
-          <button className="text-primary hover:underline font-medium">
+          <button 
+            onClick={onSwitchToLogin}
+            className="text-primary hover:underline font-medium"
+          >
             Sign In
           </button>
         </div>

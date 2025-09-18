@@ -4,8 +4,17 @@ import Footer from "@/components/Footer";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { User, Settings, Package, Heart, LogOut } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const Account = () => {
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
+  };
   return (
     <>
       <Helmet>
@@ -96,9 +105,9 @@ const Account = () => {
                 <p className="text-muted-foreground mb-4">
                   Securely sign out of your account
                 </p>
-                <Button variant="destructive" className="w-full">
-                  Sign Out
-                </Button>
+              <Button variant="destructive" className="w-full" onClick={handleSignOut}>
+                Sign Out
+              </Button>
               </Card>
             </div>
           </div>
