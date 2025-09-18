@@ -41,16 +41,31 @@ const Products = () => {
   const { addToCart } = useCart();
   const { toast } = useToast();
   
+  // Get category from URL params or pathname for legacy routes
+  const getCategorySlug = () => {
+    if (category) return category;
+    
+    const pathname = window.location.pathname;
+    if (pathname === '/specials') return 'specials';
+    if (pathname === '/clothing') return 'clothing';
+    if (pathname === '/accessories') return 'accessories';
+    if (pathname === '/groceries') return 'groceries';
+    if (pathname === '/household') return 'household';
+    
+    return null;
+  };
+  
   const PRODUCTS_PER_PAGE = 12;
 
   useEffect(() => {
     setCurrentPage(1);
     setProducts([]);
     fetchProducts(true);
-  }, [category]);
+  }, [category, window.location.pathname]);
 
   const fetchProducts = async (reset = false) => {
-    if (!category) {
+    const categorySlug = getCategorySlug();
+    if (!categorySlug) {
       setLoading(false);
       return;
     }
@@ -59,13 +74,13 @@ const Products = () => {
     setLoading(true);
     
     try {
-      console.log('Fetching category:', category);
+      console.log('Fetching category:', categorySlug);
       
       // Single optimized query combining category and products
       const { data: categoryData, error: categoryError } = await supabase
         .from('categories')
         .select('id, name, slug, description')
-        .eq('slug', category)
+        .eq('slug', categorySlug)
         .eq('is_active', true)
         .maybeSingle();
 
@@ -74,7 +89,7 @@ const Products = () => {
       if (categoryError) throw categoryError;
 
       if (!categoryData) {
-        console.log('Category not found:', category);
+        console.log('Category not found:', categorySlug);
         setCategoryInfo(null);
         setProducts([]);
         setTotalProducts(0);
@@ -185,7 +200,7 @@ const Products = () => {
     );
   }
 
-  if (!category || !categoryInfo) {
+  if (!getCategorySlug() || !categoryInfo) {
     return (
       <div className="min-h-screen bg-background">
         <Helmet>
