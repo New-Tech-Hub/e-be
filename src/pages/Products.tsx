@@ -97,7 +97,10 @@ const Products = () => {
           price,
           description,
           image_url,
+          gallery,
           stock_quantity,
+          is_active,
+          category_id,
           categories!inner (
             name,
             slug

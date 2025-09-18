@@ -25,12 +25,18 @@ const CategorySidebar = () => {
 
   const fetchCategories = async () => {
     try {
-      // Single optimized query with product count aggregation
-      const { data, error } = await supabase
-        .rpc('get_categories_with_product_count');
+      // Try optimized RPC first, fallback to basic query
+      let categoriesData: Category[] = [];
+      
+      try {
+        const { data: rpcData, error: rpcError } = await supabase
+          .rpc('get_categories_with_product_count');
 
-      if (error) {
+        if (rpcError) throw rpcError;
+        categoriesData = rpcData || [];
+      } catch (rpcError) {
         // Fallback to basic query if RPC doesn't exist
+        console.log('Using fallback query for categories');
         const { data: basicData, error: basicError } = await supabase
           .from('categories')
           .select('id, name, slug, description, image_url')
@@ -40,10 +46,10 @@ const CategorySidebar = () => {
         if (basicError) throw basicError;
         
         // Set product_count to 0 for all categories as fallback
-        setCategories((basicData || []).map(cat => ({ ...cat, product_count: 0 })));
-      } else {
-        setCategories(data || []);
+        categoriesData = (basicData || []).map(cat => ({ ...cat, product_count: 0 }));
       }
+      
+      setCategories(categoriesData);
     } catch (error) {
       console.error('Error fetching categories:', error);
     } finally {
