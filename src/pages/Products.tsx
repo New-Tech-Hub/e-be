@@ -46,11 +46,21 @@ const Products = () => {
     if (category) return category;
     
     const pathname = window.location.pathname;
+    // Legacy routes
     if (pathname === '/specials') return 'specials';
     if (pathname === '/clothing') return 'clothing';
     if (pathname === '/accessories') return 'accessories';
     if (pathname === '/groceries') return 'groceries';
     if (pathname === '/household') return 'household';
+    
+    // Current category routes - extract slug from pathname
+    if (pathname.startsWith('/')) {
+      const slug = pathname.slice(1); // Remove leading slash
+      // Check if this matches a known category slug format
+      if (slug.includes('-') || ['formal-wear', 'bags-luggage', 'beauty-personal-care', 'beverages', 'electronics-gadgets', 'fashion-clothing', 'food-beverages', 'make-up-kits', 'home-living', 'sports-fitness'].includes(slug)) {
+        return slug;
+      }
+    }
     
     return null;
   };
