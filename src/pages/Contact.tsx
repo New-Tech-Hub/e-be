@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import StoreMap from "@/components/StoreMap";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
@@ -108,6 +109,19 @@ const Contact = () => {
                     </Card>
                   );
                 })}
+              </div>
+
+              {/* Store Location Map */}
+              <div className="max-w-6xl mx-auto mb-16">
+                <div className="text-center mb-8">
+                  <h2 className="text-3xl font-bold text-foreground mb-4">
+                    Find Our Store
+                  </h2>
+                  <p className="text-muted-foreground">
+                    Visit us at Atlantic Mall, Utako-Abuja for an exclusive shopping experience
+                  </p>
+                </div>
+                <StoreMap />
               </div>
 
               {/* Contact Form */}
