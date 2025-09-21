@@ -1,23 +1,27 @@
 import { useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import MockReviewsSection from "@/components/MockReviewsSection";
 import { useCart } from "@/hooks/useCart";
+import ProductReviews from "@/components/ProductReviews";
+import { useWishlist } from "@/hooks/useWishlist";
+import { useAnalytics } from "@/hooks/useAnalytics";
+import SEOHead from "@/components/SEOHead";
 import { Star, Heart, ShoppingCart, Minus, Plus, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const ProductDetail = () => {
   const { productId } = useParams();
   const { addToCart } = useCart();
+  const { isInWishlist, addToWishlist, removeFromWishlist, getWishlistItemId } = useWishlist();
+  const { trackProductView, trackAddToCart, trackWishlistAdd } = useAnalytics();
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
-  const [isLiked, setIsLiked] = useState(false);
 
   // Mock product data - in production this would come from the database
   const product = {
@@ -53,6 +57,12 @@ const ProductDetail = () => {
     }
   };
 
+  useEffect(() => {
+    if (product) {
+      trackProductView(product.id, product.name, 'Fashion');
+    }
+  }, [product, trackProductView]);
+
   const formatCurrency = (amount: number) => `₦${amount.toLocaleString()}`;
   
   const renderStars = (rating: number) => {
@@ -72,8 +82,27 @@ const ProductDetail = () => {
     );
   };
 
-  const handleAddToCart = () => {
-    addToCart(product.id, quantity);
+  const handleAddToCart = async () => {
+    const success = await addToCart(product.id, quantity);
+    if (success && product) {
+      trackAddToCart(product.id, product.name, quantity, product.price);
+    }
+  };
+
+  const handleWishlistToggle = async () => {
+    if (!product) return;
+    
+    if (isInWishlist(product.id)) {
+      const wishlistItemId = getWishlistItemId(product.id);
+      if (wishlistItemId) {
+        await removeFromWishlist(wishlistItemId);
+      }
+    } else {
+      const success = await addToWishlist(product.id);
+      if (success) {
+        trackWishlistAdd(product.id, product.name);
+      }
+    }
   };
 
   const handleQuantityChange = (change: number) => {
@@ -85,13 +114,28 @@ const ProductDetail = () => {
 
   return (
     <>
-      <Helmet>
-        <title>{product.name} - Ebeth Boutique & Exclusive Store</title>
-        <meta 
-          name="description" 
-          content={`${product.description} - ${formatCurrency(product.price)} at Ebeth Boutique.`}
-        />
-      </Helmet>
+      <SEOHead
+        title={product?.name || 'Product Details'}
+        description={product?.description || 'Premium fashion and accessories at Ebeth Boutique'}
+        keywords={`${product?.name}, fashion, boutique, ${product?.category || 'accessories'}`}
+        canonicalUrl={`https://ebethboutique.com/product/${productId}`}
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "Product",
+          "name": product?.name,
+          "description": product?.description,
+          "brand": {
+            "@type": "Brand",
+            "name": "Ebeth Boutique"
+          },
+          "offers": {
+            "@type": "Offer",
+            "price": product?.price,
+            "priceCurrency": "NGN",
+            "availability": product?.inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock"
+          }
+        }}
+      />
 
       <div className="min-h-screen bg-background">
         <Header />
@@ -144,10 +188,10 @@ const ProductDetail = () => {
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => setIsLiked(!isLiked)}
-                    className={isLiked ? "text-red-500" : ""}
+                    onClick={handleWishlistToggle}
+                    className={isInWishlist(product.id) ? "text-red-500" : ""}
                   >
-                    <Heart className={`h-5 w-5 ${isLiked ? 'fill-current' : ''}`} />
+                    <Heart className={`h-5 w-5 ${isInWishlist(product.id) ? 'fill-current' : ''}`} />
                   </Button>
                 </div>
                 
@@ -265,7 +309,7 @@ const ProductDetail = () => {
 
           {/* Reviews Section */}
           <div className="mt-16">
-            <MockReviewsSection productId={product.id} />
+            <ProductReviews productId={product.id} />
           </div>
         </main>
         

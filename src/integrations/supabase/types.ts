@@ -314,6 +314,13 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "fk_product_reviews_user_profile"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+          {
             foreignKeyName: "product_reviews_product_id_fkey"
             columns: ["product_id"]
             isOneToOne: false

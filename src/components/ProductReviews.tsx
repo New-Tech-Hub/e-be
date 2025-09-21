@@ -21,9 +21,6 @@ interface Review {
   comment: string;
   created_at: string;
   user_id: string;
-  profiles?: {
-    full_name: string | null;
-  } | null;
 }
 
 interface ProductReviewsProps {
@@ -51,10 +48,7 @@ const ProductReviews = ({ productId }: ProductReviewsProps) => {
     try {
       const { data, error } = await supabase
         .from('product_reviews')
-        .select(`
-          *,
-          profiles!product_reviews_user_id_fkey (full_name)
-        `)
+        .select('*')
         .eq('product_id', productId)
         .order('created_at', { ascending: false });
 
@@ -286,9 +280,7 @@ const ProductReviews = ({ productId }: ProductReviewsProps) => {
                     <User className="h-4 w-4 text-gold" />
                   </div>
                   <div>
-                    <p className="font-medium">
-                      {review.profiles?.full_name || 'Anonymous User'}
-                    </p>
+                    <p className="font-medium">Anonymous User</p>
                     <div className="flex items-center space-x-2 mt-1">
                       {renderStars(review.rating)}
                       <span className="text-sm text-muted-foreground">

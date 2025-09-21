@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Star, Heart, ShoppingCart, Filter } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useCart } from "@/hooks/useCart";
+import { useWishlist } from "@/hooks/useWishlist";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import CustomerCare from "@/components/CustomerCare";
@@ -39,6 +40,7 @@ const Products = () => {
   const [totalProducts, setTotalProducts] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const { addToCart } = useCart();
+  const { isInWishlist, addToWishlist, removeFromWishlist, getWishlistItemId } = useWishlist();
   const { toast } = useToast();
   
   // Get category from URL params or pathname for legacy routes
@@ -184,12 +186,15 @@ const Products = () => {
     return categoryInfo?.name || "Products";
   };
 
-  const toggleLike = (itemId: string) => {
-    setLikedItems(prev => 
-      prev.includes(itemId) 
-        ? prev.filter(id => id !== itemId)
-        : [...prev, itemId]
-    );
+  const toggleLike = async (productId: string) => {
+    if (isInWishlist(productId)) {
+      const wishlistItemId = getWishlistItemId(productId);
+      if (wishlistItemId) {
+        await removeFromWishlist(wishlistItemId);
+      }
+    } else {
+      await addToWishlist(productId);
+    }
   };
 
   if (loading) {

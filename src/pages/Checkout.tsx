@@ -12,6 +12,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { ArrowLeft, CreditCard, Truck } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import DeliverySlotSelector from "@/components/DeliverySlotSelector";
+import { useAnalytics } from "@/hooks/useAnalytics";
 import { Textarea } from "@/components/ui/textarea";
 
 interface CartItem {
@@ -42,10 +44,12 @@ interface CheckoutForm {
 const Checkout = () => {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { trackPurchase } = useAnalytics();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState(false);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [selectedDeliverySlot, setSelectedDeliverySlot] = useState<string | null>(null);
   const [form, setForm] = useState<CheckoutForm>({
     firstName: '',
     lastName: '',
@@ -173,6 +177,8 @@ const Checkout = () => {
         status: 'pending',
         payment_status: 'pending',
         payment_method: 'paystack',
+        delivery_slot_id: selectedDeliverySlot,
+        delivery_instructions: form.notes,
         shipping_address: {
           firstName: form.firstName,
           lastName: form.lastName,
@@ -217,6 +223,18 @@ const Checkout = () => {
         .eq('user_id', user!.id);
 
       if (cartError) throw cartError;
+
+      // Track purchase for analytics
+      trackPurchase(
+        order.id,
+        getFinalTotal(),
+        'NGN',
+        cartItems.map(item => ({
+          product_id: item.product_id,
+          quantity: item.quantity,
+          price: item.products?.price || 0
+        }))
+      );
 
       toast({
         title: "Order placed successfully!",
@@ -407,6 +425,14 @@ const Checkout = () => {
                           value={form.notes}
                           onChange={(e) => handleInputChange('notes', e.target.value)}
                           placeholder="Any special instructions for your order"
+                        />
+                      </div>
+
+                      {/* Delivery Slot Selection */}
+                      <div className="mt-6">
+                        <DeliverySlotSelector
+                          selectedSlotId={selectedDeliverySlot}
+                          onSlotSelect={setSelectedDeliverySlot}
                         />
                       </div>
                     </form>
