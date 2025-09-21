@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight, ShoppingBag, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import heroImage1 from "@/assets/hero-bags-collection.jpg";
 import heroImage2 from "@/assets/hero-formal-wear.jpg";
-import heroImage3 from "@/assets/hero-beverages.jpg";
+import heroImage3 from "@/assets/hero-watches-collection.jpg";
 
 const HeroSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -28,11 +28,11 @@ const HeroSection = () => {
     },
     {
       image: heroImage3,
-      title: "Premium Beverages Collection",
-      subtitle: "Fine wines, premium water, and luxury beverages for every occasion",
-      cta: "Shop Beverages",
-      accent: "Quality Drinks",
-      href: "/groceries"
+      title: "Luxury Wrist Watches Collection",
+      subtitle: "Elegant timepieces, premium craftsmanship, and sophisticated designs for every style",
+      cta: "Shop Watches",
+      accent: "Timeless Elegance",
+      href: "/accessories"
     }
   ];
 
