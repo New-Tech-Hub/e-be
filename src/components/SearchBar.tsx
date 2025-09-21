@@ -153,7 +153,7 @@ const SearchBar = ({ onClose, className = "" }: SearchBarProps) => {
               {results.map((product) => (
                 <Link
                   key={product.id}
-                  to={`/products/${product.categories?.slug || 'general'}`}
+                  to={`/product/${product.id}`}
                   onClick={handleResultClick}
                   className="flex items-center space-x-3 p-2 hover:bg-muted rounded-lg transition-colors"
                 >
