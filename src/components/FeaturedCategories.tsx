@@ -24,15 +24,6 @@ const FeaturedCategories = () => {
       items: "200+ Items"
     },
     {
-      id: "groceries",
-      title: "Groceries",
-      description: "Fresh produce & quality food essentials",
-      icon: ShoppingBasket,
-      href: "/groceries",
-      color: "pastel-green", 
-      items: "1000+ Items"
-    },
-    {
       id: "household",
       title: "Household Essentials", 
       description: "Everything you need for your home",
@@ -105,7 +96,7 @@ const FeaturedCategories = () => {
             Weekly Special: Mix & Match
           </h3>
           <p className="text-black/80 mb-6 max-w-md mx-auto">
-            Get 30% off when you shop both fashion and grocery categories in a single order
+            Get 30% off when you shop both fashion and household categories in a single order
           </p>
           <Button variant="outline" className="border-2 border-black text-black hover:bg-black hover:text-gold" asChild>
             <Link to="/specials">

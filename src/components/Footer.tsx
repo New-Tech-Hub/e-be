@@ -23,14 +23,11 @@ const Footer = () => {
   ];
 
   const categories = [
-    { name: "Fashion & Clothing", href: "/fashion-clothing" },
-    { name: "Formal Wear", href: "/formal-wear" },
+    { name: "Fashion & Clothing", href: "/clothing" },
+    { name: "Formal Wear", href: "/clothing" },
     { name: "Accessories", href: "/accessories" },
-    { name: "Jewelries", href: "/jewelries" },
-    { name: "Bags & Luggage", href: "/bags-luggage" },
-    { name: "Beauty & Personal Care", href: "/beauty-personal-care" },
-    { name: "Beverages", href: "/beverages" },
-    { name: "Home & Living", href: "/home-living" },
+    { name: "Bags & Luggage", href: "/accessories" },
+    { name: "Home & Living", href: "/household" },
     { name: "Weekly Specials", href: "/specials" },
   ];
 
