@@ -16,6 +16,7 @@ import Settings from "./pages/Settings";
 import Wishlist from "./pages/Wishlist";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import FAQ from "./pages/FAQ";
 import Admin from "./pages/Admin";
 import AdminProducts from "./pages/AdminProducts";
 import AdminCategories from "./pages/AdminCategories";
@@ -38,8 +39,9 @@ const App = () => (
               <Route path="/search" element={<Search />} />
               <Route path="/products/:category" element={<Products />} />
               <Route path="/product/:productId" element={<ProductDetail />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/contact" element={<Contact />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/faq" element={<FAQ />} />
               <Route path="/account" element={
                 <ProtectedRoute>
                   <Account />
@@ -96,7 +98,7 @@ const App = () => (
               <Route path="/bags-luggage" element={<Products />} />
               <Route path="/beauty-personal-care" element={<Products />} />
               <Route path="/beverages" element={<Products />} />
-              <Route path="/electronics-gadgets" element={<Products />} />
+              <Route path="/jewelries" element={<Products />} />
               <Route path="/fashion-clothing" element={<Products />} />
               <Route path="/food-beverages" element={<Products />} />
               <Route path="/make-up-kits" element={<Products />} />

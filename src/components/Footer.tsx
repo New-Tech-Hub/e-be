@@ -8,7 +8,7 @@ const Footer = () => {
   const quickLinks = [
     { name: "About Us", href: "/about" },
     { name: "Contact", href: "/contact" },
-    { name: "FAQ", href: "/contact" },
+    { name: "FAQ", href: "/faq" },
     { name: "Size Guide", href: "/contact" },
     { name: "Careers", href: "/contact" },
     { name: "Blog", href: "/" },
@@ -17,17 +17,20 @@ const Footer = () => {
   const policies = [
     { name: "Privacy Policy", href: "/contact" },
     { name: "Terms & Conditions", href: "/contact" },
-    { name: "Return Policy", href: "/contact" },
-    { name: "Shipping Info", href: "/contact" },
+    { name: "Return Policy", href: "/faq" },
+    { name: "Shipping Info", href: "/faq" },
     { name: "Cookie Policy", href: "/contact" },
   ];
 
   const categories = [
-    { name: "Women's Fashion", href: "/clothing" },
-    { name: "Men's Fashion", href: "/clothing" },
+    { name: "Fashion & Clothing", href: "/fashion-clothing" },
+    { name: "Formal Wear", href: "/formal-wear" },
     { name: "Accessories", href: "/accessories" },
-    { name: "Fresh Groceries", href: "/groceries" },
-    { name: "Household Items", href: "/household" },
+    { name: "Jewelries", href: "/jewelries" },
+    { name: "Bags & Luggage", href: "/bags-luggage" },
+    { name: "Beauty & Personal Care", href: "/beauty-personal-care" },
+    { name: "Beverages", href: "/beverages" },
+    { name: "Home & Living", href: "/home-living" },
     { name: "Weekly Specials", href: "/specials" },
   ];
 
@@ -66,15 +69,22 @@ const Footer = () => {
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
                 <Phone className="h-4 w-4 text-gold" />
-                <span className="text-sm text-white/80">09092034816</span>
+                <span className="text-sm text-white/80">0909 203 4816</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="h-4 w-4 text-gold" />
                 <span className="text-sm text-white/80">hello@ebethboutique.com</span>
               </div>
-              <div className="flex items-center space-x-3">
-                <MapPin className="h-4 w-4 text-gold" />
-                <span className="text-sm text-white/80">Atlantic Mall, 40 Ajose Adeogun Street Utako-Abuja</span>
+              <div className="flex items-start space-x-3">
+                <MapPin className="h-4 w-4 text-gold mt-0.5 flex-shrink-0" />
+                <div className="text-sm text-white/80">
+                  <div className="font-medium">Atlantic Mall</div>
+                  <div>40 Ajose Adeogun St, near Peace Mass Park</div>
+                  <div>Utako, Abuja 900108, FCT</div>
+                  <div className="mt-2 text-xs text-white/60">
+                    Hours: Mon-Sun 7:00 AM - 10:00 PM
+                  </div>
+                </div>
               </div>
             </div>
           </div>
