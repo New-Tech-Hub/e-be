@@ -9,7 +9,7 @@ const About = () => {
     {
       icon: Award,
       title: "Premium Quality",
-      description: "We curate only the finest products, from designer fashion to fresh groceries, ensuring excellence in every purchase."
+      description: "We curate only the finest products, from designer fashion,bags,shoes to health supplements, ensuring excellence in every purchase."
     },
     {
       icon: Users,
@@ -19,7 +19,7 @@ const About = () => {
     {
       icon: Truck,
       title: "Fast Delivery", 
-      description: "Quick and reliable delivery service ensures your fashion and grocery needs are met promptly."
+      description: "Quick and reliable delivery service ensures your fashion and store needs are met promptly."
     },
     {
       icon: Shield,
