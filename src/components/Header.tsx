@@ -69,9 +69,9 @@ const Header = () => {
       </div>
 
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-16 gap-4">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3">
+          <Link to="/" className="flex items-center space-x-3 flex-shrink-0">
             <img 
               src={logo} 
               alt="Ebeth Boutique & Exclusive Store" 
@@ -84,12 +84,12 @@ const Header = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-8">
+          <nav className="hidden lg:flex items-center space-x-6 flex-shrink-0">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 to={item.href}
-                className="text-foreground hover:text-gold transition-smooth font-medium"
+                className="text-sm text-foreground hover:text-gold transition-smooth font-medium whitespace-nowrap"
               >
                 {item.name}
               </Link>
@@ -97,12 +97,12 @@ const Header = () => {
           </nav>
 
           {/* Search Bar - Desktop */}
-          <div className="hidden md:flex items-center space-x-4 flex-1 max-w-md mx-8">
-            <SearchBar className="flex-1" />
+          <div className="hidden md:flex items-center flex-1 max-w-sm mx-4">
+            <SearchBar className="w-full" />
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-1 flex-shrink-0">
             {/* Desktop Auth Buttons */}
             <div className="hidden md:flex items-center space-x-2">
               {user ? (
