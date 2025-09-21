@@ -57,7 +57,7 @@ const Products = () => {
     if (pathname.startsWith('/')) {
       const slug = pathname.slice(1); // Remove leading slash
       // Check if this matches a known category slug format
-      if (slug.includes('-') || ['formal-wear', 'bags-luggage', 'beauty-personal-care', 'beverages', 'jewelries', 'fashion-clothing', 'food-beverages', 'make-up-kits', 'home-living', 'sports-fitness'].includes(slug)) {
+      if (slug.includes('-') || ['formal-wear', 'bags-luggage', 'beauty-personal-care', 'beverages', 'jewelries', 'fashion-clothing', 'food-beverages', 'make-up-kits', 'home-living', 'sports-fitness', 'mens-executive-shoes', 'womens-executive-shoes', 'mens-bags', 'womens-handbags', 'premium-luggage'].includes(slug)) {
         return slug;
       }
     }
