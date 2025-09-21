@@ -48,28 +48,56 @@ const Search = () => {
   const searchProducts = async () => {
     setLoading(true);
     try {
-        const { data, error } = await supabase
-          .from('products')
-          .select(`
-            id,
+      // Search products by name and description
+      const { data: products, error: productError } = await supabase
+        .from('products')
+        .select(`
+          id,
+          name,
+          description,
+          price,
+          image_url,
+          currency,
+          slug,
+          categories (
             name,
-            description,
-            price,
-            image_url,
-            currency,
-            slug,
-            categories (
-              name,
-              slug
-            )
-          `)
-          .or(`name.ilike.%${query}%,description.ilike.%${query}%,categories.name.ilike.%${query}%`)
-          .eq('is_active', true);
+            slug
+          )
+        `)
+        .or(`name.ilike.%${query}%,description.ilike.%${query}%`)
+        .eq('is_active', true);
 
-      if (error) throw error;
-      
-      setProducts(data || []);
-      setTotalProducts(data?.length || 0);
+      if (productError) throw productError;
+
+      // Also search for products by category name
+      const { data: categoryProducts, error: categoryError } = await supabase
+        .from('products')
+        .select(`
+          id,
+          name,
+          description,
+          price,
+          image_url,
+          currency,
+          slug,
+          categories!inner (
+            name,
+            slug
+          )
+        `)
+        .ilike('categories.name', `%${query}%`)
+        .eq('is_active', true);
+
+      if (categoryError) throw categoryError;
+
+      // Combine and deduplicate results
+      const allResults = [...(products || []), ...(categoryProducts || [])];
+      const uniqueResults = allResults.filter((product, index, self) => 
+        index === self.findIndex(p => p.id === product.id)
+      );
+
+      setProducts(uniqueResults);
+      setTotalProducts(uniqueResults.length);
     } catch (error) {
       console.error('Search error:', error);
       toast({

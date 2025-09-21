@@ -40,7 +40,8 @@ const SearchBar = ({ onClose, className = "" }: SearchBarProps) => {
     const searchProducts = async () => {
       setLoading(true);
       try {
-        const { data, error } = await supabase
+        // Search products by name and description
+        const { data: products, error: productError } = await supabase
           .from('products')
           .select(`
             id,
@@ -53,12 +54,39 @@ const SearchBar = ({ onClose, className = "" }: SearchBarProps) => {
               slug
             )
           `)
-          .or(`name.ilike.%${query}%,description.ilike.%${query}%,categories.name.ilike.%${query}%`)
+          .or(`name.ilike.%${query}%,description.ilike.%${query}%`)
           .eq('is_active', true)
           .limit(8);
 
-        if (error) throw error;
-        setResults(data || []);
+        if (productError) throw productError;
+
+        // Also search for products by category name
+        const { data: categoryProducts, error: categoryError } = await supabase
+          .from('products')
+          .select(`
+            id,
+            name,
+            price,
+            image_url,
+            currency,
+            categories!inner (
+              name,
+              slug
+            )
+          `)
+          .ilike('categories.name', `%${query}%`)
+          .eq('is_active', true)
+          .limit(8);
+
+        if (categoryError) throw categoryError;
+
+        // Combine and deduplicate results
+        const allResults = [...(products || []), ...(categoryProducts || [])];
+        const uniqueResults = allResults.filter((product, index, self) => 
+          index === self.findIndex(p => p.id === product.id)
+        ).slice(0, 8);
+
+        setResults(uniqueResults);
         setShowResults(true);
       } catch (error) {
         console.error('Search error:', error);
