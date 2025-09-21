@@ -5,6 +5,14 @@ import { Badge } from "@/components/ui/badge";
 import { ExternalLink, Heart, MessageCircle, ShoppingBag } from "lucide-react";
 import { useCart } from "@/hooks/useCart";
 
+// Import Instagram post images
+import fashionHero from "@/assets/hero-fashion-collection.jpg";
+import groceryHero from "@/assets/grocery-hero.jpg";
+import jewelryHero from "@/assets/hero-jewelry-gifts.jpg";
+import boutiqueFashion from "@/assets/fashion-hero.jpg";
+import bagsCollection from "@/assets/hero-bags-collection.jpg";
+import boutiqueHero from "@/assets/hero-boutique.jpg";
+
 interface InstagramPost {
   id: string;
   image_url: string;
@@ -26,7 +34,7 @@ const InstagramFeed = () => {
   const mockPosts: InstagramPost[] = [
     {
       id: "1",
-      image_url: "/api/placeholder/400/400",
+      image_url: fashionHero,
       caption: "New arrivals from our premium collection! ✨ Perfect for any occasion. Shop now! #EbethBoutique #Fashion",
       likes: 245,
       comments: 18,
@@ -37,7 +45,7 @@ const InstagramFeed = () => {
     },
     {
       id: "2",
-      image_url: "/api/placeholder/400/400",
+      image_url: groceryHero,
       caption: "Fresh groceries delivered straight to your door! 🥗 Quality you can trust. #FreshGroceries #EbethBoutique",
       likes: 189,
       comments: 12,
@@ -48,7 +56,7 @@ const InstagramFeed = () => {
     },
     {
       id: "3",
-      image_url: "/api/placeholder/400/400",
+      image_url: jewelryHero,
       caption: "Accessorize in style! These handcrafted jewelry pieces are flying off our shelves 💎 #Jewelry #Handcrafted",
       likes: 312,
       comments: 25,
@@ -59,7 +67,7 @@ const InstagramFeed = () => {
     },
     {
       id: "4",
-      image_url: "/api/placeholder/400/400",
+      image_url: boutiqueFashion,
       caption: "Weekend vibes with our casual collection! Comfort meets style 👗 #WeekendWear #Casual",
       likes: 156,
       comments: 8,
@@ -70,7 +78,7 @@ const InstagramFeed = () => {
     },
     {
       id: "5",
-      image_url: "/api/placeholder/400/400",
+      image_url: boutiqueHero,
       caption: "Behind the scenes at Ebeth Boutique! Our team curating the best products for you 📦 #BehindTheScenes",
       likes: 98,
       comments: 15,
@@ -78,12 +86,12 @@ const InstagramFeed = () => {
     },
     {
       id: "6",
-      image_url: "/api/placeholder/400/400",
-      caption: "Customer favorite! This household essential is a must-have for every home 🏠 #Household #Essentials",
+      image_url: bagsCollection,
+      caption: "Customer favorite! Our luxury bag collection is perfect for every occasion 👜 #LuxuryBags #Fashion",
       likes: 203,
       comments: 11,
       product_id: "prod_6",
-      product_name: "Premium Kitchen Set",
+      product_name: "Designer Handbag Collection",
       product_price: 45000,
       permalink: "https://instagram.com/p/example6"
     }
