@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      analytics_events: {
+        Row: {
+          created_at: string
+          event_data: Json | null
+          event_type: string
+          id: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_data?: Json | null
+          event_type: string
+          id?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_data?: Json | null
+          event_type?: string
+          id?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       cart_items: {
         Row: {
           created_at: string
@@ -82,6 +106,42 @@ export type Database = {
         }
         Relationships: []
       }
+      delivery_slots: {
+        Row: {
+          created_at: string
+          current_orders: number | null
+          date: string
+          end_time: string
+          id: string
+          is_available: boolean | null
+          max_orders: number | null
+          start_time: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          current_orders?: number | null
+          date: string
+          end_time: string
+          id?: string
+          is_available?: boolean | null
+          max_orders?: number | null
+          start_time: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          current_orders?: number | null
+          date?: string
+          end_time?: string
+          id?: string
+          is_available?: boolean | null
+          max_orders?: number | null
+          start_time?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       order_items: {
         Row: {
           created_at: string
@@ -127,10 +187,47 @@ export type Database = {
           },
         ]
       }
+      order_status_history: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          notes: string | null
+          order_id: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          notes?: string | null
+          order_id: string
+          status: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          notes?: string | null
+          order_id?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_status_history_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       orders: {
         Row: {
           created_at: string
           currency: string | null
+          delivery_instructions: string | null
+          delivery_slot_id: string | null
           id: string
           order_number: string
           payment_method: string | null
@@ -139,12 +236,15 @@ export type Database = {
           shipping_address: Json | null
           status: string | null
           total_amount: number
+          tracking_number: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
           created_at?: string
           currency?: string | null
+          delivery_instructions?: string | null
+          delivery_slot_id?: string | null
           id?: string
           order_number: string
           payment_method?: string | null
@@ -153,12 +253,15 @@ export type Database = {
           shipping_address?: Json | null
           status?: string | null
           total_amount: number
+          tracking_number?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
           created_at?: string
           currency?: string | null
+          delivery_instructions?: string | null
+          delivery_slot_id?: string | null
           id?: string
           order_number?: string
           payment_method?: string | null
@@ -167,10 +270,19 @@ export type Database = {
           shipping_address?: Json | null
           status?: string | null
           total_amount?: number
+          tracking_number?: string | null
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "orders_delivery_slot_id_fkey"
+            columns: ["delivery_slot_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_slots"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       product_reviews: {
         Row: {
@@ -278,6 +390,7 @@ export type Database = {
           full_name: string | null
           id: string
           phone: string | null
+          role: string | null
           state: string | null
           updated_at: string
           user_id: string
@@ -290,6 +403,7 @@ export type Database = {
           full_name?: string | null
           id?: string
           phone?: string | null
+          role?: string | null
           state?: string | null
           updated_at?: string
           user_id: string
@@ -302,6 +416,7 @@ export type Database = {
           full_name?: string | null
           id?: string
           phone?: string | null
+          role?: string | null
           state?: string | null
           updated_at?: string
           user_id?: string
@@ -331,6 +446,35 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      wishlist_items: {
+        Row: {
+          created_at: string
+          id: string
+          product_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          product_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          product_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wishlist_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
