@@ -41,7 +41,7 @@ const InstagramFeed = () => {
       product_id: "prod_1",
       product_name: "Premium Silk Dress",
       product_price: 85000,
-      permalink: "https://instagram.com/p/example1"
+      permalink: "https://www.instagram.com/p/DC_SSkBuQJ5/"
     },
     {
       id: "2",
@@ -52,7 +52,7 @@ const InstagramFeed = () => {
       product_id: "prod_2",
       product_name: "Organic Vegetable Bundle",
       product_price: 15000,
-      permalink: "https://instagram.com/p/example2"
+      permalink: "https://www.instagram.com/p/DC_SSkBuQJ5/"
     },
     {
       id: "3",
@@ -63,7 +63,7 @@ const InstagramFeed = () => {
       product_id: "prod_3",
       product_name: "Handcrafted Gold Necklace",
       product_price: 125000,
-      permalink: "https://instagram.com/p/example3"
+      permalink: "https://www.instagram.com/p/DC_SSkBuQJ5/"
     },
     {
       id: "4",
@@ -74,7 +74,7 @@ const InstagramFeed = () => {
       product_id: "prod_4",
       product_name: "Casual Cotton Dress",
       product_price: 35000,
-      permalink: "https://instagram.com/p/example4"
+      permalink: "https://www.instagram.com/p/DC_SSkBuQJ5/"
     },
     {
       id: "5",
@@ -82,7 +82,7 @@ const InstagramFeed = () => {
       caption: "Behind the scenes at Ebeth Boutique! Our team curating the best products for you 📦 #BehindTheScenes",
       likes: 98,
       comments: 15,
-      permalink: "https://instagram.com/p/example5"
+      permalink: "https://www.instagram.com/p/DC_SSkBuQJ5/"
     },
     {
       id: "6",
@@ -93,7 +93,7 @@ const InstagramFeed = () => {
       product_id: "prod_6",
       product_name: "Designer Handbag Collection",
       product_price: 45000,
-      permalink: "https://instagram.com/p/example6"
+      permalink: "https://www.instagram.com/p/DC_SSkBuQJ5/"
     }
   ];
 
