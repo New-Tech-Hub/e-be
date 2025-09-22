@@ -20,6 +20,10 @@ import FAQ from "./pages/FAQ";
 import Admin from "./pages/Admin";
 import AdminProducts from "./pages/AdminProducts";
 import AdminCategories from "./pages/AdminCategories";
+import AdminUsers from "./pages/AdminUsers";
+import AdminCoupons from "./pages/AdminCoupons";
+import AdminAnalytics from "./pages/AdminAnalytics";
+import AdminOrders from "./pages/AdminOrders";
 import Checkout from "./pages/Checkout";
 import ProductDetail from "./pages/ProductDetail";
 import Search from "./pages/Search";
@@ -80,6 +84,26 @@ const App = () => (
               <Route path="/admin/categories" element={
                 <ProtectedRoute>
                   <AdminCategories />
+                </ProtectedRoute>
+              } />
+              <Route path="/admin/users" element={
+                <ProtectedRoute>
+                  <AdminUsers />
+                </ProtectedRoute>
+              } />
+              <Route path="/admin/coupons" element={
+                <ProtectedRoute>
+                  <AdminCoupons />
+                </ProtectedRoute>
+              } />
+              <Route path="/admin/analytics" element={
+                <ProtectedRoute>
+                  <AdminAnalytics />
+                </ProtectedRoute>
+              } />
+              <Route path="/admin/orders" element={
+                <ProtectedRoute>
+                  <AdminOrders />
                 </ProtectedRoute>
               } />
               <Route path="/checkout" element={

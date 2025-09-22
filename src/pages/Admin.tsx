@@ -1,7 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import { useState, useEffect } from "react";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import { AdminLayout } from "@/components/AdminLayout";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -170,10 +169,8 @@ const Admin = () => {
         />
       </Helmet>
 
-      <div className="min-h-screen bg-background">
-        <Header />
-        
-        <main className="container mx-auto px-4 py-16">
+      <AdminLayout>
+        <div className="p-6">
           <div className="mb-8">
             <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
               Admin Dashboard
@@ -367,10 +364,8 @@ const Admin = () => {
               </Tabs>
             </>
           )}
-        </main>
-        
-        <Footer />
-      </div>
+        </div>
+      </AdminLayout>
     </>
   );
 };
