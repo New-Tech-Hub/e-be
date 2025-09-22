@@ -8,6 +8,7 @@ import {
   Tags, 
   BarChart3, 
   Settings,
+  Shield,
   ChevronLeft,
   ChevronRight
 } from "lucide-react";
@@ -22,6 +23,7 @@ const sidebarItems = [
   { title: "Orders", icon: ShoppingCart, href: "/admin/orders" },
   { title: "Categories", icon: Tags, href: "/admin/categories" },
   { title: "Coupons", icon: Tags, href: "/admin/coupons" },
+  { title: "Security", icon: Shield, href: "/admin/security" },
   { title: "Settings", icon: Settings, href: "/admin/settings" },
 ];
 

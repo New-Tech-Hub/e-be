@@ -520,6 +520,42 @@ export type Database = {
         }
         Relationships: []
       }
+      security_audit_log: {
+        Row: {
+          action: string
+          created_at: string | null
+          details: Json | null
+          id: string
+          ip_address: unknown | null
+          record_id: string | null
+          table_name: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string | null
+          details?: Json | null
+          id?: string
+          ip_address?: unknown | null
+          record_id?: string | null
+          table_name?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string | null
+          details?: Json | null
+          id?: string
+          ip_address?: unknown | null
+          record_id?: string | null
+          table_name?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       store_settings: {
         Row: {
           created_at: string
@@ -593,6 +629,16 @@ export type Database = {
           slug: string
         }[]
       }
+      get_user_session_info: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          email: string
+          last_sign_in: string
+          role: string
+          session_count: number
+          user_id: string
+        }[]
+      }
       is_admin: {
         Args: { user_id: string }
         Returns: boolean
@@ -600,6 +646,15 @@ export type Database = {
       is_super_admin: {
         Args: { user_id: string }
         Returns: boolean
+      }
+      log_security_event: {
+        Args: {
+          p_action: string
+          p_details?: Json
+          p_record_id?: string
+          p_table_name?: string
+        }
+        Returns: undefined
       }
     }
     Enums: {

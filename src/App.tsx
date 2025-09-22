@@ -25,6 +25,7 @@ import AdminUsers from "./pages/AdminUsers";
 import AdminCoupons from "./pages/AdminCoupons";
 import AdminAnalytics from "./pages/AdminAnalytics";
 import AdminOrders from "./pages/AdminOrders";
+import AdminSecurity from "./pages/AdminSecurity";
 import Checkout from "./pages/Checkout";
 import ProductDetail from "./pages/ProductDetail";
 import Search from "./pages/Search";
@@ -105,6 +106,11 @@ const App = () => (
               <Route path="/admin/orders" element={
                 <SuperAdminRoute>
                   <AdminOrders />
+                </SuperAdminRoute>
+              } />
+              <Route path="/admin/security" element={
+                <SuperAdminRoute>
+                  <AdminSecurity />
                 </SuperAdminRoute>
               } />
               <Route path="/checkout" element={
