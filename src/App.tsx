@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { AuthProvider } from "@/hooks/useAuth";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import SuperAdminRoute from "@/components/SuperAdminRoute";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Products from "./pages/Products";
@@ -72,39 +73,39 @@ const App = () => (
                 </ProtectedRoute>
               } />
               <Route path="/admin" element={
-                <ProtectedRoute>
+                <SuperAdminRoute>
                   <Admin />
-                </ProtectedRoute>
+                </SuperAdminRoute>
               } />
               <Route path="/admin/products" element={
-                <ProtectedRoute>
+                <SuperAdminRoute>
                   <AdminProducts />
-                </ProtectedRoute>
+                </SuperAdminRoute>
               } />
               <Route path="/admin/categories" element={
-                <ProtectedRoute>
+                <SuperAdminRoute>
                   <AdminCategories />
-                </ProtectedRoute>
+                </SuperAdminRoute>
               } />
               <Route path="/admin/users" element={
-                <ProtectedRoute>
+                <SuperAdminRoute>
                   <AdminUsers />
-                </ProtectedRoute>
+                </SuperAdminRoute>
               } />
               <Route path="/admin/coupons" element={
-                <ProtectedRoute>
+                <SuperAdminRoute>
                   <AdminCoupons />
-                </ProtectedRoute>
+                </SuperAdminRoute>
               } />
               <Route path="/admin/analytics" element={
-                <ProtectedRoute>
+                <SuperAdminRoute>
                   <AdminAnalytics />
-                </ProtectedRoute>
+                </SuperAdminRoute>
               } />
               <Route path="/admin/orders" element={
-                <ProtectedRoute>
+                <SuperAdminRoute>
                   <AdminOrders />
-                </ProtectedRoute>
+                </SuperAdminRoute>
               } />
               <Route path="/checkout" element={
                 <ProtectedRoute>

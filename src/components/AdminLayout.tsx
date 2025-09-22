@@ -1,6 +1,6 @@
 import { ReactNode, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAdminAuth } from "@/hooks/useAdminAuth";
+import { useSuperAdminAuth } from "@/hooks/useSuperAdminAuth";
 import { useToast } from "@/components/ui/use-toast";
 import { AdminSidebar } from "@/components/AdminSidebar";
 import Header from "@/components/Header";
@@ -10,7 +10,7 @@ interface AdminLayoutProps {
 }
 
 export function AdminLayout({ children }: AdminLayoutProps) {
-  const { isAdmin, loading, user } = useAdminAuth();
+  const { isSuperAdmin, loading, user } = useSuperAdminAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -22,25 +22,26 @@ export function AdminLayout({ children }: AdminLayoutProps) {
         variant: "destructive"
       });
       navigate("/");
-    } else if (!loading && user && !isAdmin) {
+    } else if (!loading && user && !isSuperAdmin) {
       toast({
-        title: "Access Denied",
-        description: "You don't have permission to access the admin panel.",
+        title: "Access Denied - Super Admin Only",
+        description: "This backend dashboard is restricted to the super administrator.",
         variant: "destructive"
       });
       navigate("/");
     }
-  }, [user, isAdmin, loading, navigate, toast]);
+  }, [user, isSuperAdmin, loading, navigate, toast]);
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold"></div>
+        <p className="ml-4 text-muted-foreground">Verifying super admin access...</p>
       </div>
     );
   }
 
-  if (!user || !isAdmin) {
+  if (!user || !isSuperAdmin) {
     return null;
   }
 

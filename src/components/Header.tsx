@@ -1,14 +1,16 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, Search, User, Heart, X, UserPlus, LogOut } from "lucide-react";
+import { Menu, Search, User, Heart, X, UserPlus, LogOut, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import logo from "@/assets/ebeth-logo.jpg";
 import SignupModal from "./SignupModal";
 import LoginModal from "./LoginModal";
 import CartButton from "./CartButton";
 import SearchBar from "./SearchBar";
 import { useAuth } from "@/hooks/useAuth";
+import { useSuperAdminAuth } from "@/hooks/useSuperAdminAuth";
 import { supabase } from "@/integrations/supabase/client";
 
 const Header = () => {
@@ -16,6 +18,7 @@ const Header = () => {
   const [isSignupOpen, setIsSignupOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const { user, signOut, loading } = useAuth();
+  const { isSuperAdmin } = useSuperAdminAuth();
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
@@ -111,11 +114,19 @@ const Header = () => {
             <div className="hidden md:flex items-center space-x-2">
               {user ? (
                 <>
-                  <Link to="/account">
+                  <Link to="/account" className="flex items-center space-x-2">
                     <Button variant="ghost" size="icon">
                       <User className="h-5 w-5" />
                     </Button>
                   </Link>
+                  {isSuperAdmin && (
+                    <Link to="/admin">
+                      <Badge variant="destructive" className="text-xs px-2 py-1 bg-red-600 hover:bg-red-700 text-white flex items-center space-x-1">
+                        <Shield className="h-3 w-3" />
+                        <span>Super Admin</span>
+                      </Badge>
+                    </Link>
+                  )}
                   <Link to="/wishlist">
                     <Button variant="ghost" size="icon">
                       <Heart className="h-5 w-5" />
@@ -215,6 +226,14 @@ const Header = () => {
                   <Link to="/account" className="block py-2 text-foreground hover:text-gold transition-smooth" onClick={() => setIsMenuOpen(false)}>
                     My Account
                   </Link>
+                  {isSuperAdmin && (
+                    <Link to="/admin" className="block py-2" onClick={() => setIsMenuOpen(false)}>
+                      <Badge variant="destructive" className="text-xs px-2 py-1 bg-red-600 hover:bg-red-700 text-white inline-flex items-center space-x-1">
+                        <Shield className="h-3 w-3" />
+                        <span>Super Admin Dashboard</span>
+                      </Badge>
+                    </Link>
+                  )}
                   <Link to="/wishlist" className="block py-2 text-foreground hover:text-gold transition-smooth" onClick={() => setIsMenuOpen(false)}>
                     Wishlist
                   </Link>
