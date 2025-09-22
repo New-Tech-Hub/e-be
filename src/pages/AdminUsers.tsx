@@ -85,7 +85,18 @@ const AdminUsers = () => {
         .update({ role: newRole })
         .eq('id', userId);
 
-      if (error) throw error;
+      if (error) {
+        if (error.message.includes('Only administrators can change user roles')) {
+          toast({
+            title: "Access Denied",
+            description: "Only administrators can change user roles.",
+            variant: "destructive"
+          });
+        } else {
+          throw error;
+        }
+        return;
+      }
 
       setUsers(users.map(user => 
         user.id === userId ? { ...user, role: newRole } : user

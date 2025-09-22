@@ -1,6 +1,6 @@
 import { ReactNode, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/hooks/useAuth";
+import { useAdminAuth } from "@/hooks/useAdminAuth";
 import { useToast } from "@/components/ui/use-toast";
 import { AdminSidebar } from "@/components/AdminSidebar";
 import Header from "@/components/Header";
@@ -10,7 +10,7 @@ interface AdminLayoutProps {
 }
 
 export function AdminLayout({ children }: AdminLayoutProps) {
-  const { user, loading } = useAuth();
+  const { isAdmin, loading, user } = useAdminAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -22,8 +22,15 @@ export function AdminLayout({ children }: AdminLayoutProps) {
         variant: "destructive"
       });
       navigate("/");
+    } else if (!loading && user && !isAdmin) {
+      toast({
+        title: "Access Denied",
+        description: "You don't have permission to access the admin panel.",
+        variant: "destructive"
+      });
+      navigate("/");
     }
-  }, [user, loading, navigate, toast]);
+  }, [user, isAdmin, loading, navigate, toast]);
 
   if (loading) {
     return (
@@ -33,7 +40,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
     );
   }
 
-  if (!user) {
+  if (!user || !isAdmin) {
     return null;
   }
 
