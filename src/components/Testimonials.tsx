@@ -97,6 +97,10 @@ const Testimonials = () => {
                     src={currentTestimonialData.avatar}
                     alt={currentTestimonialData.name}
                     className="w-20 h-20 rounded-full object-cover shadow-card"
+                    loading="lazy"
+                    decoding="async"
+                    width="80"
+                    height="80"
                   />
                 </div>
 

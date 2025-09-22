@@ -7,7 +7,6 @@ import { useCart } from "@/hooks/useCart";
 
 // Import Instagram post images
 import fashionHero from "@/assets/hero-fashion-collection.jpg";
-import groceryHero from "@/assets/grocery-hero.jpg";
 import jewelryHero from "@/assets/hero-jewelry-gifts.jpg";
 import boutiqueFashion from "@/assets/fashion-hero.jpg";
 import bagsCollection from "@/assets/hero-bags-collection.jpg";
@@ -41,17 +40,6 @@ const InstagramFeed = () => {
       product_id: "prod_1",
       product_name: "Premium Silk Dress",
       product_price: 85000,
-      permalink: "https://www.instagram.com/p/DC_SSkBuQJ5/"
-    },
-    {
-      id: "2",
-      image_url: groceryHero,
-      caption: "Fresh groceries delivered straight to your door! 🥗 Quality you can trust. #FreshGroceries #EbethBoutique",
-      likes: 189,
-      comments: 12,
-      product_id: "prod_2",
-      product_name: "Organic Vegetable Bundle",
-      product_price: 15000,
       permalink: "https://www.instagram.com/p/DC_SSkBuQJ5/"
     },
     {
@@ -134,7 +122,7 @@ const InstagramFeed = () => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[...Array(6)].map((_, index) => (
+          {[...Array(5)].map((_, index) => (
             <Card key={index} className="overflow-hidden">
               <div className="aspect-square bg-muted animate-pulse"></div>
               <div className="p-4 space-y-3">
@@ -179,6 +167,11 @@ const InstagramFeed = () => {
                 src={post.image_url}
                 alt="Instagram post"
                 className="w-full aspect-square object-cover"
+                loading="lazy"
+                decoding="async"
+                width="400"
+                height="400"
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33.33vw"
               />
               {post.product_id && (
                 <Badge className="absolute top-2 right-2 bg-black/70 text-white">

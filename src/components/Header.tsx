@@ -76,6 +76,10 @@ const Header = () => {
               src={logo} 
               alt="Ebeth Boutique & Exclusive Store" 
               className="h-12 w-12 rounded-full object-cover"
+              loading="eager"
+              decoding="async"
+              width="48"
+              height="48"
             />
             <div className="hidden md:block">
               <h1 className="text-xl font-bold text-foreground">Ebeth Boutique</h1>

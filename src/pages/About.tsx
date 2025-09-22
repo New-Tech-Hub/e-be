@@ -83,6 +83,11 @@ const About = () => {
                       src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&h=400&fit=crop"
                       alt="Ebeth Boutique Store Interior"
                       className="rounded-lg shadow-elegant"
+                      loading="lazy"
+                      decoding="async"
+                      width="600"
+                      height="400"
+                      sizes="(max-width: 768px) 100vw, 50vw"
                     />
                   </div>
                 </div>

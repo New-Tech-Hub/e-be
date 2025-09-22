@@ -126,6 +126,11 @@ const WeeklyDeals = () => {
                   src={deal.image}
                   alt={deal.name}
                   className="w-full h-48 object-cover group-hover:scale-105 transition-smooth"
+                  loading="lazy"
+                  decoding="async"
+                  width="200"
+                  height="200"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 16.67vw"
                 />
                 <div className="absolute top-2 left-2">
                   <Badge className="bg-destructive text-destructive-foreground text-xs font-bold">
