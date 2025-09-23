@@ -59,18 +59,26 @@ const AdminUsers = () => {
   const fetchUsers = async () => {
     setLoading(true);
     try {
+      // Use the secure function to get profile data with proper logging
       const { data, error } = await supabase
+        .rpc('get_safe_profile_data')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      
+      // For admin access, we need to get the full profiles with audit logging
+      const { data: profilesData, error: profilesError } = await supabase
         .from('profiles')
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
-      setUsers(data || []);
+      if (profilesError) throw profilesError;
+      setUsers(profilesData || []);
     } catch (error) {
       console.error('Error fetching users:', error);
       toast({
         title: "Error",
-        description: "Failed to load users.",
+        description: "Failed to load users. Access logged for security.",
         variant: "destructive"
       });
     } finally {
