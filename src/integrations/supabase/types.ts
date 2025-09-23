@@ -411,6 +411,13 @@ export type Database = {
             referencedColumns: ["user_id"]
           },
           {
+            foreignKeyName: "fk_product_reviews_user_profile"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles_safe"
+            referencedColumns: ["user_id"]
+          },
+          {
             foreignKeyName: "product_reviews_product_id_fkey"
             columns: ["product_id"]
             isOneToOne: false
@@ -611,9 +618,60 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      profiles_safe: {
+        Row: {
+          city: string | null
+          country: string | null
+          created_at: string | null
+          full_name: string | null
+          id: string | null
+          role: string | null
+          state: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          city?: string | null
+          country?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          id?: string | null
+          role?: string | null
+          state?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          city?: string | null
+          country?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          id?: string | null
+          role?: string | null
+          state?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
+      admin_access_profile: {
+        Args: { reason?: string; target_user_id: string }
+        Returns: {
+          address: string
+          city: string
+          country: string
+          created_at: string
+          full_name: string
+          id: string
+          phone: string
+          role: string
+          state: string
+          updated_at: string
+          user_id: string
+        }[]
+      }
       generate_order_number: {
         Args: Record<PropertyKey, never>
         Returns: string
@@ -645,6 +703,10 @@ export type Database = {
       }
       is_super_admin: {
         Args: { user_id: string }
+        Returns: boolean
+      }
+      log_admin_profile_access: {
+        Args: Record<PropertyKey, never>
         Returns: boolean
       }
       log_security_event: {
