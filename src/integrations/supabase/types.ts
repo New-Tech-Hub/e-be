@@ -411,13 +411,6 @@ export type Database = {
             referencedColumns: ["user_id"]
           },
           {
-            foreignKeyName: "fk_product_reviews_user_profile"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles_safe"
-            referencedColumns: ["user_id"]
-          },
-          {
             foreignKeyName: "product_reviews_product_id_fkey"
             columns: ["product_id"]
             isOneToOne: false
@@ -618,42 +611,7 @@ export type Database = {
       }
     }
     Views: {
-      profiles_safe: {
-        Row: {
-          city: string | null
-          country: string | null
-          created_at: string | null
-          full_name: string | null
-          id: string | null
-          role: string | null
-          state: string | null
-          updated_at: string | null
-          user_id: string | null
-        }
-        Insert: {
-          city?: string | null
-          country?: string | null
-          created_at?: string | null
-          full_name?: string | null
-          id?: string | null
-          role?: string | null
-          state?: string | null
-          updated_at?: string | null
-          user_id?: string | null
-        }
-        Update: {
-          city?: string | null
-          country?: string | null
-          created_at?: string | null
-          full_name?: string | null
-          id?: string | null
-          role?: string | null
-          state?: string | null
-          updated_at?: string | null
-          user_id?: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       admin_access_profile: {
@@ -685,6 +643,20 @@ export type Database = {
           name: string
           product_count: number
           slug: string
+        }[]
+      }
+      get_safe_profile_data: {
+        Args: { target_user_id?: string }
+        Returns: {
+          city: string
+          country: string
+          created_at: string
+          full_name: string
+          id: string
+          role: string
+          state: string
+          updated_at: string
+          user_id: string
         }[]
       }
       get_user_session_info: {
