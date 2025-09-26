@@ -26,19 +26,30 @@ import egyptianCottonTowels from "@/assets/products/egyptian-cotton-towels.jpg";
 import ceramicVaseDecor from "@/assets/products/ceramic-vase-decor.jpg";
 import luxuryGiftHamper from "@/assets/products/luxury-gift-hamper.jpg";
 
-// Existing asset imports for categories that use existing images
+// Additional product-specific image imports
+import designerPoloWhite from "@/assets/products/designer-polo-white.jpg";
+import premiumChinosKhaki from "@/assets/products/premium-chinos-khaki.jpg";
+import womensOfficeShirtWhite from "@/assets/products/womens-office-shirt-white.jpg";
+import cottonSingletBlackPack from "@/assets/products/cotton-singlet-black-pack.jpg";
+import casualSummerDressFloral from "@/assets/products/casual-summer-dress-floral.jpg";
+import luxuryTeaCupSet from "@/assets/products/luxury-tea-cup-set.jpg";
+import electricKitchenScale from "@/assets/products/electric-kitchen-scale.jpg";
+import luxuryBathTowelsWhite from "@/assets/products/luxury-bath-towels-white.jpg";
+import premiumHandTowelsSet from "@/assets/products/premium-hand-towels-set.jpg";
+import scentedCandlesLuxurySet from "@/assets/products/scented-candles-luxury-set.jpg";
+import silkTieExecutive from "@/assets/products/silk-tie-executive.jpg";
+import romanticGiftSetValentines from "@/assets/products/romantic-gift-set-valentines.jpg";
+import corporateGiftPackage from "@/assets/products/corporate-gift-package.jpg";
+import birthdaySurpriseBox from "@/assets/products/birthday-surprise-box.jpg";
+import weekendFlashDealBundle from "@/assets/products/weekend-flash-deal-bundle.jpg";
+import clearanceFashionItems from "@/assets/products/clearance-fashion-items.jpg";
+
+// Existing asset imports for specific categories
 import designerHandbagsCollection from "@/assets/designer-handbags-collection.jpg";
 import blackProfessionalLuggage from "@/assets/black-professional-luggage.jpg";
 import redHardshellLuggage from "@/assets/red-hardshell-luggage.jpg";
 import oliveLuggageSet from "@/assets/olive-luggage-set.jpg";
-import heroJewelryGifts from "@/assets/hero-jewelry-gifts.jpg";
 import heroAfricanCollection from "@/assets/hero-african-collection.jpg";
-import heroFormalWear from "@/assets/hero-formal-wear.jpg";
-import fashionHero from "@/assets/fashion-hero.jpg";
-import heroFashionCollection from "@/assets/hero-fashion-collection.jpg";
-import heroBoutique from "@/assets/hero-boutique.jpg";
-import colorfulLuggageCollection from "@/assets/colorful-luggage-collection.jpg";
-import yellowHardshellLuggage from "@/assets/yellow-hardshell-luggage.jpg";
 
 export interface Product {
   id: string;
@@ -149,7 +160,7 @@ export const productData = {
       name: "Designer Polo Shirt - White",
       price: 7999.99,
       originalPrice: 11999.99,
-      image: fashionHero,
+      image: designerPoloWhite,
       rating: 4.6,
       reviews: 203,
       category: "Men's Casual"
@@ -159,7 +170,7 @@ export const productData = {
       name: "Premium Chinos - Khaki",
       price: 9999.99,
       originalPrice: 14999.99,
-      image: heroFormalWear,
+      image: premiumChinosKhaki,
       rating: 4.7,
       reviews: 189,
       category: "Men's Casual"
@@ -169,7 +180,7 @@ export const productData = {
       name: "Women's Office Shirt - White",
       price: 6999.99,
       originalPrice: 9999.99,
-      image: heroFashionCollection,
+      image: womensOfficeShirtWhite,
       rating: 4.5,
       reviews: 167,
       category: "Women's Corporate"
@@ -179,7 +190,7 @@ export const productData = {
       name: "Cotton Singlet - Black 3-Pack",
       price: 4999.99,
       originalPrice: 7999.99,
-      image: fashionHero,
+      image: cottonSingletBlackPack,
       rating: 4.6,
       reviews: 234,
       category: "Men's Undergarments"
@@ -189,7 +200,7 @@ export const productData = {
       name: "Casual Summer Dress - Floral",
       price: 11999.99,
       originalPrice: 17999.99,
-      image: heroFashionCollection,
+      image: casualSummerDressFloral,
       rating: 4.8,
       reviews: 298,
       category: "Women's Casual"
@@ -315,7 +326,7 @@ export const productData = {
       name: "Silk Tie - Executive Pattern",
       price: 3999.99,
       originalPrice: 6999.99,
-      image: heroFormalWear,
+      image: silkTieExecutive,
       rating: 4.8,
       reviews: 156,
       category: "Ties"
@@ -401,7 +412,7 @@ export const productData = {
       name: "Luxury Tea Cup Set - Porcelain",
       price: 12999.99,
       originalPrice: 18999.99,
-      image: heroBoutique,
+      image: luxuryTeaCupSet,
       rating: 4.8,
       reviews: 167,
       category: "Expensive Cups"
@@ -411,7 +422,7 @@ export const productData = {
       name: "Electric Kitchen Scale",
       price: 4999.99,
       originalPrice: 7999.99,
-      image: heroBoutique,
+      image: electricKitchenScale,
       rating: 4.6,
       reviews: 298,
       category: "Kitchen Accessories"
@@ -432,7 +443,7 @@ export const productData = {
       name: "Luxury Bath Towels - White",
       price: 7999.99,
       originalPrice: 11999.99,
-      image: heroBoutique,
+      image: luxuryBathTowelsWhite,
       rating: 4.8,
       reviews: 189,
       category: "Towels"
@@ -442,7 +453,7 @@ export const productData = {
       name: "Premium Hand Towels - Set of 6",
       price: 5999.99,
       originalPrice: 8999.99,
-      image: heroBoutique,
+      image: premiumHandTowelsSet,
       rating: 4.7,
       reviews: 167,
       category: "Towels"
@@ -463,7 +474,7 @@ export const productData = {
       name: "Scented Candles - Luxury Set",
       price: 4999.99,
       originalPrice: 7999.99,
-      image: heroBoutique,
+      image: scentedCandlesLuxurySet,
       rating: 4.8,
       reviews: 234,
       category: "Home Decor"
@@ -487,7 +498,7 @@ export const productData = {
       name: "Romantic Gift Set - Valentine's",
       price: 18999.99,
       originalPrice: 27999.99,
-      image: heroJewelryGifts,
+      image: romanticGiftSetValentines,
       rating: 4.8,
       reviews: 156,
       category: "Gifts"
@@ -497,7 +508,7 @@ export const productData = {
       name: "Corporate Gift Package",
       price: 25999.99,
       originalPrice: 35999.99,
-      image: heroJewelryGifts,
+      image: corporateGiftPackage,
       rating: 4.7,
       reviews: 89,
       category: "Gifts"
@@ -507,7 +518,7 @@ export const productData = {
       name: "Birthday Surprise Box",
       price: 12999.99,
       originalPrice: 18999.99,
-      image: heroJewelryGifts,
+      image: birthdaySurpriseBox,
       rating: 4.8,
       reviews: 234,
       category: "Gifts"
@@ -517,7 +528,7 @@ export const productData = {
       name: "Weekend Flash Deal - Mixed Bundle",
       price: 9999.99,
       originalPrice: 19999.99,
-      image: colorfulLuggageCollection,
+      image: weekendFlashDealBundle,
       rating: 4.6,
       reviews: 345,
       category: "Weekly Deals"
@@ -527,7 +538,7 @@ export const productData = {
       name: "Clearance Sale - Fashion Items",
       price: 7999.99,
       originalPrice: 15999.99,
-      image: yellowHardshellLuggage,
+      image: clearanceFashionItems,
       rating: 4.5,
       reviews: 267,
       category: "Weekly Deals"
