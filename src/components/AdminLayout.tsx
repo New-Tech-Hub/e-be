@@ -10,7 +10,7 @@ interface AdminLayoutProps {
 }
 
 export function AdminLayout({ children }: AdminLayoutProps) {
-  const { isSuperAdmin, loading, user } = useSuperAdminAuth();
+  const { hasElevatedAccess, loading, user, userRole } = useSuperAdminAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -22,26 +22,28 @@ export function AdminLayout({ children }: AdminLayoutProps) {
         variant: "destructive"
       });
       navigate("/");
-    } else if (!loading && user && !isSuperAdmin) {
+    } else if (!loading && user && !hasElevatedAccess) {
       toast({
-        title: "Access Denied - Super Admin Only",
-        description: "This backend dashboard is restricted to the super administrator.",
+        title: "Access Denied",
+        description: "This area requires elevated permissions (manager, admin, or super admin).",
         variant: "destructive"
       });
       navigate("/");
     }
-  }, [user, isSuperAdmin, loading, navigate, toast]);
+  }, [user, hasElevatedAccess, loading, navigate, toast]);
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold"></div>
-        <p className="ml-4 text-muted-foreground">Verifying super admin access...</p>
+        <p className="ml-4 text-muted-foreground">
+          Verifying access permissions...
+        </p>
       </div>
     );
   }
 
-  if (!user || !isSuperAdmin) {
+  if (!user || !hasElevatedAccess) {
     return null;
   }
 

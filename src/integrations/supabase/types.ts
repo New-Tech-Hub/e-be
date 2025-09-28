@@ -527,6 +527,33 @@ export type Database = {
         }
         Relationships: []
       }
+      role_hierarchy: {
+        Row: {
+          can_manage_roles: string[] | null
+          created_at: string | null
+          id: string
+          permissions: Json | null
+          role: string
+          updated_at: string | null
+        }
+        Insert: {
+          can_manage_roles?: string[] | null
+          created_at?: string | null
+          id?: string
+          permissions?: Json | null
+          role: string
+          updated_at?: string | null
+        }
+        Update: {
+          can_manage_roles?: string[] | null
+          created_at?: string | null
+          id?: string
+          permissions?: Json | null
+          role?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       security_audit_log: {
         Row: {
           action: string
@@ -669,6 +696,10 @@ export type Database = {
           user_id: string
         }[]
       }
+      can_manage_role: {
+        Args: { manager_user_id: string; target_role: string }
+        Returns: boolean
+      }
       generate_order_number: {
         Args: Record<PropertyKey, never>
         Returns: string
@@ -709,6 +740,14 @@ export type Database = {
         }[]
       }
       is_admin: {
+        Args: { user_id: string }
+        Returns: boolean
+      }
+      is_admin_or_super: {
+        Args: { user_id: string }
+        Returns: boolean
+      }
+      is_manager: {
         Args: { user_id: string }
         Returns: boolean
       }

@@ -7,6 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import UserInvitationModal from "@/components/UserInvitationModal";
+import { useSuperAdminAuth } from "@/hooks/useSuperAdminAuth";
+import { useRoleManagement } from "@/hooks/useRoleManagement";
 import {
   Table,
   TableBody,
@@ -16,20 +19,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Search, Edit, Plus, Trash2 } from "lucide-react";
+import { Search, Shield, Users, Crown } from "lucide-react";
 
 interface UserProfile {
   id: string;
@@ -46,11 +42,11 @@ interface UserProfile {
 
 const AdminUsers = () => {
   const { toast } = useToast();
+  const { userRole, canManageUsers, isSuperAdmin } = useSuperAdminAuth();
+  const { canManageRole, getAvailableRoles } = useRoleManagement();
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [editingUser, setEditingUser] = useState<UserProfile | null>(null);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
     fetchUsers();
@@ -87,24 +83,23 @@ const AdminUsers = () => {
   };
 
   const updateUserRole = async (userId: string, newRole: string) => {
+    // Check if the current user can manage the target role
+    if (!canManageRole(userRole, newRole)) {
+      toast({
+        title: "Access Denied",
+        description: `You don't have permission to assign the ${newRole} role.`,
+        variant: "destructive"
+      });
+      return;
+    }
+
     try {
       const { error } = await supabase
         .from('profiles')
         .update({ role: newRole })
         .eq('id', userId);
 
-      if (error) {
-        if (error.message.includes('Only administrators can change user roles')) {
-          toast({
-            title: "Access Denied",
-            description: "Only administrators can change user roles.",
-            variant: "destructive"
-          });
-        } else {
-          throw error;
-        }
-        return;
-      }
+      if (error) throw error;
 
       setUsers(users.map(user => 
         user.id === userId ? { ...user, role: newRole } : user
@@ -114,11 +109,11 @@ const AdminUsers = () => {
         title: "Success",
         description: "User role updated successfully.",
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error updating user role:', error);
       toast({
         title: "Error",
-        description: "Failed to update user role.",
+        description: error.message || "Failed to update user role.",
         variant: "destructive"
       });
     }
@@ -130,10 +125,27 @@ const AdminUsers = () => {
         return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
       case 'manager':
         return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
+      case 'customer':
+        return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200';
       default:
         return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200';
     }
   };
+
+  const getRoleIcon = (role: string) => {
+    switch (role) {
+      case 'admin':
+        return <Crown className="h-3 w-3" />;
+      case 'manager':
+        return <Shield className="h-3 w-3" />;
+      case 'customer':
+        return <Users className="h-3 w-3" />;
+      default:
+        return <Users className="h-3 w-3" />;
+    }
+  };
+
+  const availableRoles = getAvailableRoles(userRole);
 
   const filteredUsers = users.filter(user =>
     user.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -152,8 +164,11 @@ const AdminUsers = () => {
           <div className="flex justify-between items-center">
             <div>
               <h1 className="text-3xl font-bold text-foreground">User Management</h1>
-              <p className="text-muted-foreground">Manage user accounts and roles</p>
+              <p className="text-muted-foreground">
+                Manage user accounts and roles {!isSuperAdmin && `(${userRole} access)`}
+              </p>
             </div>
+            {canManageUsers && <UserInvitationModal />}
           </div>
 
           <div className="flex items-center space-x-4">
@@ -195,7 +210,8 @@ const AdminUsers = () => {
                         </TableCell>
                         <TableCell>{user.phone || 'N/A'}</TableCell>
                         <TableCell>
-                          <Badge className={getRoleColor(user.role)}>
+                          <Badge className={`${getRoleColor(user.role)} flex items-center gap-1`}>
+                            {getRoleIcon(user.role)}
                             {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
                           </Badge>
                         </TableCell>
@@ -210,19 +226,28 @@ const AdminUsers = () => {
                         </TableCell>
                         <TableCell>
                           <div className="flex space-x-2">
-                            <Select
-                              value={user.role}
-                              onValueChange={(value) => updateUserRole(user.id, value)}
-                            >
-                              <SelectTrigger className="w-32">
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="customer">Customer</SelectItem>
-                                <SelectItem value="manager">Manager</SelectItem>
-                                <SelectItem value="admin">Admin</SelectItem>
-                              </SelectContent>
-                            </Select>
+                            {canManageRole(userRole, user.role) || user.role === 'customer' ? (
+                              <Select
+                                value={user.role}
+                                onValueChange={(value) => updateUserRole(user.id, value)}
+                              >
+                                <SelectTrigger className="w-32">
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="customer">Customer</SelectItem>
+                                  {availableRoles.map(role => (
+                                    <SelectItem key={role} value={role}>
+                                      {role.charAt(0).toUpperCase() + role.slice(1)}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            ) : (
+                              <Badge variant="outline" className="w-32 justify-center">
+                                No Access
+                              </Badge>
+                            )}
                           </div>
                         </TableCell>
                       </TableRow>

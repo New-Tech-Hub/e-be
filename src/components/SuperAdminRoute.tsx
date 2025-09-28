@@ -9,7 +9,7 @@ interface SuperAdminRouteProps {
 }
 
 const SuperAdminRoute = ({ children, redirectTo = '/' }: SuperAdminRouteProps) => {
-  const { isSuperAdmin, loading, user } = useSuperAdminAuth();
+  const { hasElevatedAccess, loading, user, userRole } = useSuperAdminAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -21,26 +21,28 @@ const SuperAdminRoute = ({ children, redirectTo = '/' }: SuperAdminRouteProps) =
         variant: "destructive"
       });
       navigate(redirectTo);
-    } else if (!loading && user && !isSuperAdmin) {
+    } else if (!loading && user && !hasElevatedAccess) {
       toast({
         title: "Access Denied",
-        description: "This area is restricted to the super administrator only.",
+        description: "This area requires elevated permissions (manager, admin, or super admin).",
         variant: "destructive"
       });
       navigate(redirectTo);
     }
-  }, [user, isSuperAdmin, loading, navigate, redirectTo, toast]);
+  }, [user, hasElevatedAccess, loading, navigate, redirectTo, toast]);
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold"></div>
-        <p className="ml-4 text-muted-foreground">Verifying super admin access...</p>
+        <p className="ml-4 text-muted-foreground">
+          Verifying access permissions ({userRole})...
+        </p>
       </div>
     );
   }
 
-  if (!user || !isSuperAdmin) {
+  if (!user || !hasElevatedAccess) {
     return null;
   }
 
