@@ -1,7 +1,11 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Shirt, Gem, ShoppingBasket, Home, Tag } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import clothingImage from "@/assets/categories/clothing-category.jpg";
+import accessoriesImage from "@/assets/categories/accessories-category.jpg";
+import householdImage from "@/assets/categories/household-category.jpg";
+import specialsImage from "@/assets/categories/specials-category.jpg";
 
 const FeaturedCategories = () => {
   const categories = [
@@ -9,7 +13,8 @@ const FeaturedCategories = () => {
       id: "clothing",
       title: "Clothing",
       description: "Fashion-forward pieces for every occasion",
-      icon: Shirt,
+      image: clothingImage,
+      alt: "Elegant Ankara dress and modern women's fashion on display.",
       href: "/clothing",
       color: "pastel-pink",
       items: "500+ Items"
@@ -18,7 +23,8 @@ const FeaturedCategories = () => {
       id: "accessories", 
       title: "Accessories",
       description: "Complete your look with premium accessories",
-      icon: Gem,
+      image: accessoriesImage,
+      alt: "Luxury jewelry, wristwatch, and designer sunglasses collection.",
       href: "/accessories", 
       color: "pastel-blue",
       items: "200+ Items"
@@ -27,7 +33,8 @@ const FeaturedCategories = () => {
       id: "household",
       title: "Household Essentials", 
       description: "Everything you need for your home",
-      icon: Home,
+      image: householdImage,
+      alt: "Premium bedsheets, duvets, and stylish home essentials neatly arranged.",
       href: "/household",
       color: "cream",
       items: "300+ Items"
@@ -36,7 +43,8 @@ const FeaturedCategories = () => {
       id: "specials",
       title: "Specials & Deals",
       description: "Weekly offers and exclusive discounts",
-      icon: Tag,
+      image: specialsImage,
+      alt: "Shopping bags and gift packages representing special offers and discounts.",
       href: "/specials",
       color: "gold",
       items: "Hot Deals"
@@ -58,31 +66,35 @@ const FeaturedCategories = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {categories.map((category) => {
-            const IconComponent = category.icon;
-            
             return (
               <Link key={category.id} to={category.href} className="group">
-                <Card className="h-full p-6 border-0 shadow-card hover:shadow-elegant transition-smooth transform hover:-translate-y-1 bg-background">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className={`p-3 rounded-full bg-${category.color} flex items-center justify-center`}>
-                      <IconComponent className="h-6 w-6 text-foreground" />
+                <Card className="h-full border-0 shadow-card hover:shadow-elegant transition-smooth transform hover:-translate-y-1 bg-background overflow-hidden">
+                  <div className="relative h-48 overflow-hidden">
+                    <img
+                      src={category.image}
+                      alt={category.alt}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-smooth"
+                    />
+                    <div className="absolute top-4 right-4">
+                      <span className="text-xs font-semibold text-white bg-black/70 px-2 py-1 rounded-full backdrop-blur-sm">
+                        {category.items}
+                      </span>
                     </div>
-                    <span className="text-xs font-semibold text-muted-foreground bg-secondary px-2 py-1 rounded-full">
-                      {category.items}
-                    </span>
                   </div>
                   
-                  <h3 className="text-xl font-semibold text-foreground mb-2 group-hover:text-gold transition-smooth">
-                    {category.title}
-                  </h3>
-                  
-                  <p className="text-muted-foreground mb-4 flex-grow">
-                    {category.description}
-                  </p>
-                  
-                  <div className="flex items-center text-gold group-hover:text-gold-dark transition-smooth">
-                    <span className="text-sm font-medium mr-2">Explore Collection</span>
-                    <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-smooth" />
+                  <div className="p-6">
+                    <h3 className="text-xl font-semibold text-foreground mb-2 group-hover:text-gold transition-smooth">
+                      {category.title}
+                    </h3>
+                    
+                    <p className="text-muted-foreground mb-4">
+                      {category.description}
+                    </p>
+                    
+                    <div className="flex items-center text-gold group-hover:text-gold-dark transition-smooth">
+                      <span className="text-sm font-medium mr-2">Explore Collection</span>
+                      <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-smooth" />
+                    </div>
                   </div>
                 </Card>
               </Link>
