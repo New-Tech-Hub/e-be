@@ -6,6 +6,11 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import luxurySkincareImage from "@/assets/products/luxury-skincare-set.jpg";
+import designerDressImage from "@/assets/products/designer-summer-dress-floral.jpg";
+import vitaminSupplementsImage from "@/assets/products/premium-vitamin-supplements.jpg";
+import coffeeBeansImage from "@/assets/products/artisan-coffee-beans.jpg";
+import goldNecklaceImage from "@/assets/products/gold-layered-necklace-set.jpg";
+import cleaningKitImage from "@/assets/products/eco-friendly-cleaning-kit.jpg";
 
 const WeeklyDeals = () => {
   const [likedItems, setLikedItems] = useState<string[]>([]);
@@ -21,7 +26,7 @@ const WeeklyDeals = () => {
       discount: 30,
       rating: 4.8,
       reviews: 124,
-      image: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400&h=400&fit=crop",
+      image: designerDressImage,
       badge: "Limited Edition",
       timeLeft: "2 days left"
     },
@@ -34,7 +39,7 @@ const WeeklyDeals = () => {
       discount: 35,
       rating: 4.8,
       reviews: 156,
-      image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&h=400&fit=crop",
+      image: vitaminSupplementsImage,
       badge: "Health Boost",
       timeLeft: "Today only"
     },
@@ -60,7 +65,7 @@ const WeeklyDeals = () => {
       discount: 28,
       rating: 4.7,
       reviews: 203,
-      image: "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=400&h=400&fit=crop",
+      image: coffeeBeansImage,
       badge: "Premium Quality",
       timeLeft: "5 days left"
     },
@@ -73,7 +78,7 @@ const WeeklyDeals = () => {
       discount: 39,
       rating: 4.5,
       reviews: 156,
-      image: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=400&fit=crop",
+      image: goldNecklaceImage,
       badge: "Trending",
       timeLeft: "1 day left"
     },
@@ -86,7 +91,7 @@ const WeeklyDeals = () => {
       discount: 39,
       rating: 4.4,
       reviews: 91,
-      image: "https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?w=400&h=400&fit=crop", 
+      image: cleaningKitImage,
       badge: "Eco-Friendly",
       timeLeft: "4 days left"
     }
@@ -125,8 +130,8 @@ const WeeklyDeals = () => {
               <div className="relative overflow-hidden">
                 <img
                   src={deal.image}
-                  alt={deal.name}
-                  className="w-full h-48 object-cover group-hover:scale-105 transition-smooth"
+                  alt={`${deal.name} - ${deal.category} with ${deal.discount}% discount, rated ${deal.rating} stars`}
+                  className="w-full h-48 object-cover group-hover:scale-110 transition-smooth"
                   loading="lazy"
                   decoding="async"
                   width="200"
