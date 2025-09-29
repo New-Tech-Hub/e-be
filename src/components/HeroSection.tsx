@@ -3,8 +3,11 @@ import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight, ShoppingBag, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import heroImage1 from "@/assets/hero-bags-collection.jpg";
-import heroImage2 from "@/assets/hero-formal-wear.jpg";
-import heroImage3 from "@/assets/hero-watches-collection.jpg";
+import heroImage2 from "@/assets/hero-ankara-native.jpg";
+import heroImage3 from "@/assets/hero-jewelry-collection.jpg";
+import heroImage4 from "@/assets/hero-designer-sunglasses.jpg";
+import heroImage5 from "@/assets/hero-gift-bags.jpg";
+import heroImage6 from "@/assets/hero-bedding-collection.jpg";
 
 const HeroSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -20,19 +23,43 @@ const HeroSection = () => {
     },
     {
       image: heroImage2,
-      title: "Formal Wear & Business Attire",
-      subtitle: "Professional suits, dress shoes, elegant ties, and corporate wear for success",
-      cta: "Shop Formal Wear",
-      accent: "Business Class",
+      title: "Celebrate Culture in Style",
+      subtitle: "Bold Ankara prints and elegant wrappers for every occasion",
+      cta: "Shop Attire",
+      accent: "Cultural Elegance",
       href: "/clothing"
     },
     {
       image: heroImage3,
-      title: "Luxury Wrist Watches Collection",
-      subtitle: "Elegant timepieces, premium craftsmanship, and sophisticated designs for every style",
-      cta: "Shop Watches",
-      accent: "Timeless Elegance",
+      title: "Shine Beyond Measure",
+      subtitle: "Elegant pieces that complete your look, day or night",
+      cta: "Shop Jewelries",
+      accent: "Timeless Beauty",
       href: "/accessories"
+    },
+    {
+      image: heroImage4,
+      title: "See the World in Style",
+      subtitle: "Trendy designer shades for fashion and protection",
+      cta: "Shop Sunglasses",
+      accent: "Fashion Forward",
+      href: "/accessories"
+    },
+    {
+      image: heroImage5,
+      title: "Perfect Wraps for Perfect Moments",
+      subtitle: "Stylish gift bags that make every present unforgettable",
+      cta: "Shop Gift Bags",
+      accent: "Gift Perfect",
+      href: "/accessories"
+    },
+    {
+      image: heroImage6,
+      title: "Luxury Comfort for Every Night",
+      subtitle: "Soft, premium-quality bedsheets and duvets for restful sleep",
+      cta: "Shop Bedding",
+      accent: "Sleep Luxury",
+      href: "/home-essentials"
     }
   ];
 
@@ -46,7 +73,7 @@ const HeroSection = () => {
 
   // Auto-advance slides
   useEffect(() => {
-    const timer = setInterval(nextSlide, 6000);
+    const timer = setInterval(nextSlide, 7000);
     return () => clearInterval(timer);
   }, []);
 
