@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
+import luxurySkincareImage from "@/assets/products/luxury-skincare-set.jpg";
 
 const WeeklyDeals = () => {
   const [likedItems, setLikedItems] = useState<string[]>([]);
@@ -46,7 +47,7 @@ const WeeklyDeals = () => {
       discount: 30,
       rating: 4.9,
       reviews: 67,
-      image: "https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&h=400&fit=crop",
+      image: luxurySkincareImage,
       badge: "Bestseller",
       timeLeft: "3 days left"
     },
