@@ -2,6 +2,11 @@ import { useState, useEffect } from "react";
 import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import zainabAvatar from "@/assets/avatars/zainab-avatar.jpg";
+import emekaAvatar from "@/assets/avatars/emeka-avatar.jpg";
+import aminuAvatar from "@/assets/avatars/aminu-avatar.jpg";
+import chiomaAvatar from "@/assets/avatars/chioma-avatar.jpg";
+import ademolaAvatar from "@/assets/avatars/ademola-avatar.jpg";
 
 const Testimonials = () => {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
@@ -14,7 +19,7 @@ const Testimonials = () => {
       location: "Lagos, Nigeria",
       rating: 5,
       text: "As a busy mom, Ebeth Boutique saves me so much time! I can shop for fashion and household items all in one place. The quality is excellent and delivery is always on time.",
-      avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face"
+      avatar: zainabAvatar
     },
     {
       id: 2,
@@ -23,7 +28,7 @@ const Testimonials = () => {
       location: "Port Harcourt, Nigeria",
       rating: 5,
       text: "The convenience is unbeatable! I love the wide variety of products - from designer clothes to everyday essentials. Their pricing is very affordable and the weekly deals are fantastic.",
-      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face"
+      avatar: emekaAvatar
     },
     {
       id: 3,
@@ -32,7 +37,7 @@ const Testimonials = () => {
       location: "Kano, Nigeria", 
       rating: 5,
       text: "Ebeth Boutique offers premium quality products at great prices. Shopping here saves me time and money. The combination of fashion and household items makes it my go-to store.",
-      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face"
+      avatar: aminuAvatar
     },
     {
       id: 4,
@@ -41,7 +46,7 @@ const Testimonials = () => {
       location: "Abuja, Nigeria",
       rating: 5,
       text: "I'm impressed by the quality of products and how affordable everything is! From stylish accessories to household essentials, Ebeth Boutique has it all. The delivery service is excellent too.",
-      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face"
+      avatar: chiomaAvatar
     },
     {
       id: 5,
@@ -50,7 +55,7 @@ const Testimonials = () => {
       location: "Ibadan, Nigeria",
       rating: 5,
       text: "The quality and variety at Ebeth Boutique is outstanding. I can get designer fashion and premium household items conveniently. Shopping here is time-efficient and the products always exceed expectations.",
-      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=face"
+      avatar: ademolaAvatar
     }
   ];
 
