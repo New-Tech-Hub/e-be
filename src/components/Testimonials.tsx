@@ -9,48 +9,48 @@ const Testimonials = () => {
   const testimonials = [
     {
       id: 1,
-      name: "Sarah Johnson",
-      role: "Fashion Enthusiast",
-      location: "New York, NY",
+      name: "Zainab Mohammed",
+      role: "Working Mom",
+      location: "Lagos, Nigeria",
       rating: 5,
-      text: "Ebeth Boutique is absolutely amazing! I can shop for designer clothes and grab my weekly groceries all in one place. The quality is outstanding and the service is impeccable.",
+      text: "As a busy mom, Ebeth Boutique saves me so much time! I can shop for fashion and household items all in one place. The quality is excellent and delivery is always on time.",
       avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face"
     },
     {
       id: 2,
-      name: "Michael Chen",
-      role: "Business Professional", 
-      location: "San Francisco, CA",
+      name: "Emeka Okonkwo",
+      role: "Engineer", 
+      location: "Port Harcourt, Nigeria",
       rating: 5,
-      text: "The convenience factor is unbeatable. I love how they combine luxury shopping with everyday essentials. Their weekly deals are fantastic, and everything arrives perfectly packaged.",
+      text: "The convenience is unbeatable! I love the wide variety of products - from designer clothes to everyday essentials. Their pricing is very affordable and the weekly deals are fantastic.",
       avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face"
     },
     {
       id: 3,
-      name: "Emma Rodriguez",
-      role: "Working Mom",
-      location: "Austin, TX", 
+      name: "Aminu Bello",
+      role: "Entrepreneur",
+      location: "Kano, Nigeria", 
       rating: 5,
-      text: "As a busy mom, Ebeth Boutique saves me so much time! I can shop for my wardrobe and household needs simultaneously. The fresh produce quality rivals any high-end grocery store.",
-      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face"
-    },
-    {
-      id: 4,
-      name: "David Kumar",
-      role: "Food Blogger",
-      location: "Los Angeles, CA",
-      rating: 5,
-      text: "I'm impressed by their curated selection of artisanal foods and premium ingredients. Plus, I can pick up stylish accessories while I'm at it. Truly a unique shopping experience!",
+      text: "Ebeth Boutique offers premium quality products at great prices. Shopping here saves me time and money. The combination of fashion and household items makes it my go-to store.",
       avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face"
     },
     {
-      id: 5,
-      name: "Lisa Park",
-      role: "Interior Designer",
-      location: "Miami, FL",
+      id: 4,
+      name: "Chioma Okafor",
+      role: "Student",
+      location: "Abuja, Nigeria",
       rating: 5,
-      text: "The aesthetic and quality of everything at Ebeth Boutique is simply stunning. From their fashion pieces to household items, everything reflects excellent taste and craftsmanship.",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=face"
+      text: "I'm impressed by the quality of products and how affordable everything is! From stylish accessories to household essentials, Ebeth Boutique has it all. The delivery service is excellent too.",
+      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face"
+    },
+    {
+      id: 5,
+      name: "Ademola Adeyemi",
+      role: "Banker",
+      location: "Ibadan, Nigeria",
+      rating: 5,
+      text: "The quality and variety at Ebeth Boutique is outstanding. I can get designer fashion and premium household items conveniently. Shopping here is time-efficient and the products always exceed expectations.",
+      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=face"
     }
   ];
 
