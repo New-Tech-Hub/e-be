@@ -73,7 +73,7 @@ const HeroSection = () => {
 
   // Auto-advance slides
   useEffect(() => {
-    const timer = setInterval(nextSlide, 7000);
+    const timer = setInterval(nextSlide, 2000);
     return () => clearInterval(timer);
   }, []);
 

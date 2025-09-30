@@ -21,8 +21,8 @@ const WeeklyDeals = () => {
       id: "1",
       name: "Designer Summer Dress",
       category: "Clothing",
-      originalPrice: 89.99,
-      salePrice: 62.99,
+      originalPrice: 89999.99,
+      salePrice: 62999.99,
       discount: 30,
       rating: 4.8,
       reviews: 124,
@@ -34,8 +34,8 @@ const WeeklyDeals = () => {
       id: "2", 
       name: "Premium Vitamin Supplements",
       category: "Health & Wellness",
-      originalPrice: 45.99,
-      salePrice: 29.99,
+      originalPrice: 45999.99,
+      salePrice: 29999.99,
       discount: 35,
       rating: 4.8,
       reviews: 156,
@@ -47,8 +47,8 @@ const WeeklyDeals = () => {
       id: "3",
       name: "Luxury Skincare Set",
       category: "Household",
-      originalPrice: 156.99,
-      salePrice: 109.99,
+      originalPrice: 156999.99,
+      salePrice: 109999.99,
       discount: 30,
       rating: 4.9,
       reviews: 67,
@@ -60,8 +60,8 @@ const WeeklyDeals = () => {
       id: "4",
       name: "Artisan Coffee Beans 1kg",
       category: "Groceries", 
-      originalPrice: 24.99,
-      salePrice: 17.99,
+      originalPrice: 24999.99,
+      salePrice: 17999.99,
       discount: 28,
       rating: 4.7,
       reviews: 203,
@@ -73,8 +73,8 @@ const WeeklyDeals = () => {
       id: "5",
       name: "Gold Layered Necklace Set",
       category: "Accessories",
-      originalPrice: 45.99,
-      salePrice: 27.99,
+      originalPrice: 45999.99,
+      salePrice: 27999.99,
       discount: 39,
       rating: 4.5,
       reviews: 156,
@@ -86,8 +86,8 @@ const WeeklyDeals = () => {
       id: "6",
       name: "Eco-Friendly Cleaning Kit",
       category: "Household",
-      originalPrice: 32.99,
-      salePrice: 19.99,
+      originalPrice: 32999.99,
+      salePrice: 19999.99,
       discount: 39,
       rating: 4.4,
       reviews: 91,
@@ -189,8 +189,8 @@ const WeeklyDeals = () => {
 
                 {/* Price */}
                 <div className="flex items-center space-x-2 mb-4">
-                  <span className="text-lg font-bold text-foreground">${deal.salePrice}</span>
-                  <span className="text-sm text-muted-foreground line-through">${deal.originalPrice}</span>
+                  <span className="text-lg font-bold text-foreground">₦{deal.salePrice.toLocaleString()}</span>
+                  <span className="text-sm text-muted-foreground line-through">₦{deal.originalPrice.toLocaleString()}</span>
                 </div>
 
                 {/* Add to Cart Button */}

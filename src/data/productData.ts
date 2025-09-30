@@ -50,6 +50,11 @@ import blackProfessionalLuggage from "@/assets/black-professional-luggage.jpg";
 import redHardshellLuggage from "@/assets/red-hardshell-luggage.jpg";
 import oliveLuggageSet from "@/assets/olive-luggage-set.jpg";
 import heroAfricanCollection from "@/assets/hero-african-collection.jpg";
+import luggageBlackProfessionalSet from "@/assets/luggage-black-professional-set.jpg";
+import luggageGoldenYellow from "@/assets/luggage-golden-yellow.jpg";
+import luggageCardinalRed from "@/assets/luggage-cardinal-red.jpg";
+import luggageMulticolorSet from "@/assets/luggage-multicolor-set.jpg";
+import luggageBlackCarryOn from "@/assets/luggage-black-carry-on.jpg";
 
 export interface Product {
   id: string;
@@ -231,22 +236,52 @@ export const productData = {
     },
     {
       id: "a3",
-      name: "Travel Suitcase - Hard Shell 24\"",
-      price: 28999.99,
-      originalPrice: 39999.99,
-      image: redHardshellLuggage,
-      rating: 4.7,
-      reviews: 189,
+      name: "Professional Luggage Set - Black (3-Piece)",
+      price: 89999.99,
+      originalPrice: 125999.99,
+      image: luggageBlackProfessionalSet,
+      rating: 4.9,
+      reviews: 312,
       category: "Traveling Bags"
     },
     {
       id: "a4",
-      name: "Luxury Travel Duffel Bag",
-      price: 19999.99,
-      originalPrice: 27999.99,
-      image: oliveLuggageSet,
-      rating: 4.6,
-      reviews: 145,
+      name: "Premium Hardshell Luggage - Golden Yellow",
+      price: 34999.99,
+      originalPrice: 49999.99,
+      image: luggageGoldenYellow,
+      rating: 4.8,
+      reviews: 189,
+      category: "Traveling Bags"
+    },
+    {
+      id: "a17",
+      name: "Luxury Hardshell Luggage - Cardinal Red",
+      price: 36999.99,
+      originalPrice: 52999.99,
+      image: luggageCardinalRed,
+      rating: 4.9,
+      reviews: 234,
+      category: "Traveling Bags"
+    },
+    {
+      id: "a18",
+      name: "Colorful Travel Luggage Set - Multi-Color",
+      price: 79999.99,
+      originalPrice: 109999.99,
+      image: luggageMulticolorSet,
+      rating: 4.7,
+      reviews: 178,
+      category: "Traveling Bags"
+    },
+    {
+      id: "a19",
+      name: "Business Carry-On Luggage - Black",
+      price: 24999.99,
+      originalPrice: 35999.99,
+      image: luggageBlackCarryOn,
+      rating: 4.8,
+      reviews: 267,
       category: "Traveling Bags"
     },
     // Jewelry & Watches
