@@ -32,8 +32,8 @@ const Footer = () => {
   ];
 
   const socialLinks = [
-    { name: "Facebook", href: "https://www.facebook.com/ebethstores?mibextid=ZbWKwL", icon: Facebook },
-    { name: "Instagram", href: "https://www.instagram.com/ebeth_stores?igsh=cW01OXpicW51Y3gz", icon: Instagram },
+    { name: "Facebook", href: "https://www.facebook.com/ebethstores", icon: Facebook },
+    { name: "Instagram", href: "https://www.instagram.com/ebeth_stores/", icon: Instagram },
     { name: "Twitter", href: "#", icon: Twitter },
     { name: "YouTube", href: "#", icon: Youtube },
   ];
