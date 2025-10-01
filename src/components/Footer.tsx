@@ -32,10 +32,10 @@ const Footer = () => {
   ];
 
   const socialLinks = [
-    { name: "Facebook", href: "https://www.facebook.com/ebethstores", icon: Facebook },
-    { name: "Instagram", href: "https://www.instagram.com/ebeth_stores/", icon: Instagram },
-    { name: "Twitter", href: "#", icon: Twitter },
-    { name: "YouTube", href: "#", icon: Youtube },
+    { name: "Facebook", href: "https://www.facebook.com/ebethstores", icon: Facebook, active: true },
+    { name: "Instagram", href: "https://www.instagram.com/ebeth_stores/", icon: Instagram, active: true },
+    { name: "Twitter", href: "#", icon: Twitter, active: false },
+    { name: "YouTube", href: "#", icon: Youtube, active: false },
   ];
 
   return (
@@ -144,9 +144,20 @@ const Footer = () => {
                 return (
                   <a
                     key={social.name}
-                    href={social.href}
-                    className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-gold hover:text-black transition-smooth"
-                    aria-label={social.name}
+                    href={social.active ? social.href : undefined}
+                    onClick={(e) => {
+                      if (social.active) {
+                        e.preventDefault();
+                        window.open(social.href, '_blank', 'noopener,noreferrer');
+                      } else {
+                        e.preventDefault();
+                      }
+                    }}
+                    className={`w-10 h-10 bg-white/10 rounded-full flex items-center justify-center transition-smooth ${
+                      social.active ? 'hover:bg-gold hover:text-black cursor-pointer' : 'opacity-40 cursor-not-allowed'
+                    }`}
+                    aria-label={`${social.name}${social.active ? '' : ' (coming soon)'}`}
+                    title={social.active ? `Visit our ${social.name}` : `${social.name} coming soon`}
                   >
                     <IconComponent className="h-5 w-5" />
                   </a>

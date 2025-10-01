@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, Search, User, Heart, X, UserPlus, LogOut, Shield } from "lucide-react";
+import { Menu, Search, User, Heart, X, UserPlus, LogOut, Shield, Facebook, Instagram } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -110,6 +110,26 @@ const Header = () => {
 
           {/* Action Buttons */}
           <div className="flex items-center space-x-1 flex-shrink-0">
+            {/* Social Media Icons - Desktop */}
+            <div className="hidden md:flex items-center space-x-1 mr-2">
+              <Button 
+                variant="ghost" 
+                size="icon"
+                onClick={() => window.open('https://www.facebook.com/ebethstores', '_blank', 'noopener,noreferrer')}
+                aria-label="Visit our Facebook page"
+              >
+                <Facebook className="h-4 w-4" />
+              </Button>
+              <Button 
+                variant="ghost" 
+                size="icon"
+                onClick={() => window.open('https://www.instagram.com/ebeth_stores/', '_blank', 'noopener,noreferrer')}
+                aria-label="Visit our Instagram page"
+              >
+                <Instagram className="h-4 w-4" />
+              </Button>
+            </div>
+            
             {/* Desktop Auth Buttons */}
             <div className="hidden md:flex items-center space-x-2">
               {user ? (
@@ -221,6 +241,33 @@ const Header = () => {
                 </Link>
               ))}
               <hr className="border-border" />
+              
+              {/* Social Media Links - Mobile */}
+              <div className="py-2">
+                <p className="text-xs font-semibold text-muted-foreground mb-3">Follow Us</p>
+                <div className="flex space-x-3">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => window.open('https://www.facebook.com/ebethstores', '_blank', 'noopener,noreferrer')}
+                    aria-label="Visit our Facebook page"
+                  >
+                    <Facebook className="h-4 w-4 mr-2" />
+                    Facebook
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => window.open('https://www.instagram.com/ebeth_stores/', '_blank', 'noopener,noreferrer')}
+                    aria-label="Visit our Instagram page"
+                  >
+                    <Instagram className="h-4 w-4 mr-2" />
+                    Instagram
+                  </Button>
+                </div>
+              </div>
+              <hr className="border-border" />
+              
               {user ? (
                 <>
                   <Link to="/account" className="block py-2 text-foreground hover:text-gold transition-smooth" onClick={() => setIsMenuOpen(false)}>
