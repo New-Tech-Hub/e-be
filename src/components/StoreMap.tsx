@@ -1,5 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 declare global {
   namespace JSX {
@@ -12,8 +15,25 @@ declare global {
 
 const StoreMap = () => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
+  const [apiKey, setApiKey] = useState<string>(() => {
+    return localStorage.getItem('googleMapsApiKey') || '';
+  });
+  const [inputKey, setInputKey] = useState<string>('');
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  const handleSaveApiKey = () => {
+    if (inputKey.trim()) {
+      localStorage.setItem('googleMapsApiKey', inputKey.trim());
+      setApiKey(inputKey.trim());
+      toast.success('API key saved! Refreshing map...');
+      setIsInitialized(false);
+    } else {
+      toast.error('Please enter a valid API key');
+    }
+  };
 
   useEffect(() => {
+    if (!apiKey || isInitialized) return;
     // Load Google Maps Extended Component Library
     const script = document.createElement('script');
     script.type = 'module';
@@ -41,7 +61,7 @@ const StoreMap = () => {
           "maxZoom": 17,
           "mapId": ""
         },
-        "mapsApiKey": "YOUR_API_KEY_HERE",
+        "mapsApiKey": apiKey,
         "capabilities": {
           "input": true,
           "autocomplete": true,
@@ -57,6 +77,7 @@ const StoreMap = () => {
       const locator = document.querySelector('gmpx-store-locator');
       if (locator) {
         (locator as any).configureFromQuickBuilder(CONFIGURATION);
+        setIsInitialized(true);
       }
     };
 
@@ -67,13 +88,48 @@ const StoreMap = () => {
         script.parentNode.removeChild(script);
       }
     };
-  }, []);
+  }, [apiKey, isInitialized]);
+
+  if (!apiKey) {
+    return (
+      <Card className="w-full p-6">
+        <div className="space-y-4">
+          <div>
+            <h3 className="text-lg font-semibold mb-2">Google Maps API Key Required</h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              To display the store location map, please enter your Google Maps API key.
+              Get your free API key from the{' '}
+              <a 
+                href="https://console.cloud.google.com/google/maps-apis/start" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-primary hover:underline"
+              >
+                Google Cloud Console
+              </a>
+              .
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <Input
+              type="text"
+              placeholder="Enter your Google Maps API key"
+              value={inputKey}
+              onChange={(e) => setInputKey(e.target.value)}
+              className="flex-1"
+            />
+            <Button onClick={handleSaveApiKey}>Save</Button>
+          </div>
+        </div>
+      </Card>
+    );
+  }
 
   return (
     <Card className="w-full h-96 overflow-hidden">
       <div ref={mapContainerRef} className="w-full h-full relative">
         <gmpx-api-loader 
-          key="YOUR_API_KEY_HERE" 
+          key={apiKey} 
           solution-channel="GMP_QB_locatorplus_v11_cABD"
         />
         <gmpx-store-locator 
