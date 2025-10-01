@@ -411,13 +411,6 @@ export type Database = {
             referencedColumns: ["user_id"]
           },
           {
-            foreignKeyName: "fk_product_reviews_user_profile"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles_public"
-            referencedColumns: ["user_id"]
-          },
-          {
             foreignKeyName: "product_reviews_product_id_fkey"
             columns: ["product_id"]
             isOneToOne: false
@@ -645,39 +638,7 @@ export type Database = {
       }
     }
     Views: {
-      profiles_public: {
-        Row: {
-          city: string | null
-          country: string | null
-          created_at: string | null
-          full_name: string | null
-          id: string | null
-          state: string | null
-          updated_at: string | null
-          user_id: string | null
-        }
-        Insert: {
-          city?: string | null
-          country?: string | null
-          created_at?: string | null
-          full_name?: string | null
-          id?: string | null
-          state?: string | null
-          updated_at?: string | null
-          user_id?: string | null
-        }
-        Update: {
-          city?: string | null
-          country?: string | null
-          created_at?: string | null
-          full_name?: string | null
-          id?: string | null
-          state?: string | null
-          updated_at?: string | null
-          user_id?: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       admin_access_profile: {
