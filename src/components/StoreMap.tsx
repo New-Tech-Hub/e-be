@@ -16,7 +16,13 @@ declare global {
 const StoreMap = () => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const [apiKey, setApiKey] = useState<string>(() => {
-    return localStorage.getItem('googleMapsApiKey') || '';
+    const stored = localStorage.getItem('googleMapsApiKey');
+    if (!stored) {
+      const defaultKey = 'AIzaSyAOVYRIgupAurZup5y1PRh8Ismb1A3lLao';
+      localStorage.setItem('googleMapsApiKey', defaultKey);
+      return defaultKey;
+    }
+    return stored;
   });
   const [inputKey, setInputKey] = useState<string>('');
   const [isInitialized, setIsInitialized] = useState(false);
