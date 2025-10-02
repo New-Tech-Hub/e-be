@@ -583,6 +583,33 @@ export type Database = {
         }
         Relationships: []
       }
+      security_rate_limits: {
+        Row: {
+          call_count: number | null
+          created_at: string | null
+          function_name: string
+          id: string
+          user_id: string
+          window_start: string | null
+        }
+        Insert: {
+          call_count?: number | null
+          created_at?: string | null
+          function_name: string
+          id?: string
+          user_id: string
+          window_start?: string | null
+        }
+        Update: {
+          call_count?: number | null
+          created_at?: string | null
+          function_name?: string
+          id?: string
+          user_id?: string
+          window_start?: string | null
+        }
+        Relationships: []
+      }
       store_settings: {
         Row: {
           created_at: string
@@ -641,6 +668,19 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_access_order: {
+        Args: { reason?: string; target_order_id: string }
+        Returns: {
+          created_at: string
+          id: string
+          order_number: string
+          payment_status: string
+          shipping_address: Json
+          status: string
+          total_amount: number
+          user_id: string
+        }[]
+      }
       admin_access_profile: {
         Args: { reason?: string; target_user_id: string }
         Returns: {
@@ -661,6 +701,10 @@ export type Database = {
         Args: { manager_user_id: string; target_role: string }
         Returns: boolean
       }
+      cleanup_old_rate_limits: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       generate_order_number: {
         Args: Record<PropertyKey, never>
         Returns: string
@@ -674,6 +718,16 @@ export type Database = {
           name: string
           product_count: number
           slug: string
+        }[]
+      }
+      get_public_profile_info: {
+        Args: { target_user_id: string }
+        Returns: {
+          city: string
+          country: string
+          full_name: string
+          state: string
+          user_id: string
         }[]
       }
       get_safe_profile_data: {
