@@ -729,6 +729,21 @@ export type Database = {
         }
         Returns: undefined
       }
+      validate_coupon_code: {
+        Args: { coupon_code: string }
+        Returns: {
+          code: string
+          discount_type: string
+          discount_value: number
+          expires_at: string
+          id: string
+          is_active: boolean
+          maximum_discount_amount: number
+          minimum_amount: number
+          usage_limit: number
+          used_count: number
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
