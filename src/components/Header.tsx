@@ -1,9 +1,17 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, Search, User, Heart, X, UserPlus, LogOut, Shield, Facebook, Instagram } from "lucide-react";
+import { Menu, Search, User, Heart, X, UserPlus, LogOut, Shield, Facebook, Instagram, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
 import logo from "@/assets/ebeth-logo.jpg";
 import SignupModal from "./SignupModal";
 import LoginModal from "./LoginModal";
@@ -12,6 +20,13 @@ import SearchBar from "./SearchBar";
 import { useAuth } from "@/hooks/useAuth";
 import { useSuperAdminAuth } from "@/hooks/useSuperAdminAuth";
 import { supabase } from "@/integrations/supabase/client";
+
+interface Category {
+  id: string;
+  name: string;
+  slug: string;
+  subcategories?: Category[];
+}
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -36,7 +51,8 @@ const Header = () => {
     setIsSignupOpen(true);
   };
 
-  const [categories, setCategories] = useState<any[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [mobileOpenCategory, setMobileOpenCategory] = useState<string | null>(null);
 
   useEffect(() => {
     fetchCategories();
@@ -44,23 +60,40 @@ const Header = () => {
 
   const fetchCategories = async () => {
     try {
-      const { data } = await supabase
+      // Fetch major categories (parent_id IS NULL)
+      const { data: majorCategories } = await supabase
         .from('categories')
-        .select('name, slug')
+        .select('id, name, slug')
+        .is('parent_id', null)
         .eq('is_active', true)
-        .order('name')
-        .limit(5);
+        .order('display_order')
+        .order('name');
       
-      setCategories(data || []);
+      if (!majorCategories) return;
+
+      // Fetch subcategories for each major category
+      const categoriesWithSubs = await Promise.all(
+        majorCategories.map(async (major) => {
+          const { data: subs } = await supabase
+            .from('categories')
+            .select('id, name, slug')
+            .eq('parent_id', major.id)
+            .eq('is_active', true)
+            .order('display_order')
+            .order('name');
+          
+          return {
+            ...major,
+            subcategories: subs || []
+          };
+        })
+      );
+
+      setCategories(categoriesWithSubs);
     } catch (error) {
       console.error('Error fetching categories:', error);
     }
   };
-
-  const navigation = categories.map(cat => ({
-    name: cat.name,
-    href: `/products/${cat.slug}`
-  }));
 
   return (
     <header className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
@@ -91,17 +124,59 @@ const Header = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-6 flex-shrink-0">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                to={item.href}
-                className="text-sm text-foreground hover:text-gold transition-smooth font-medium whitespace-nowrap"
-              >
-                {item.name}
-              </Link>
-            ))}
-          </nav>
+          <NavigationMenu className="hidden lg:flex">
+            <NavigationMenuList>
+              {categories.map((category) => (
+                <NavigationMenuItem key={category.id}>
+                  {category.subcategories && category.subcategories.length > 0 ? (
+                    <>
+                      <NavigationMenuTrigger className="text-sm font-medium">
+                        {category.name}
+                      </NavigationMenuTrigger>
+                      <NavigationMenuContent>
+                        <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-background border border-border shadow-lg">
+                          <li className="row-span-3">
+                            <NavigationMenuLink asChild>
+                              <Link
+                                to={`/products/${category.slug}`}
+                                className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md hover:bg-muted/80 transition-colors"
+                              >
+                                <div className="mb-2 mt-4 text-lg font-medium">
+                                  View All {category.name}
+                                </div>
+                                <p className="text-sm leading-tight text-muted-foreground">
+                                  Browse all products in this category
+                                </p>
+                              </Link>
+                            </NavigationMenuLink>
+                          </li>
+                          {category.subcategories.map((sub) => (
+                            <li key={sub.id}>
+                              <NavigationMenuLink asChild>
+                                <Link
+                                  to={`/products/${sub.slug}`}
+                                  className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                                >
+                                  <div className="text-sm font-medium leading-none">{sub.name}</div>
+                                </Link>
+                              </NavigationMenuLink>
+                            </li>
+                          ))}
+                        </ul>
+                      </NavigationMenuContent>
+                    </>
+                  ) : (
+                    <Link
+                      to={`/products/${category.slug}`}
+                      className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+                    >
+                      {category.name}
+                    </Link>
+                  )}
+                </NavigationMenuItem>
+              ))}
+            </NavigationMenuList>
+          </NavigationMenu>
 
           {/* Search Bar - Desktop */}
           <div className="hidden md:flex items-center flex-1 max-w-sm mx-4">
@@ -230,15 +305,49 @@ const Header = () => {
         {isMenuOpen && (
           <div className="lg:hidden py-4 border-t border-border">
             <nav className="space-y-3">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  className="block py-2 text-foreground hover:text-gold transition-smooth font-medium"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {item.name}
-                </Link>
+              {categories.map((category) => (
+                <div key={category.id}>
+                  {category.subcategories && category.subcategories.length > 0 ? (
+                    <div className="space-y-2">
+                      <button
+                        onClick={() => setMobileOpenCategory(mobileOpenCategory === category.id ? null : category.id)}
+                        className="flex items-center justify-between w-full py-2 text-foreground hover:text-gold transition-smooth font-medium"
+                      >
+                        <span>{category.name}</span>
+                        <ChevronDown className={`h-4 w-4 transition-transform ${mobileOpenCategory === category.id ? 'rotate-180' : ''}`} />
+                      </button>
+                      {mobileOpenCategory === category.id && (
+                        <div className="pl-4 space-y-2">
+                          <Link
+                            to={`/products/${category.slug}`}
+                            className="block py-2 text-sm text-muted-foreground hover:text-gold transition-smooth"
+                            onClick={() => setIsMenuOpen(false)}
+                          >
+                            View All {category.name}
+                          </Link>
+                          {category.subcategories.map((sub) => (
+                            <Link
+                              key={sub.id}
+                              to={`/products/${sub.slug}`}
+                              className="block py-2 text-sm text-muted-foreground hover:text-gold transition-smooth"
+                              onClick={() => setIsMenuOpen(false)}
+                            >
+                              {sub.name}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <Link
+                      to={`/products/${category.slug}`}
+                      className="block py-2 text-foreground hover:text-gold transition-smooth font-medium"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {category.name}
+                    </Link>
+                  )}
+                </div>
               ))}
               <hr className="border-border" />
               

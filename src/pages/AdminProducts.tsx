@@ -37,6 +37,7 @@ interface Category {
   id: string;
   name: string;
   slug: string;
+  parent_id: string | null;
 }
 
 const AdminProducts = () => {
@@ -99,8 +100,9 @@ const AdminProducts = () => {
     try {
       const { data, error } = await supabase
         .from('categories')
-        .select('id, name, slug')
+        .select('id, name, slug, parent_id')
         .eq('is_active', true)
+        .order('display_order')
         .order('name');
 
       if (error) throw error;
@@ -315,8 +317,17 @@ const AdminProducts = () => {
 
   const downloadCSVTemplate = () => {
     const headers = ['name', 'description', 'price', 'stock_quantity', 'image_url', 'category_slug'];
+    
+    // Get all category slugs for reference
+    const categoryExamples = categories
+      .slice(0, 3)
+      .map(c => c.slug)
+      .join(' or ');
+    
     const csvContent = headers.join(',') + '\n' + 
-                      'Sample Product,A great product,99.99,10,https://example.com/image.jpg,sample-category';
+                      `Sample Product 1,A great product,99.99,10,https://example.com/image.jpg,${categories[0]?.slug || 'example-slug'}\n` +
+                      `Sample Product 2,Another product,149.99,5,https://example.com/image2.jpg,${categories[1]?.slug || 'example-slug-2'}\n` +
+                      `# Available category slugs: ${categories.map(c => c.slug).join(', ')}`;
     
     const blob = new Blob([csvContent], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
@@ -325,6 +336,11 @@ const AdminProducts = () => {
     link.download = 'products-template.csv';
     link.click();
     URL.revokeObjectURL(url);
+    
+    toast({
+      title: "Template Downloaded",
+      description: "Use subcategory slugs when available for better product organization."
+    });
   };
 
   return (
@@ -457,13 +473,23 @@ const AdminProducts = () => {
                           <SelectValue placeholder="Select a category" />
                         </SelectTrigger>
                         <SelectContent>
-                          {categories.map((category) => (
-                            <SelectItem key={category.id} value={category.id}>
-                              {category.name}
-                            </SelectItem>
-                          ))}
+                          {categories
+                            .filter(c => !c.parent_id)
+                            .map((majorCategory) => [
+                              <SelectItem key={majorCategory.id} value={majorCategory.id} className="font-semibold">
+                                {majorCategory.name}
+                              </SelectItem>,
+                              ...categories
+                                .filter(sub => sub.parent_id === majorCategory.id)
+                                .map(sub => (
+                                  <SelectItem key={sub.id} value={sub.id} className="pl-6">
+                                    └ {sub.name}
+                                  </SelectItem>
+                                ))
+                            ])}
                         </SelectContent>
                       </Select>
+                      <p className="text-xs text-muted-foreground mt-1">Select subcategory when available for better organization</p>
                     </div>
                     
                     <div className="flex justify-end gap-2">
@@ -510,7 +536,15 @@ const AdminProducts = () => {
                         />
                       </TableCell>
                       <TableCell className="font-medium">{product.name}</TableCell>
-                      <TableCell>{product.categories?.name || 'Uncategorized'}</TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          {product.categories?.name || (
+                            <Badge variant="destructive" className="text-xs">
+                              Uncategorized
+                            </Badge>
+                          )}
+                        </div>
+                      </TableCell>
                       <TableCell>₦{Number(product.price).toLocaleString()}</TableCell>
                       <TableCell>{product.stock_quantity}</TableCell>
                       <TableCell>

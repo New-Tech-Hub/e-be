@@ -24,7 +24,11 @@ interface Category {
   image_url: string;
   is_active: boolean;
   created_at: string;
+  parent_id: string | null;
+  display_order: number;
   product_count?: number;
+  parent_name?: string;
+  subcategory_count?: number;
 }
 
 const AdminCategories = () => {
@@ -33,6 +37,7 @@ const AdminCategories = () => {
   const navigate = useNavigate();
   
   const [categories, setCategories] = useState<Category[]>([]);
+  const [majorCategories, setMajorCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
@@ -42,7 +47,9 @@ const AdminCategories = () => {
     slug: '',
     description: '',
     image_url: '',
-    is_active: true
+    is_active: true,
+    parent_id: null as string | null,
+    display_order: 0
   });
 
   useEffect(() => {
@@ -58,22 +65,42 @@ const AdminCategories = () => {
       const { data, error } = await supabase
         .from('categories')
         .select('*')
-        .order('created_at', { ascending: false });
+        .order('display_order')
+        .order('name');
 
       if (error) throw error;
       
-      // Get product counts for each category
+      // Get major categories (for parent dropdown)
+      const majors = (data || []).filter(cat => !cat.parent_id);
+      setMajorCategories(majors);
+      
+      // Get product counts and subcategory counts for each category
       const categoriesWithCounts = await Promise.all(
         (data || []).map(async (category) => {
-          const { count } = await supabase
+          const { count: productCount } = await supabase
             .from('products')
             .select('*', { count: 'exact', head: true })
             .eq('category_id', category.id)
             .eq('is_active', true);
           
+          const { count: subcategoryCount } = await supabase
+            .from('categories')
+            .select('*', { count: 'exact', head: true })
+            .eq('parent_id', category.id)
+            .eq('is_active', true);
+          
+          // Get parent name if this is a subcategory
+          let parent_name = null;
+          if (category.parent_id) {
+            const parent = data.find(c => c.id === category.parent_id);
+            parent_name = parent?.name;
+          }
+          
           return {
             ...category,
-            product_count: count || 0
+            product_count: productCount || 0,
+            subcategory_count: subcategoryCount || 0,
+            parent_name
           };
         })
       );
@@ -109,7 +136,9 @@ const AdminCategories = () => {
       slug: '',
       description: '',
       image_url: '',
-      is_active: true
+      is_active: true,
+      parent_id: null,
+      display_order: 0
     });
     setEditingCategory(null);
   };
@@ -132,7 +161,9 @@ const AdminCategories = () => {
         slug: formData.slug,
         description: formData.description,
         image_url: formData.image_url,
-        is_active: formData.is_active
+        is_active: formData.is_active,
+        parent_id: formData.parent_id,
+        display_order: formData.display_order
       };
 
       if (editingCategory) {
@@ -180,7 +211,9 @@ const AdminCategories = () => {
       slug: category.slug,
       description: category.description || '',
       image_url: category.image_url || '',
-      is_active: category.is_active
+      is_active: category.is_active,
+      parent_id: category.parent_id,
+      display_order: category.display_order
     });
     setIsAddDialogOpen(true);
   };
@@ -259,6 +292,35 @@ const AdminCategories = () => {
                       />
                     </div>
                   </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="parent">Parent Category</Label>
+                      <select
+                        id="parent"
+                        value={formData.parent_id || ''}
+                        onChange={(e) => handleInputChange('parent_id', e.target.value || null)}
+                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                      >
+                        <option value="">None (Major Category)</option>
+                        {majorCategories.map((cat) => (
+                          <option key={cat.id} value={cat.id}>{cat.name}</option>
+                        ))}
+                      </select>
+                      <p className="text-xs text-muted-foreground mt-1">Leave empty for major category, select parent for subcategory</p>
+                    </div>
+                    <div>
+                      <Label htmlFor="display_order">Display Order</Label>
+                      <Input
+                        id="display_order"
+                        type="number"
+                        value={formData.display_order}
+                        onChange={(e) => handleInputChange('display_order', parseInt(e.target.value) || 0)}
+                        placeholder="0"
+                      />
+                      <p className="text-xs text-muted-foreground mt-1">Lower numbers appear first</p>
+                    </div>
+                  </div>
                   
                   <div>
                     <Label htmlFor="description">Description</Label>
@@ -306,10 +368,12 @@ const AdminCategories = () => {
                   <TableRow>
                     <TableHead>Image</TableHead>
                     <TableHead>Name</TableHead>
-                    <TableHead>Slug</TableHead>
+                    <TableHead>Type</TableHead>
+                    <TableHead>Parent</TableHead>
+                    <TableHead>Subcategories</TableHead>
                     <TableHead>Products</TableHead>
+                    <TableHead>Order</TableHead>
                     <TableHead>Status</TableHead>
-                    <TableHead>Created</TableHead>
                     <TableHead>Actions</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -323,21 +387,32 @@ const AdminCategories = () => {
                           className="w-12 h-12 object-cover rounded"
                         />
                       </TableCell>
-                      <TableCell className="font-medium">{category.name}</TableCell>
-                      <TableCell className="text-muted-foreground">{category.slug}</TableCell>
+                      <TableCell className="font-medium">
+                        {category.parent_id && <span className="text-muted-foreground mr-2">└</span>}
+                        {category.name}
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant={category.parent_id ? "outline" : "default"}>
+                          {category.parent_id ? 'Subcategory' : 'Major'}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-muted-foreground text-sm">
+                        {category.parent_name || '-'}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {category.subcategory_count || 0}
+                      </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
                           <Package className="h-4 w-4" />
                           <span>{category.product_count}</span>
                         </div>
                       </TableCell>
+                      <TableCell className="text-center">{category.display_order}</TableCell>
                       <TableCell>
                         <Badge variant={category.is_active ? "default" : "secondary"}>
                           {category.is_active ? 'Active' : 'Inactive'}
                         </Badge>
-                      </TableCell>
-                      <TableCell>
-                        {new Date(category.created_at).toLocaleDateString()}
                       </TableCell>
                       <TableCell>
                         <div className="flex space-x-2">

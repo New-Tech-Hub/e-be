@@ -5,7 +5,8 @@ import Footer from "@/components/Footer";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Star, Heart, ShoppingCart, Filter } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Star, Heart, ShoppingCart, Filter, SlidersHorizontal } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useCart } from "@/hooks/useCart";
 import { useWishlist } from "@/hooks/useWishlist";
@@ -39,6 +40,7 @@ const Products = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalProducts, setTotalProducts] = useState(0);
   const [hasMore, setHasMore] = useState(true);
+  const [sortBy, setSortBy] = useState<string>('newest');
   const { addToCart } = useCart();
   const { isInWishlist, addToWishlist, removeFromWishlist, getWishlistItemId } = useWishlist();
   const { toast } = useToast();
@@ -73,7 +75,7 @@ const Products = () => {
     setCurrentPage(1);
     setProducts([]);
     fetchProducts(true);
-  }, [category, window.location.pathname]);
+  }, [category, window.location.pathname, sortBy]);
 
   const fetchProducts = async (reset = false) => {
     const categorySlug = getCategorySlug();
@@ -112,20 +114,33 @@ const Products = () => {
 
       setCategoryInfo(categoryData);
 
+      // Check if this is a major category with subcategories
+      const { data: subcategories } = await supabase
+        .from('categories')
+        .select('id')
+        .eq('parent_id', categoryData.id)
+        .eq('is_active', true);
+
+      // Build category IDs to fetch products from
+      const categoryIds = [categoryData.id];
+      if (subcategories && subcategories.length > 0) {
+        categoryIds.push(...subcategories.map(sub => sub.id));
+      }
+
       // Get total count for pagination
       const { count } = await supabase
         .from('products')
         .select('*', { count: 'exact', head: true })
-        .eq('category_id', categoryData.id)
+        .in('category_id', categoryIds)
         .eq('is_active', true);
 
       setTotalProducts(count || 0);
 
-      // Get paginated products with optimized fields
+      // Get paginated products with optimized fields and sorting
       const from = (pageToFetch - 1) * PRODUCTS_PER_PAGE;
       const to = from + PRODUCTS_PER_PAGE - 1;
 
-      const { data: productsData, error: productsError } = await supabase
+      let query = supabase
         .from('products')
         .select(`
           id,
@@ -137,15 +152,33 @@ const Products = () => {
           stock_quantity,
           is_active,
           category_id,
+          created_at,
           categories!inner (
             name,
             slug
           )
         `)
-        .eq('category_id', categoryData.id)
-        .eq('is_active', true)
-        .order('created_at', { ascending: false })
-        .range(from, to);
+        .in('category_id', categoryIds)
+        .eq('is_active', true);
+
+      // Apply sorting
+      switch (sortBy) {
+        case 'price-low':
+          query = query.order('price', { ascending: true });
+          break;
+        case 'price-high':
+          query = query.order('price', { ascending: false });
+          break;
+        case 'name':
+          query = query.order('name', { ascending: true });
+          break;
+        case 'newest':
+        default:
+          query = query.order('created_at', { ascending: false });
+          break;
+      }
+
+      const { data: productsData, error: productsError } = await query.range(from, to);
 
       if (productsError) throw productsError;
 
@@ -286,14 +319,24 @@ const Products = () => {
           </div>
 
           {/* Filters */}
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
             <p className="text-muted-foreground">
               Showing {products.length} of {totalProducts} products
             </p>
-            <Button variant="outline" className="gap-2">
-              <Filter className="h-4 w-4" />
-              Filter & Sort
-            </Button>
+            <div className="flex items-center gap-2">
+              <SlidersHorizontal className="h-4 w-4 text-muted-foreground" />
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger className="w-[200px]">
+                  <SelectValue placeholder="Sort by" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="newest">Newest First</SelectItem>
+                  <SelectItem value="price-low">Price: Low to High</SelectItem>
+                  <SelectItem value="price-high">Price: High to Low</SelectItem>
+                  <SelectItem value="name">Name: A to Z</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           {/* Products Grid */}
