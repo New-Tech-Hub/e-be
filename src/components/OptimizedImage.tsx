@@ -1,4 +1,4 @@
-import { ImgHTMLAttributes } from 'react';
+import { ImgHTMLAttributes, useState } from 'react';
 
 interface OptimizedImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   src: string;
@@ -19,9 +19,31 @@ const OptimizedImage = ({
   className,
   ...props 
 }: OptimizedImageProps) => {
+  const [imgSrc, setImgSrc] = useState(src);
+  const [hasError, setHasError] = useState(false);
+
+  // Try to use WebP format if supported
+  const getOptimizedSrc = (originalSrc: string) => {
+    if (hasError) return originalSrc;
+    
+    // If it's a URL with query params, try WebP
+    if (originalSrc.includes('unsplash.com')) {
+      return `${originalSrc}${originalSrc.includes('?') ? '&' : '?'}fm=webp&q=80`;
+    }
+    
+    return originalSrc;
+  };
+
+  const handleError = () => {
+    if (!hasError) {
+      setHasError(true);
+      setImgSrc(src); // Fallback to original
+    }
+  };
+
   return (
     <img
-      src={src}
+      src={getOptimizedSrc(imgSrc)}
       alt={alt}
       className={className}
       loading={priority ? "eager" : "lazy"}
@@ -29,6 +51,8 @@ const OptimizedImage = ({
       width={width}
       height={height}
       sizes={sizes}
+      onError={handleError}
+      fetchPriority={priority ? "high" : "auto"}
       {...props}
     />
   );
