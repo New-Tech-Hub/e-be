@@ -107,19 +107,19 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 gap-4">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3 flex-shrink-0">
+          <Link to="/" className="flex items-center space-x-3 flex-shrink-0 group">
             <img 
               src={logo} 
               alt="Ebeth Boutique & Exclusive Store" 
-              className="h-12 w-12 rounded-full object-cover"
+              className="h-12 w-12 rounded-full object-cover transition-all duration-300 group-hover:shadow-lg group-hover:scale-105"
               loading="eager"
               decoding="async"
               width="48"
               height="48"
             />
             <div className="hidden md:block">
-              <h1 className="text-xl font-bold text-foreground">Ebeth Boutique</h1>
-              <p className="text-xs text-muted-foreground">& Exclusive Store</p>
+              <h1 className="text-xl font-bold text-foreground group-hover:text-gold-dark transition-colors duration-300">Ebeth Boutique</h1>
+              <p className="text-xs text-muted-foreground group-hover:text-gold transition-colors duration-300">& Exclusive Store</p>
             </div>
           </Link>
 
@@ -134,17 +134,17 @@ const Header = () => {
                         {category.name}
                       </NavigationMenuTrigger>
                       <NavigationMenuContent>
-                        <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-background border border-border shadow-lg">
+                        <ul className="grid w-[400px] gap-3 p-6 md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-background/95 backdrop-blur-sm">
                           <li className="row-span-3">
                             <NavigationMenuLink asChild>
                               <Link
                                 to={`/products/${category.slug}`}
-                                className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md hover:bg-muted/80 transition-colors"
+                                className="group flex h-full w-full select-none flex-col justify-end rounded-lg bg-gradient-to-br from-accent/30 via-accent/20 to-accent/10 p-6 no-underline outline-none transition-all duration-300 hover:shadow-[0_8px_20px_rgba(0,0,0,0.1)] hover:scale-[1.02] hover:from-accent/40 hover:via-accent/30 hover:to-accent/20"
                               >
-                                <div className="mb-2 mt-4 text-lg font-medium">
+                                <div className="mb-2 mt-4 text-lg font-semibold text-foreground group-hover:text-gold-dark transition-colors duration-300">
                                   View All {category.name}
                                 </div>
-                                <p className="text-sm leading-tight text-muted-foreground">
+                                <p className="text-sm leading-tight text-muted-foreground group-hover:text-foreground transition-colors duration-300">
                                   Browse all products in this category
                                 </p>
                               </Link>
@@ -155,9 +155,9 @@ const Header = () => {
                               <NavigationMenuLink asChild>
                                 <Link
                                   to={`/products/${sub.slug}`}
-                                  className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                                  className="group block select-none space-y-1 rounded-lg p-4 leading-none no-underline outline-none transition-all duration-300 hover:bg-gradient-to-r hover:from-accent/20 hover:to-accent/10 hover:shadow-md hover:scale-[1.02] focus:bg-accent focus:text-accent-foreground border border-transparent hover:border-accent/30"
                                 >
-                                  <div className="text-sm font-medium leading-none">{sub.name}</div>
+                                  <div className="text-sm font-medium leading-none text-foreground group-hover:text-gold-dark transition-colors duration-300">{sub.name}</div>
                                 </Link>
                               </NavigationMenuLink>
                             </li>
@@ -168,7 +168,7 @@ const Header = () => {
                   ) : (
                     <Link
                       to={`/products/${category.slug}`}
-                      className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+                      className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-all duration-300 hover:bg-gradient-to-r hover:from-accent/20 hover:to-accent/10 hover:text-foreground hover:shadow-sm focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
                     >
                       {category.name}
                     </Link>
@@ -192,6 +192,7 @@ const Header = () => {
                 size="icon"
                 onClick={() => window.open('https://www.facebook.com/ebethstores', '_blank', 'noopener,noreferrer')}
                 aria-label="Visit our Facebook page"
+                className="hover:text-gold hover:bg-accent/20 transition-all duration-300"
               >
                 <Facebook className="h-4 w-4" />
               </Button>
@@ -200,6 +201,7 @@ const Header = () => {
                 size="icon"
                 onClick={() => window.open('https://www.instagram.com/ebeth_stores/', '_blank', 'noopener,noreferrer')}
                 aria-label="Visit our Instagram page"
+                className="hover:text-gold hover:bg-accent/20 transition-all duration-300"
               >
                 <Instagram className="h-4 w-4" />
               </Button>
@@ -311,16 +313,16 @@ const Header = () => {
                     <div className="space-y-2">
                       <button
                         onClick={() => setMobileOpenCategory(mobileOpenCategory === category.id ? null : category.id)}
-                        className="flex items-center justify-between w-full py-2 text-foreground hover:text-gold transition-smooth font-medium"
+                        className="flex items-center justify-between w-full py-3 px-3 text-foreground hover:text-gold hover:bg-accent/20 rounded-md transition-all duration-300 font-medium group"
                       >
-                        <span>{category.name}</span>
-                        <ChevronDown className={`h-4 w-4 transition-transform ${mobileOpenCategory === category.id ? 'rotate-180' : ''}`} />
+                        <span className="group-hover:translate-x-1 transition-transform duration-300">{category.name}</span>
+                        <ChevronDown className={`h-4 w-4 transition-all duration-300 group-hover:text-gold ${mobileOpenCategory === category.id ? 'rotate-180' : ''}`} />
                       </button>
                       {mobileOpenCategory === category.id && (
-                        <div className="pl-4 space-y-2">
+                        <div className="pl-4 space-y-1 animate-in slide-in-from-top-2 duration-300">
                           <Link
                             to={`/products/${category.slug}`}
-                            className="block py-2 text-sm text-muted-foreground hover:text-gold transition-smooth"
+                            className="block py-3 px-3 text-sm text-muted-foreground hover:text-gold hover:bg-accent/10 rounded-md transition-all duration-300 hover:translate-x-1 hover:font-medium"
                             onClick={() => setIsMenuOpen(false)}
                           >
                             View All {category.name}
@@ -329,7 +331,7 @@ const Header = () => {
                             <Link
                               key={sub.id}
                               to={`/products/${sub.slug}`}
-                              className="block py-2 text-sm text-muted-foreground hover:text-gold transition-smooth"
+                              className="block py-3 px-3 text-sm text-muted-foreground hover:text-gold hover:bg-accent/10 rounded-md transition-all duration-300 hover:translate-x-1 hover:font-medium"
                               onClick={() => setIsMenuOpen(false)}
                             >
                               {sub.name}
@@ -341,7 +343,7 @@ const Header = () => {
                   ) : (
                     <Link
                       to={`/products/${category.slug}`}
-                      className="block py-2 text-foreground hover:text-gold transition-smooth font-medium"
+                      className="block py-3 px-3 text-foreground hover:text-gold hover:bg-accent/20 rounded-md transition-all duration-300 font-medium hover:translate-x-1 hover:shadow-sm"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       {category.name}

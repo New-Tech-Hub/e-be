@@ -127,9 +127,9 @@ const SearchBar = ({ onClose, className = "" }: SearchBarProps) => {
 
   return (
     <div className={`relative ${className}`}>
-      <form onSubmit={handleSearch} className="relative">
+      <form onSubmit={handleSearch} className="relative group">
         <Search 
-          className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4 cursor-pointer" 
+          className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4 cursor-pointer transition-all duration-300 group-hover:text-gold group-focus-within:text-gold" 
           onClick={handleSearch}
         />
         <Input
@@ -137,7 +137,7 @@ const SearchBar = ({ onClose, className = "" }: SearchBarProps) => {
           placeholder="Search products..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="pl-10 pr-10"
+          className="pl-10 pr-10 transition-all duration-300 focus:ring-2 focus:ring-accent/50 hover:border-accent/50"
           onFocus={() => query.length >= 2 && setShowResults(true)}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
@@ -150,7 +150,7 @@ const SearchBar = ({ onClose, className = "" }: SearchBarProps) => {
             type="button"
             variant="ghost"
             size="sm"
-            className="absolute right-1 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0"
+            className="absolute right-1 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 hover:bg-accent/20 transition-all duration-300"
             onClick={() => {
               setQuery("");
               setResults([]);
@@ -163,45 +163,46 @@ const SearchBar = ({ onClose, className = "" }: SearchBarProps) => {
       </form>
 
       {showResults && query.length >= 2 && (
-        <Card className="absolute top-full left-0 right-0 mt-2 z-50 max-h-96 overflow-y-auto bg-background border shadow-lg">
+        <Card className="absolute top-full left-0 right-0 mt-2 z-50 max-h-96 overflow-y-auto bg-background/95 backdrop-blur-sm border shadow-[0_8px_30px_rgba(0,0,0,0.12)] animate-in fade-in slide-in-from-top-2 duration-300 rounded-lg">
           {loading ? (
-            <div className="p-4 text-center">
-              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-gold mx-auto"></div>
-              <p className="text-sm text-muted-foreground mt-2">Searching...</p>
+            <div className="p-6 text-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold mx-auto"></div>
+              <p className="text-sm text-muted-foreground mt-3">Searching...</p>
             </div>
           ) : results.length === 0 ? (
-            <div className="p-4 text-center">
+            <div className="p-6 text-center">
               <p className="text-sm text-muted-foreground">No products found for "{query}"</p>
             </div>
           ) : (
             <div className="p-2">
-              <p className="text-xs text-muted-foreground px-2 py-1 mb-2">
+              <p className="text-xs font-medium text-muted-foreground px-3 py-2 mb-1 bg-accent/10 rounded-md">
                 Found {results.length} result{results.length !== 1 ? 's' : ''}
               </p>
-              {results.map((product) => (
+              {results.map((product, index) => (
                 <Link
                   key={product.id}
                   to={`/product/${product.id}`}
                   onClick={handleResultClick}
-                  className="flex items-center space-x-3 p-2 hover:bg-muted rounded-lg transition-colors"
+                  className="flex items-center space-x-3 p-3 hover:bg-gradient-to-r hover:from-accent/20 hover:to-accent/10 rounded-lg transition-all duration-300 hover:shadow-md hover:scale-[1.02] group animate-in fade-in slide-in-from-left-2"
+                  style={{ animationDelay: `${index * 50}ms` }}
                 >
                   {product.image_url && (
                     <img
                       src={product.image_url}
                       alt={product.name}
-                      className="w-12 h-12 object-cover rounded"
+                      className="w-14 h-14 object-cover rounded-lg shadow-sm group-hover:shadow-md transition-all duration-300"
                     />
                   )}
                   <div className="flex-1 min-w-0">
-                    <h4 className="text-sm font-medium text-foreground truncate">
+                    <h4 className="text-sm font-medium text-foreground truncate group-hover:text-gold-dark transition-colors duration-300">
                       {product.name}
                     </h4>
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm font-semibold text-gold">
+                    <div className="flex items-center justify-between mt-1">
+                      <p className="text-sm font-semibold text-gold group-hover:text-gold-dark transition-colors duration-300">
                         {formatCurrency(product.price, product.currency)}
                       </p>
                       {product.categories && (
-                        <span className="text-xs text-muted-foreground">
+                        <span className="text-xs text-muted-foreground bg-accent/20 px-2 py-1 rounded-full">
                           {product.categories.name}
                         </span>
                       )}
