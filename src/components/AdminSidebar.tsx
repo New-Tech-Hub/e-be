@@ -10,7 +10,8 @@ import {
   Settings,
   Shield,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Activity
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -18,6 +19,7 @@ import { cn } from "@/lib/utils";
 const sidebarItems = [
   { title: "Dashboard", icon: LayoutDashboard, href: "/admin" },
   { title: "Analytics", icon: BarChart3, href: "/admin/analytics" },
+  { title: "Performance", icon: Activity, href: "/admin/performance" },
   { title: "Users", icon: Users, href: "/admin/users" },
   { title: "Products", icon: Package, href: "/admin/products" },
   { title: "Orders", icon: ShoppingCart, href: "/admin/orders" },

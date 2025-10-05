@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useWishlist } from "@/hooks/useWishlist";
 import { useAnalytics } from "@/hooks/useAnalytics";
+import { usePerformanceMonitor } from "@/hooks/usePerformanceMonitor";
 import SEOHead from "@/components/SEOHead";
 import { Helmet } from "react-helmet-async";
 import Header from "@/components/Header";
@@ -15,6 +16,7 @@ import CustomerCare from "@/components/CustomerCare";
 
 const Index = () => {
   const { trackPageView } = useAnalytics();
+  usePerformanceMonitor();
 
   useEffect(() => {
     trackPageView('home');

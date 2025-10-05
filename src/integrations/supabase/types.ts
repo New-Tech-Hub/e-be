@@ -388,6 +388,142 @@ export type Database = {
           },
         ]
       }
+      performance_alerts: {
+        Row: {
+          alert_type: string
+          created_at: string
+          id: string
+          message: string
+          metric_id: string | null
+          resolved: boolean | null
+          resolved_at: string | null
+          severity: string
+        }
+        Insert: {
+          alert_type: string
+          created_at?: string
+          id?: string
+          message: string
+          metric_id?: string | null
+          resolved?: boolean | null
+          resolved_at?: string | null
+          severity: string
+        }
+        Update: {
+          alert_type?: string
+          created_at?: string
+          id?: string
+          message?: string
+          metric_id?: string | null
+          resolved?: boolean | null
+          resolved_at?: string | null
+          severity?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "performance_alerts_metric_id_fkey"
+            columns: ["metric_id"]
+            isOneToOne: false
+            referencedRelation: "performance_metrics"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      performance_issues: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          issue_type: string
+          metric_id: string | null
+          recommendation: string | null
+          resolved: boolean | null
+          severity: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          issue_type: string
+          metric_id?: string | null
+          recommendation?: string | null
+          resolved?: boolean | null
+          severity: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          issue_type?: string
+          metric_id?: string | null
+          recommendation?: string | null
+          resolved?: boolean | null
+          severity?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "performance_issues_metric_id_fkey"
+            columns: ["metric_id"]
+            isOneToOne: false
+            referencedRelation: "performance_metrics"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      performance_metrics: {
+        Row: {
+          accessibility_score: number | null
+          best_practices_score: number | null
+          cls: number | null
+          created_at: string
+          fcp: number | null
+          id: string
+          lcp: number | null
+          load_time: number | null
+          page_size: number | null
+          performance_score: number | null
+          requests_count: number | null
+          seo_score: number | null
+          speed_index: number | null
+          tbt: number | null
+          url: string
+        }
+        Insert: {
+          accessibility_score?: number | null
+          best_practices_score?: number | null
+          cls?: number | null
+          created_at?: string
+          fcp?: number | null
+          id?: string
+          lcp?: number | null
+          load_time?: number | null
+          page_size?: number | null
+          performance_score?: number | null
+          requests_count?: number | null
+          seo_score?: number | null
+          speed_index?: number | null
+          tbt?: number | null
+          url: string
+        }
+        Update: {
+          accessibility_score?: number | null
+          best_practices_score?: number | null
+          cls?: number | null
+          created_at?: string
+          fcp?: number | null
+          id?: string
+          lcp?: number | null
+          load_time?: number | null
+          page_size?: number | null
+          performance_score?: number | null
+          requests_count?: number | null
+          seo_score?: number | null
+          speed_index?: number | null
+          tbt?: number | null
+          url?: string
+        }
+        Relationships: []
+      }
       product_reviews: {
         Row: {
           comment: string
@@ -714,6 +850,10 @@ export type Database = {
       can_manage_role: {
         Args: { manager_user_id: string; target_role: string }
         Returns: boolean
+      }
+      cleanup_old_performance_metrics: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
       }
       cleanup_old_rate_limits: {
         Args: Record<PropertyKey, never>
