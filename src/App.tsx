@@ -27,7 +27,6 @@ import AdminAnalytics from "./pages/AdminAnalytics";
 import AdminOrders from "./pages/AdminOrders";
 import AdminSecurity from "./pages/AdminSecurity";
 import AdminSettings from "./pages/AdminSettings";
-import AdminPerformance from "./pages/AdminPerformance";
 import Checkout from "./pages/Checkout";
 import ProductDetail from "./pages/ProductDetail";
 import Search from "./pages/Search";
@@ -118,11 +117,6 @@ const App = () => (
               <Route path="/admin/settings" element={
                 <SuperAdminRoute>
                   <AdminSettings />
-                </SuperAdminRoute>
-              } />
-              <Route path="/admin/performance" element={
-                <SuperAdminRoute>
-                  <AdminPerformance />
                 </SuperAdminRoute>
               } />
               <Route path="/checkout" element={
