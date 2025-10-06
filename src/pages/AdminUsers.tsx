@@ -32,7 +32,7 @@ interface UserProfile {
   user_id: string;
   full_name: string | null;
   phone: string | null;
-  role: string;
+  primary_role: string;
   address: string | null;
   city: string | null;
   state: string | null;
@@ -55,26 +55,47 @@ const AdminUsers = () => {
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      // Use the secure function to get profile data with proper logging
-      const { data, error } = await supabase
-        .rpc('get_safe_profile_data')
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-      
-      // For admin access, we need to get the full profiles with audit logging
+      // Fetch profiles
       const { data: profilesData, error: profilesError } = await supabase
         .from('profiles')
         .select('*')
         .order('created_at', { ascending: false });
 
       if (profilesError) throw profilesError;
-      setUsers(profilesData || []);
+
+      // Fetch roles for all users
+      const { data: rolesData, error: rolesError } = await supabase
+        .from('user_roles')
+        .select('user_id, role');
+
+      if (rolesError) throw rolesError;
+
+      // Combine profiles with their primary role
+      const usersWithRoles = profilesData?.map(profile => {
+        const userRoles = rolesData?.filter(r => r.user_id === profile.user_id) || [];
+        
+        // Determine primary role (highest privilege)
+        let primaryRole = 'customer';
+        if (userRoles.some(r => r.role === 'super_admin')) {
+          primaryRole = 'super_admin';
+        } else if (userRoles.some(r => r.role === 'admin')) {
+          primaryRole = 'admin';
+        } else if (userRoles.some(r => r.role === 'manager')) {
+          primaryRole = 'manager';
+        }
+        
+        return {
+          ...profile,
+          primary_role: primaryRole
+        };
+      }) || [];
+
+      setUsers(usersWithRoles);
     } catch (error) {
       console.error('Error fetching users:', error);
       toast({
         title: "Error",
-        description: "Failed to load users. Access logged for security.",
+        description: "Failed to load users.",
         variant: "destructive"
       });
     } finally {
@@ -94,15 +115,31 @@ const AdminUsers = () => {
     }
 
     try {
-      const { error } = await supabase
-        .from('profiles')
-        .update({ role: newRole })
-        .eq('id', userId);
+      // Get the target user's user_id from profiles
+      const targetUser = users.find(u => u.id === userId);
+      if (!targetUser) throw new Error('User not found');
 
-      if (error) throw error;
+      // Delete all existing roles for this user
+      const { error: deleteError } = await supabase
+        .from('user_roles')
+        .delete()
+        .eq('user_id', targetUser.user_id);
 
+      if (deleteError) throw deleteError;
+
+      // Insert the new role
+      const { error: insertError } = await supabase
+        .from('user_roles')
+        .insert([{
+          user_id: targetUser.user_id,
+          role: newRole as any // Cast to avoid type issues with enum
+        }]);
+
+      if (insertError) throw insertError;
+
+      // Update local state
       setUsers(users.map(user => 
-        user.id === userId ? { ...user, role: newRole } : user
+        user.id === userId ? { ...user, primary_role: newRole } : user
       ));
 
       toast({
@@ -121,6 +158,8 @@ const AdminUsers = () => {
 
   const getRoleColor = (role: string) => {
     switch (role) {
+      case 'super_admin':
+        return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200';
       case 'admin':
         return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
       case 'manager':
@@ -134,6 +173,8 @@ const AdminUsers = () => {
 
   const getRoleIcon = (role: string) => {
     switch (role) {
+      case 'super_admin':
+        return <Crown className="h-3 w-3 text-purple-600" />;
       case 'admin':
         return <Crown className="h-3 w-3" />;
       case 'manager':
@@ -150,7 +191,7 @@ const AdminUsers = () => {
   const filteredUsers = users.filter(user =>
     user.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     user.phone?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.role.toLowerCase().includes(searchTerm.toLowerCase())
+    user.primary_role.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -210,9 +251,9 @@ const AdminUsers = () => {
                         </TableCell>
                         <TableCell>{user.phone || 'N/A'}</TableCell>
                         <TableCell>
-                          <Badge className={`${getRoleColor(user.role)} flex items-center gap-1`}>
-                            {getRoleIcon(user.role)}
-                            {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
+                          <Badge className={`${getRoleColor(user.primary_role)} flex items-center gap-1`}>
+                            {getRoleIcon(user.primary_role)}
+                            {user.primary_role.replace('_', ' ').charAt(0).toUpperCase() + user.primary_role.replace('_', ' ').slice(1)}
                           </Badge>
                         </TableCell>
                         <TableCell>
@@ -226,25 +267,25 @@ const AdminUsers = () => {
                         </TableCell>
                         <TableCell>
                           <div className="flex space-x-2">
-                            {canManageRole(userRole, user.role) || user.role === 'customer' ? (
+                            {canManageRole(userRole, user.primary_role) || user.primary_role === 'customer' ? (
                               <Select
-                                value={user.role}
+                                value={user.primary_role}
                                 onValueChange={(value) => updateUserRole(user.id, value)}
                               >
-                                <SelectTrigger className="w-32">
+                                <SelectTrigger className="w-40">
                                   <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
                                   <SelectItem value="customer">Customer</SelectItem>
                                   {availableRoles.map(role => (
                                     <SelectItem key={role} value={role}>
-                                      {role.charAt(0).toUpperCase() + role.slice(1)}
+                                      {role.replace('_', ' ').charAt(0).toUpperCase() + role.replace('_', ' ').slice(1)}
                                     </SelectItem>
                                   ))}
                                 </SelectContent>
                               </Select>
                             ) : (
-                              <Badge variant="outline" className="w-32 justify-center">
+                              <Badge variant="outline" className="w-40 justify-center">
                                 No Access
                               </Badge>
                             )}

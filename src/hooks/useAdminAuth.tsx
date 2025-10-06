@@ -16,17 +16,17 @@ export const useAdminAuth = () => {
       }
 
       try {
-        const { data, error } = await supabase
-          .from('profiles')
+        const { data: roles, error } = await supabase
+          .from('user_roles')
           .select('role')
-          .eq('user_id', user.id)
-          .single();
+          .eq('user_id', user.id);
 
         if (error) {
           console.error('Error checking admin status:', error);
           setIsAdmin(false);
         } else {
-          setIsAdmin(data?.role === 'admin');
+          const userRoles = roles?.map(r => r.role) || [];
+          setIsAdmin(userRoles.includes('admin') || userRoles.includes('super_admin'));
         }
       } catch (error) {
         console.error('Error checking admin status:', error);

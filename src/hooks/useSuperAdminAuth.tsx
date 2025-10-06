@@ -22,11 +22,11 @@ export const useSuperAdminAuth = () => {
       }
 
       try {
-        const { data, error } = await supabase
-          .from('profiles')
+        // Query user_roles table for all roles
+        const { data: roles, error } = await supabase
+          .from('user_roles')
           .select('role')
-          .eq('user_id', user.id)
-          .single();
+          .eq('user_id', user.id);
 
         if (error) {
           console.error('Error checking user roles:', error);
@@ -35,18 +35,27 @@ export const useSuperAdminAuth = () => {
           setIsManager(false);
           setUserRole('customer');
         } else {
-          const role = data?.role || 'customer';
-          setUserRole(role);
+          const userRoles = roles?.map(r => r.role) || ['customer'];
           
-          // Super admin check: jerryguma01@gmail.com with admin role
-          const isSuperAdminUser = user.email === 'jerryguma01@gmail.com' && role === 'admin';
-          setIsSuperAdmin(isSuperAdminUser);
+          // Determine primary role (highest privilege)
+          const hasSuperAdmin = userRoles.includes('super_admin');
+          const hasAdmin = userRoles.includes('admin');
+          const hasManager = userRoles.includes('manager');
           
-          // Admin check (includes super admin)
-          setIsAdmin(role === 'admin' || isSuperAdminUser);
+          setIsSuperAdmin(hasSuperAdmin);
+          setIsAdmin(hasSuperAdmin || hasAdmin);
+          setIsManager(hasSuperAdmin || hasAdmin || hasManager);
           
-          // Manager check (includes admin and super admin)
-          setIsManager(['manager', 'admin'].includes(role) || isSuperAdminUser);
+          // Set primary role for display
+          if (hasSuperAdmin) {
+            setUserRole('super_admin');
+          } else if (hasAdmin) {
+            setUserRole('admin');
+          } else if (hasManager) {
+            setUserRole('manager');
+          } else {
+            setUserRole('customer');
+          }
         }
       } catch (error) {
         console.error('Error checking user roles:', error);
