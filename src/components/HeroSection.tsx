@@ -92,7 +92,6 @@ const HeroSection = () => {
             alt={slide.title}
             className="w-full h-full object-cover"
             loading={index === 0 ? "eager" : "lazy"}
-            fetchPriority={index === 0 ? "high" : "auto"}
             decoding="async"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
           />

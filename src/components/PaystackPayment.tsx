@@ -100,7 +100,7 @@ const PaystackPayment = ({
 
       paystack.openIframe();
     } catch (error) {
-      console.error('Paystack payment error:', error);
+      // Payment error handled by toast
       onError(error);
       toast({
         title: "Payment Error",

@@ -53,7 +53,7 @@ export const useWishlist = () => {
       if (error) throw error;
       setWishlistItems(data || []);
     } catch (error) {
-      console.error('Error fetching wishlist:', error);
+      // Silently fail - wishlist errors shouldn't block user experience
       toast({
         title: "Error",
         description: "Failed to load wishlist items.",
@@ -102,7 +102,7 @@ export const useWishlist = () => {
       await fetchWishlistItems();
       return true;
     } catch (error) {
-      console.error('Error adding to wishlist:', error);
+      // Error handled by toast
       toast({
         title: "Error",
         description: "Failed to add item to wishlist.",
@@ -129,7 +129,7 @@ export const useWishlist = () => {
       await fetchWishlistItems();
       return true;
     } catch (error) {
-      console.error('Error removing from wishlist:', error);
+      // Error handled by toast
       toast({
         title: "Error",
         description: "Failed to remove item from wishlist.",

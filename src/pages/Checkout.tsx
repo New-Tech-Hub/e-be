@@ -90,7 +90,7 @@ const Checkout = () => {
       if (error) throw error;
       setCartItems(data || []);
     } catch (error) {
-      console.error('Error fetching cart items:', error);
+      // Cart fetch error handled by loading state
       toast({
         title: "Error",
         description: "Failed to load cart items.",
@@ -251,7 +251,7 @@ const Checkout = () => {
       navigate('/orders');
       
     } catch (error) {
-      console.error('Error processing checkout:', error);
+      // Checkout error handled by toast
       toast({
         title: "Error",
         description: "Failed to process your order. Please try again.",

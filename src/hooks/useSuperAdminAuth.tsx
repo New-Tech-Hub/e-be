@@ -29,7 +29,7 @@ export const useSuperAdminAuth = () => {
           .eq('user_id', user.id);
 
         if (error) {
-          console.error('Error checking user roles:', error);
+          // Role check error handled silently
           setIsSuperAdmin(false);
           setIsAdmin(false);
           setIsManager(false);
@@ -58,7 +58,7 @@ export const useSuperAdminAuth = () => {
           }
         }
       } catch (error) {
-        console.error('Error checking user roles:', error);
+        // Role check error handled silently
         setIsSuperAdmin(false);
         setIsAdmin(false);
         setIsManager(false);

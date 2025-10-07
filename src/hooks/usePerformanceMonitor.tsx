@@ -43,7 +43,7 @@ export const usePerformanceMonitor = () => {
             });
             lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
           } catch (e) {
-            console.log('LCP observation not supported');
+            // LCP observation not supported in this browser
           }
 
           // First Contentful Paint (FCP)
@@ -67,7 +67,7 @@ export const usePerformanceMonitor = () => {
             });
             fcpObserver.observe({ type: 'paint', buffered: true });
           } catch (e) {
-            console.log('FCP observation not supported');
+            // FCP observation not supported in this browser
           }
 
           // Cumulative Layout Shift (CLS)
@@ -92,7 +92,7 @@ export const usePerformanceMonitor = () => {
             });
             clsObserver.observe({ type: 'layout-shift', buffered: true });
           } catch (e) {
-            console.log('CLS observation not supported');
+            // CLS observation not supported in this browser
           }
         }
 
@@ -148,12 +148,12 @@ export const usePerformanceMonitor = () => {
               }
             });
           } catch (error) {
-            console.error('Failed to send performance metrics:', error);
+            // Performance metrics failed to send - not critical
           }
         }, 3000);
 
       } catch (error) {
-        console.error('Error collecting performance metrics:', error);
+        // Performance monitoring error - not critical
       }
     };
 

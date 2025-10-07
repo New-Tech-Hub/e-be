@@ -91,7 +91,7 @@ const Header = () => {
 
       setCategories(categoriesWithSubs);
     } catch (error) {
-      console.error('Error fetching categories:', error);
+      // Silently fail - header categories are supplementary
     }
   };
 

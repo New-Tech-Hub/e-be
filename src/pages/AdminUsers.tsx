@@ -92,7 +92,7 @@ const AdminUsers = () => {
 
       setUsers(usersWithRoles);
     } catch (error) {
-      console.error('Error fetching users:', error);
+      // Users fetch error handled by loading state
       toast({
         title: "Error",
         description: "Failed to load users.",
@@ -147,7 +147,7 @@ const AdminUsers = () => {
         description: "User role updated successfully.",
       });
     } catch (error: any) {
-      console.error('Error updating user role:', error);
+      // Role update error handled by toast
       toast({
         title: "Error",
         description: error.message || "Failed to update user role.",

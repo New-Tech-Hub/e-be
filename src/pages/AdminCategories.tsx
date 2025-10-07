@@ -107,7 +107,7 @@ const AdminCategories = () => {
 
       setCategories(categoriesWithCounts);
     } catch (error) {
-      console.error('Error fetching categories:', error);
+      // Categories fetch error handled by loading state
       toast({
         title: "Error",
         description: "Failed to load categories.",
@@ -195,7 +195,7 @@ const AdminCategories = () => {
       setIsAddDialogOpen(false);
       fetchCategories();
     } catch (error) {
-      console.error('Error saving category:', error);
+      // Save error handled by toast
       toast({
         title: "Error",
         description: "Failed to save category.",
@@ -236,7 +236,7 @@ const AdminCategories = () => {
       
       fetchCategories();
     } catch (error) {
-      console.error('Error deleting category:', error);
+      // Delete error handled by toast
       toast({
         title: "Error",
         description: "Failed to delete category.",

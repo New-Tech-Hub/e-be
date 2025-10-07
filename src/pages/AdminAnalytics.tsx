@@ -203,7 +203,7 @@ const AdminAnalytics = () => {
         categoryRevenue: categoryRevenueArray
       });
     } catch (error) {
-      console.error('Error fetching analytics:', error);
+      // Analytics fetch error handled by loading state
       toast({
         title: "Error",
         description: "Failed to load analytics data.",

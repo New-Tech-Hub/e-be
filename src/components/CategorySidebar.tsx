@@ -52,7 +52,7 @@ const CategorySidebar = () => {
       
       setCategories(categoriesWithCounts);
     } catch (error) {
-      console.error('Error fetching categories:', error);
+      // Silently fail - categories are supplementary
       setCategories([]);
     } finally {
       setLoading(false);

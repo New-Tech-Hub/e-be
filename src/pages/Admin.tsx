@@ -127,7 +127,7 @@ const Admin = () => {
         totalRevenue
       });
     } catch (error) {
-      console.error('Error fetching dashboard data:', error);
+      // Dashboard fetch error handled by loading state
       toast({
         title: "Error",
         description: "Failed to load dashboard data.",

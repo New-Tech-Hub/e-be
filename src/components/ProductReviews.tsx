@@ -55,7 +55,7 @@ const ProductReviews = ({ productId }: ProductReviewsProps) => {
       if (error) throw error;
       setReviews(data || []);
     } catch (error) {
-      console.error('Error fetching reviews:', error);
+      // Silently fail - reviews are supplementary content
       toast({
         title: "Error",
         description: "Failed to load reviews.",
@@ -130,7 +130,7 @@ const ProductReviews = ({ productId }: ProductReviewsProps) => {
       setEditingReview(null);
       await fetchReviews();
     } catch (error) {
-      console.error('Error submitting review:', error);
+      // Error handled by toast
       toast({
         title: "Error",
         description: "Failed to submit review. Please try again.",
@@ -157,7 +157,7 @@ const ProductReviews = ({ productId }: ProductReviewsProps) => {
       
       await fetchReviews();
     } catch (error) {
-      console.error('Error deleting review:', error);
+      // Error handled by toast
       toast({
         title: "Error",
         description: "Failed to delete review.",

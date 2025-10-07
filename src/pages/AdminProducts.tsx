@@ -85,7 +85,7 @@ const AdminProducts = () => {
       if (error) throw error;
       setProducts(data || []);
     } catch (error) {
-      console.error('Error fetching products:', error);
+      // Products fetch error handled by loading state
       toast({
         title: "Error",
         description: "Failed to load products.",
@@ -108,7 +108,7 @@ const AdminProducts = () => {
       if (error) throw error;
       setCategories(data || []);
     } catch (error) {
-      console.error('Error fetching categories:', error);
+      // Categories fetch error handled silently
     }
   };
 
@@ -191,7 +191,7 @@ const AdminProducts = () => {
       setIsAddDialogOpen(false);
       fetchProducts();
     } catch (error) {
-      console.error('Error saving product:', error);
+      // Save error handled by toast
       toast({
         title: "Error",
         description: "Failed to save product.",
@@ -233,7 +233,7 @@ const AdminProducts = () => {
       
       fetchProducts();
     } catch (error) {
-      console.error('Error deleting product:', error);
+      // Delete error handled by toast
       toast({
         title: "Error",
         description: "Failed to delete product.",
@@ -306,7 +306,7 @@ const AdminProducts = () => {
       setCsvFile(null);
       fetchProducts();
     } catch (error) {
-      console.error('Error importing products:', error);
+      // Import error handled by toast
       toast({
         title: "Error",
         description: "Failed to import products.",

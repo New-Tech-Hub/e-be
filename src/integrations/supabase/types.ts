@@ -875,6 +875,10 @@ export type Database = {
         Args: { manager_user_id: string; target_role: string }
         Returns: boolean
       }
+      check_analytics_rate_limit: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
       check_profile_access_rate_limit: {
         Args: Record<PropertyKey, never>
         Returns: boolean

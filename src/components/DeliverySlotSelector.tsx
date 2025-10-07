@@ -46,7 +46,7 @@ const DeliverySlotSelector = ({ selectedSlotId, onSlotSelect }: DeliverySlotSele
       if (error) throw error;
       setSlots(data || []);
     } catch (error) {
-      console.error('Error fetching delivery slots:', error);
+      // Silently fail - delivery slots will show as unavailable
       toast({
         title: "Error",
         description: "Failed to load delivery slots.",

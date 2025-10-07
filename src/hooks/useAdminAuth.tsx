@@ -22,14 +22,14 @@ export const useAdminAuth = () => {
           .eq('user_id', user.id);
 
         if (error) {
-          console.error('Error checking admin status:', error);
+          // Admin check error handled silently
           setIsAdmin(false);
         } else {
           const userRoles = roles?.map(r => r.role) || [];
           setIsAdmin(userRoles.includes('admin') || userRoles.includes('super_admin'));
         }
       } catch (error) {
-        console.error('Error checking admin status:', error);
+        // Admin check error handled silently
         setIsAdmin(false);
       } finally {
         setLoading(false);

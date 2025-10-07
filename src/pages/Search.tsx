@@ -99,7 +99,7 @@ const Search = () => {
       setProducts(uniqueResults);
       setTotalProducts(uniqueResults.length);
     } catch (error) {
-      console.error('Search error:', error);
+      // Search error handled by loading state
       toast({
         title: "Search Error",
         description: "Failed to search products. Please try again.",

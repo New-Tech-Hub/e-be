@@ -48,7 +48,7 @@ const AdminSecurity = () => {
       if (error) throw error;
       setSecurityEvents(data || []);
     } catch (error) {
-      console.error('Error fetching security events:', error);
+      // Security events fetch error handled by loading state
       toast({
         title: "Error",
         description: "Failed to load security events.",

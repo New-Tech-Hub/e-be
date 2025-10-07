@@ -55,7 +55,7 @@ export const useCart = () => {
       
       return true;
     } catch (error) {
-      console.error('Error adding to cart:', error);
+      // Error handled by toast - no console logging in production
       toast({
         title: "Error",
         description: "Failed to add item to cart.",

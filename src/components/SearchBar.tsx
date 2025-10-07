@@ -89,7 +89,7 @@ const SearchBar = ({ onClose, className = "" }: SearchBarProps) => {
         setResults(uniqueResults);
         setShowResults(true);
       } catch (error) {
-        console.error('Search error:', error);
+        // Search error handled silently
         setResults([]);
       } finally {
         setLoading(false);

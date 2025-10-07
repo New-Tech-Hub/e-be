@@ -80,7 +80,7 @@ const AdminCoupons = () => {
       if (error) throw error;
       setCoupons(data || []);
     } catch (error) {
-      console.error('Error fetching coupons:', error);
+      // Coupons fetch error handled by loading state
       toast({
         title: "Error",
         description: "Failed to load coupons.",
@@ -149,7 +149,7 @@ const AdminCoupons = () => {
       resetForm();
       fetchCoupons();
     } catch (error) {
-      console.error('Error saving coupon:', error);
+      // Save error handled by toast
       toast({
         title: "Error",
         description: "Failed to save coupon.",
@@ -190,7 +190,7 @@ const AdminCoupons = () => {
       });
       fetchCoupons();
     } catch (error) {
-      console.error('Error deleting coupon:', error);
+      // Delete error handled by toast
       toast({
         title: "Error",
         description: "Failed to delete coupon.",

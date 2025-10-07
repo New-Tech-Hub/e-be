@@ -88,7 +88,7 @@ const Products = () => {
     setLoading(true);
     
     try {
-      console.log('Fetching category:', categorySlug);
+      // Fetching category data
       
       // Single optimized query combining category and products
       const { data: categoryData, error: categoryError } = await supabase
@@ -98,12 +98,12 @@ const Products = () => {
         .eq('is_active', true)
         .maybeSingle();
 
-      console.log('Category data:', categoryData, 'Error:', categoryError);
+      // Category data loaded
 
       if (categoryError) throw categoryError;
 
       if (!categoryData) {
-        console.log('Category not found:', categorySlug);
+        // Category not found
         setCategoryInfo(null);
         setProducts([]);
         setTotalProducts(0);
@@ -197,7 +197,7 @@ const Products = () => {
       setHasMore(newProducts.length === PRODUCTS_PER_PAGE && (from + newProducts.length) < (count || 0));
       
     } catch (error) {
-      console.error('Error fetching products:', error);
+      // Product fetch error handled by loading state
       toast({
         title: "Error",
         description: "Failed to load products.",

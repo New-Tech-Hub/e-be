@@ -83,7 +83,7 @@ const AdminSettings = () => {
         sms_notifications: settingsObj.sms_notifications === 'true'
       }));
     } catch (error) {
-      console.error('Error fetching store settings:', error);
+      // Settings fetch error handled by loading state
       toast({
         title: "Error",
         description: "Failed to load store settings.",
@@ -121,7 +121,7 @@ const AdminSettings = () => {
         description: "Store settings saved successfully."
       });
     } catch (error) {
-      console.error('Error saving store settings:', error);
+      // Save error handled by toast
       toast({
         title: "Error",
         description: "Failed to save store settings.",

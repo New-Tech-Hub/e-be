@@ -60,7 +60,7 @@ const CartButton = () => {
       if (error) throw error;
       setCartItems(data || []);
     } catch (error) {
-      console.error('Error fetching cart items:', error);
+      // Silently fail - cart count is not critical
     }
   };
 
@@ -85,7 +85,7 @@ const CartButton = () => {
         )
       );
     } catch (error) {
-      console.error('Error updating quantity:', error);
+      // Error handled by toast
       toast({
         title: "Error",
         description: "Failed to update quantity.",
@@ -112,7 +112,7 @@ const CartButton = () => {
         description: "Item removed from cart successfully."
       });
     } catch (error) {
-      console.error('Error removing item:', error);
+      // Error handled by toast
       toast({
         title: "Error",
         description: "Failed to remove item.",

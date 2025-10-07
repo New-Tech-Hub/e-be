@@ -41,7 +41,7 @@ export const useRoleManagement = () => {
       if (error) throw error;
       setRoleHierarchy((data || []) as RoleHierarchy[]);
     } catch (error) {
-      console.error('Error fetching role hierarchy:', error);
+      // Role management fetch errors handled silently
       toast({
         title: "Error",
         description: "Failed to load role hierarchy.",
@@ -55,7 +55,7 @@ export const useRoleManagement = () => {
       // For now, skip invitations until the table is properly set up in types
       setInvitations([]);
     } catch (error) {
-      console.error('Error fetching invitations:', error);
+      // Invitation fetch error handled silently
     } finally {
       setLoading(false);
     }
@@ -72,7 +72,7 @@ export const useRoleManagement = () => {
 
       return true;
     } catch (error: any) {
-      console.error('Error sending invitation:', error);
+      // Invitation error handled by toast
       toast({
         title: "Error",
         description: error.message || "Failed to send invitation.",

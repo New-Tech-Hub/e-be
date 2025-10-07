@@ -85,7 +85,7 @@ const AdminOrders = () => {
       if (error) throw error;
       setOrders(data || []);
     } catch (error) {
-      console.error('Error fetching orders:', error);
+      // Orders fetch error handled by loading state
       toast({
         title: "Error",
         description: "Failed to load orders.",
@@ -114,7 +114,7 @@ const AdminOrders = () => {
         description: "Order status updated successfully.",
       });
     } catch (error) {
-      console.error('Error updating order status:', error);
+      // Update error handled by toast
       toast({
         title: "Error",
         description: "Failed to update order status.",
@@ -141,7 +141,7 @@ const AdminOrders = () => {
         description: "Tracking number updated successfully.",
       });
     } catch (error) {
-      console.error('Error updating tracking number:', error);
+      // Tracking update error handled by toast
       toast({
         title: "Error",
         description: "Failed to update tracking number.",

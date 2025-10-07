@@ -14,16 +14,23 @@ export const useAnalytics = () => {
       const { error } = await supabase
         .from('analytics_events')
         .insert({
-          user_id: user?.id || null,
+          user_id: user?.id,
           event_type: event.event_type,
           event_data: event.event_data || {}
         });
 
+      // Silently fail - analytics should never disrupt user experience
       if (error) {
-        console.error('Analytics tracking error:', error);
+        // Only log in development
+        if (import.meta.env.DEV) {
+          console.warn('Analytics tracking failed:', error.message);
+        }
       }
     } catch (error) {
-      console.error('Analytics tracking error:', error);
+      // Silently handle errors in production
+      if (import.meta.env.DEV && error instanceof Error) {
+        console.warn('Analytics tracking error:', error.message);
+      }
     }
   };
 
