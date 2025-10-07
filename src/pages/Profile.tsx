@@ -52,7 +52,15 @@ const Profile = () => {
         .eq('user_id', user.id)
         .maybeSingle();
 
-      if (error) throw error;
+      if (error) {
+        // Use generic error message to prevent information leakage
+        toast({
+          title: "Error",
+          description: "Unable to load profile. Please try again.",
+          variant: "destructive"
+        });
+        return;
+      }
 
       if (data) {
         setProfile({
@@ -65,10 +73,10 @@ const Profile = () => {
         });
       }
     } catch (error) {
-      console.error('Error fetching profile:', error);
+      // Generic error without exposing details
       toast({
         title: "Error",
-        description: "Failed to load profile data.",
+        description: "Unable to load profile. Please try again.",
         variant: "destructive"
       });
     } finally {
@@ -90,17 +98,34 @@ const Profile = () => {
           updated_at: new Date().toISOString()
         });
 
-      if (error) throw error;
+      if (error) {
+        // Check for rate limit errors
+        if (error.message?.includes('Rate limit exceeded')) {
+          toast({
+            title: "Too Many Requests",
+            description: "Please wait a moment before trying again.",
+            variant: "destructive"
+          });
+        } else {
+          // Generic error message
+          toast({
+            title: "Error",
+            description: "Unable to update profile. Please try again.",
+            variant: "destructive"
+          });
+        }
+        return;
+      }
 
       toast({
         title: "Success",
         description: "Profile updated successfully.",
       });
     } catch (error) {
-      console.error('Error saving profile:', error);
+      // Generic error without exposing details
       toast({
         title: "Error",
-        description: "Failed to update profile.",
+        description: "Unable to update profile. Please try again.",
         variant: "destructive"
       });
     } finally {

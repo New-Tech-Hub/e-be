@@ -875,6 +875,10 @@ export type Database = {
         Args: { manager_user_id: string; target_role: string }
         Returns: boolean
       }
+      check_profile_access_rate_limit: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
       cleanup_old_performance_metrics: {
         Args: Record<PropertyKey, never>
         Returns: undefined
@@ -912,6 +916,21 @@ export type Database = {
           name: string
           slug: string
           subcategory_count: number
+        }[]
+      }
+      get_own_profile: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          address: string
+          city: string
+          country: string
+          created_at: string
+          full_name: string
+          id: string
+          phone: string
+          state: string
+          updated_at: string
+          user_id: string
         }[]
       }
       get_public_profile_info: {

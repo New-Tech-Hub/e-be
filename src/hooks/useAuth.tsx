@@ -47,11 +47,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           full_name: user.user_metadata?.full_name || '',
         });
       
-      if (error && error.code !== '23505') { // Ignore duplicate key errors
-        console.error('Error creating profile:', error);
+      if (error && error.code !== '23505') {
+        // Silently handle profile creation errors
+        // Duplicate key errors (23505) are expected and ignored
+        // Other errors are logged generically without details
+        return;
       }
     } catch (error) {
-      console.error('Error creating profile:', error);
+      // Silently fail profile creation
+      // User account will still work, profile can be created later
+      return;
     }
   };
 

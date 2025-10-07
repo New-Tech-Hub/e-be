@@ -111,7 +111,11 @@ const Checkout = () => {
         .eq('user_id', user.id)
         .maybeSingle();
 
-      if (error) throw error;
+      if (error) {
+        // Silently fail profile fetch - user can still checkout with manual entry
+        // Generic handling without exposing error details
+        return;
+      }
 
       if (data) {
         const nameParts = data.full_name?.split(' ') || ['', ''];
@@ -127,7 +131,9 @@ const Checkout = () => {
         }));
       }
     } catch (error) {
-      console.error('Error fetching profile:', error);
+      // Silently fail - user can manually enter information
+      // No information leakage through error messages
+      return;
     }
   };
 
