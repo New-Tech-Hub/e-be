@@ -10,6 +10,7 @@ import SuperAdminRoute from "@/components/SuperAdminRoute";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Products from "./pages/Products";
+import CategoryView from "./pages/CategoryView";
 import Account from "./pages/Account";
 import Profile from "./pages/Profile";
 import Orders from "./pages/Orders";
@@ -44,6 +45,7 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/search" element={<Search />} />
+              <Route path="/category/:slug" element={<CategoryView />} />
               <Route path="/products/:category" element={<Products />} />
               <Route path="/product/:productId" element={<ProductDetail />} />
             <Route path="/about" element={<About />} />

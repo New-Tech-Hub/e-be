@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
@@ -11,7 +11,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Plus, Edit, Trash2, Package } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Plus, Edit, Trash2, Package, Upload, X, Image as ImageIcon } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/hooks/useAuth";
@@ -51,6 +52,12 @@ const AdminCategories = () => {
     parent_id: null as string | null,
     display_order: 0
   });
+  
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploadMethod, setUploadMethod] = useState<'url' | 'upload'>('url');
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (user) {
@@ -141,6 +148,77 @@ const AdminCategories = () => {
       display_order: 0
     });
     setEditingCategory(null);
+    setUploadedFile(null);
+    setImagePreview(null);
+    setUploadMethod('url');
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+  
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
+    // Validate file type
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    if (!validTypes.includes(file.type)) {
+      toast({
+        title: "Invalid File Type",
+        description: "Please select a JPEG, PNG, or WEBP image.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    // Validate file size (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast({
+        title: "File Too Large",
+        description: "Please select an image under 5MB.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    setUploadedFile(file);
+    
+    // Create preview
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImagePreview(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+  
+  const uploadImageToStorage = async (file: File): Promise<string | null> => {
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+      const filePath = `${fileName}`;
+      
+      const { error: uploadError } = await supabase.storage
+        .from('category-images')
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
+      
+      if (uploadError) throw uploadError;
+      
+      const { data: { publicUrl } } = supabase.storage
+        .from('category-images')
+        .getPublicUrl(filePath);
+      
+      return publicUrl;
+    } catch (error) {
+      toast({
+        title: "Upload Failed",
+        description: "Failed to upload image to storage.",
+        variant: "destructive"
+      });
+      return null;
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -154,13 +232,46 @@ const AdminCategories = () => {
       });
       return;
     }
+    
+    // Validate image
+    if (uploadMethod === 'upload' && !uploadedFile && !editingCategory?.image_url) {
+      toast({
+        title: "Validation Error",
+        description: "Please select an image to upload.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    if (uploadMethod === 'url' && !formData.image_url) {
+      toast({
+        title: "Validation Error",
+        description: "Please enter an image URL.",
+        variant: "destructive"
+      });
+      return;
+    }
 
     try {
+      setUploading(true);
+      
+      let imageUrl = formData.image_url;
+      
+      // Upload file if upload method is selected and file exists
+      if (uploadMethod === 'upload' && uploadedFile) {
+        const uploadedUrl = await uploadImageToStorage(uploadedFile);
+        if (!uploadedUrl) {
+          setUploading(false);
+          return;
+        }
+        imageUrl = uploadedUrl;
+      }
+      
       const categoryData = {
         name: formData.name,
         slug: formData.slug,
         description: formData.description,
-        image_url: formData.image_url,
+        image_url: imageUrl,
         is_active: formData.is_active,
         parent_id: formData.parent_id,
         display_order: formData.display_order
@@ -195,12 +306,13 @@ const AdminCategories = () => {
       setIsAddDialogOpen(false);
       fetchCategories();
     } catch (error) {
-      // Save error handled by toast
       toast({
         title: "Error",
         description: "Failed to save category.",
         variant: "destructive"
       });
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -215,6 +327,8 @@ const AdminCategories = () => {
       parent_id: category.parent_id,
       display_order: category.display_order
     });
+    setImagePreview(category.image_url || null);
+    setUploadMethod('url');
     setIsAddDialogOpen(true);
   };
 
@@ -334,21 +448,100 @@ const AdminCategories = () => {
                   </div>
                   
                   <div>
-                    <Label htmlFor="image">Image URL</Label>
-                    <Input
-                      id="image"
-                      value={formData.image_url}
-                      onChange={(e) => handleInputChange('image_url', e.target.value)}
-                      placeholder="https://example.com/category-image.jpg"
-                    />
+                    <Label>Category Image</Label>
+                    <Tabs value={uploadMethod} onValueChange={(v) => setUploadMethod(v as 'url' | 'upload')} className="w-full">
+                      <TabsList className="grid w-full grid-cols-2">
+                        <TabsTrigger value="url">Image URL</TabsTrigger>
+                        <TabsTrigger value="upload">Upload Image</TabsTrigger>
+                      </TabsList>
+                      
+                      <TabsContent value="url" className="space-y-2">
+                        <Input
+                          id="image_url"
+                          value={formData.image_url}
+                          onChange={(e) => {
+                            handleInputChange('image_url', e.target.value);
+                            setImagePreview(e.target.value);
+                          }}
+                          placeholder="https://example.com/category-image.jpg"
+                        />
+                        {imagePreview && uploadMethod === 'url' && (
+                          <div className="relative w-full h-32 border rounded-lg overflow-hidden bg-muted">
+                            <img 
+                              src={imagePreview} 
+                              alt="Preview" 
+                              className="w-full h-full object-cover"
+                              onError={() => setImagePreview(null)}
+                            />
+                          </div>
+                        )}
+                      </TabsContent>
+                      
+                      <TabsContent value="upload" className="space-y-2">
+                        <div className="flex flex-col gap-2">
+                          <input
+                            ref={fileInputRef}
+                            type="file"
+                            accept="image/jpeg,image/jpg,image/png,image/webp"
+                            onChange={handleFileSelect}
+                            className="hidden"
+                            id="file-upload"
+                          />
+                          <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => fileInputRef.current?.click()}
+                            className="w-full"
+                          >
+                            <Upload className="h-4 w-4 mr-2" />
+                            {uploadedFile ? 'Change Image' : 'Select Image'}
+                          </Button>
+                          
+                          {uploadedFile && (
+                            <div className="flex items-center gap-2 p-2 bg-muted rounded">
+                              <ImageIcon className="h-4 w-4" />
+                              <span className="text-sm flex-1 truncate">{uploadedFile.name}</span>
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => {
+                                  setUploadedFile(null);
+                                  setImagePreview(null);
+                                  if (fileInputRef.current) {
+                                    fileInputRef.current.value = '';
+                                  }
+                                }}
+                              >
+                                <X className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          )}
+                          
+                          {imagePreview && uploadMethod === 'upload' && (
+                            <div className="relative w-full h-32 border rounded-lg overflow-hidden bg-muted">
+                              <img 
+                                src={imagePreview} 
+                                alt="Preview" 
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                          )}
+                          
+                          <p className="text-xs text-muted-foreground">
+                            Supported formats: JPEG, PNG, WEBP (Max 5MB)
+                          </p>
+                        </div>
+                      </TabsContent>
+                    </Tabs>
                   </div>
                   
                   <div className="flex justify-end gap-2">
-                    <Button type="button" variant="outline" onClick={() => setIsAddDialogOpen(false)}>
+                    <Button type="button" variant="outline" onClick={() => setIsAddDialogOpen(false)} disabled={uploading}>
                       Cancel
                     </Button>
-                    <Button type="submit">
-                      {editingCategory ? 'Update Category' : 'Create Category'}
+                    <Button type="submit" disabled={uploading}>
+                      {uploading ? 'Uploading...' : editingCategory ? 'Update Category' : 'Create Category'}
                     </Button>
                   </div>
                 </form>
