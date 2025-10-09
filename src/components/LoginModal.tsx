@@ -5,13 +5,17 @@ import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/hooks/useAuth";
-import { sanitizeInput, isValidEmail } from "@/utils/sanitize";
+import { sanitizeInput, isValidEmail, createRateLimiter, detectSuspiciousInput } from "@/utils/sanitize";
+import { securityMonitor, SecurityEvents, trackFailedAuth } from "@/utils/securityMonitor";
 
 interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSwitchToSignup: () => void;
 }
+
+// Rate limiter: max 5 login attempts per minute
+const loginRateLimiter = createRateLimiter(5, 60 * 1000);
 
 const LoginModal = ({ isOpen, onClose, onSwitchToSignup }: LoginModalProps) => {
   const [formData, setFormData] = useState({
@@ -26,6 +30,21 @@ const LoginModal = ({ isOpen, onClose, onSwitchToSignup }: LoginModalProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Check rate limit
+    if (!loginRateLimiter.checkLimit(formData.email)) {
+      securityMonitor.logEvent(SecurityEvents.RATE_LIMIT_EXCEEDED, 'high', {
+        action: 'login',
+        email: formData.email.substring(0, 3) + '***'
+      });
+      
+      toast({
+        title: "Too Many Attempts",
+        description: "Please wait a minute before trying again.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
     // Sanitize inputs
     const sanitizedEmail = sanitizeInput(formData.email).toLowerCase();
     
@@ -39,17 +58,38 @@ const LoginModal = ({ isOpen, onClose, onSwitchToSignup }: LoginModalProps) => {
       return;
     }
     
+    // Detect suspicious input patterns
+    if (detectSuspiciousInput(sanitizedEmail) || detectSuspiciousInput(formData.password)) {
+      securityMonitor.logEvent(SecurityEvents.SUSPICIOUS_INPUT, 'high', {
+        action: 'login_attempt',
+        email: sanitizedEmail.substring(0, 3) + '***'
+      });
+      
+      toast({
+        title: "Invalid Input",
+        description: "Your input contains invalid characters.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
     setIsLoading(true);
     
     const { error } = await signIn(sanitizedEmail, formData.password);
     
     if (error) {
+      // Track failed authentication
+      trackFailedAuth(sanitizedEmail);
+      
       toast({
         title: "Login Failed",
-        description: error,
+        description: "Invalid email or password. Please try again.",
         variant: "destructive"
       });
     } else {
+      // Reset rate limiter on successful login
+      loginRateLimiter.reset(formData.email);
+      
       toast({
         title: "Welcome back!",
         description: "You have successfully logged in."

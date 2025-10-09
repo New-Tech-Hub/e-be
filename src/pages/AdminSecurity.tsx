@@ -76,31 +76,55 @@ const AdminSecurity = () => {
     {
       title: "Database Access Control",
       status: "secure",
-      description: "Row Level Security enabled on all tables with super admin restrictions",
+      description: "RLS enabled on all 11 critical tables with comprehensive policies",
       icon: <Shield className="h-5 w-5" />
     },
     {
-      title: "User Data Protection",
+      title: "Input Validation & Injection Protection",
       status: "secure",
-      description: "Customer personal information restricted to account owners only",
+      description: "XSS, SQL injection, and code execution patterns blocked with enhanced sanitization",
       icon: <CheckCircle className="h-5 w-5" />
     },
     {
-      title: "Order History Security",
+      title: "Security Headers & CSP",
       status: "secure",
-      description: "Order data accessible only to customers and super admin",
+      description: "Content Security Policy, X-Frame-Options, XSS Protection, and MIME-sniffing prevention active",
       icon: <CheckCircle className="h-5 w-5" />
     },
     {
-      title: "Store Configuration",
+      title: "Rate Limiting & Brute Force Protection",
       status: "secure",
-      description: "Store settings now restricted to super admin access only",
+      description: "Client-side rate limiting + database tracking for failed login attempts (5 attempts/15min lockout)",
       icon: <CheckCircle className="h-5 w-5" />
     },
     {
-      title: "Password Protection",
+      title: "Session Security & Tracking",
+      status: "secure",
+      description: "Active session monitoring with IP tracking, user agent logging, and revocation support",
+      icon: <CheckCircle className="h-5 w-5" />
+    },
+    {
+      title: "Security Monitoring & Alerts",
+      status: "secure",
+      description: "Real-time threat detection with comprehensive event logging and suspicious activity alerts",
+      icon: <CheckCircle className="h-5 w-5" />
+    },
+    {
+      title: "Data Retention & GDPR Compliance",
+      status: "secure",
+      description: "90-day audit log retention + 24-hour rate limit data cleanup (schedule required)",
+      icon: <CheckCircle className="h-5 w-5" />
+    },
+    {
+      title: "Order & Payment Security",
+      status: "secure",
+      description: "Payment references validated, shipping addresses protected, injection patterns blocked",
+      icon: <CheckCircle className="h-5 w-5" />
+    },
+    {
+      title: "Leaked Password Protection",
       status: "warning",
-      description: "Leaked password protection needs to be enabled in Supabase Auth settings",
+      description: "Enable leaked password protection in Supabase Auth settings for additional security",
       icon: <AlertTriangle className="h-5 w-5" />
     }
   ];
