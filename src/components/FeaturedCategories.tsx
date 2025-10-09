@@ -8,6 +8,7 @@ import clothingImage from "@/assets/categories/clothing-category.jpg";
 import accessoriesImage from "@/assets/categories/accessories-category.jpg";
 import householdImage from "@/assets/categories/household-category.jpg";
 import specialsImage from "@/assets/categories/specials-category.jpg";
+import defaultCategoryImage from "@/assets/default-category.jpg";
 
 interface Category {
   id: string;
@@ -61,6 +62,26 @@ const FeaturedCategories = () => {
   useEffect(() => {
     fetchCategories();
   }, []);
+
+  const getCategoryImage = (category: Category, slug: string) => {
+    // If category has a valid image_url, use it
+    if (category.image_url && category.image_url.trim() !== '') {
+      return category.image_url;
+    }
+    
+    // Map category slug to fallback images
+    const imageMap: Record<string, string> = {
+      'accessories': accessoriesImage,
+      'fashion-clothing': clothingImage,
+      'clothing': clothingImage,
+      'beauty-personal-care': householdImage,
+      'bags-luggage': accessoriesImage,
+      'household': householdImage,
+      'specials': specialsImage
+    };
+    
+    return imageMap[slug] || defaultCategoryImage;
+  };
 
   const fetchCategories = async () => {
     try {
@@ -129,9 +150,12 @@ const FeaturedCategories = () => {
                 <Card className="h-full border-0 shadow-card hover:shadow-elegant transition-smooth transform hover:-translate-y-1 bg-background overflow-hidden">
                   <div className="relative h-48 overflow-hidden">
                     <img
-                      src={category.image_url}
+                      src={getCategoryImage(category, category.slug)}
                       alt={category.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-smooth"
+                      onError={(e) => {
+                        e.currentTarget.src = defaultCategoryImage;
+                      }}
                     />
                     <div className="absolute top-4 right-4">
                       <span className="text-xs font-semibold text-white bg-black/70 px-2 py-1 rounded-full backdrop-blur-sm">
