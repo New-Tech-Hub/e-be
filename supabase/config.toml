@@ -1,4 +1,7 @@
-project_id = "qmwyysbjhehkjzaovhcl"
+project_id = "qmwysbjhelpoor"
 
 [functions.performance-monitor]
+verify_jwt = false
+
+[functions.maps-proxy]
 verify_jwt = false

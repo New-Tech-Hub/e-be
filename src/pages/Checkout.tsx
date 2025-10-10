@@ -15,8 +15,28 @@ import { Link, useNavigate } from "react-router-dom";
 import DeliverySlotSelector from "@/components/DeliverySlotSelector";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { Textarea } from "@/components/ui/textarea";
+// Security utilities for input validation
+import { sanitizeInput, validatePhoneNumber, validateAddress, detectSuspiciousInput } from "@/utils/sanitize";
 
-interface CartItem {
+// Define the interface for delivery slots
+interface DeliverySlot {
+  id: string;
+  start_time: string;
+  end_time: string;
+  day_of_week: string;
+  available: boolean;
+}
+
+interface UserProfile {
+  full_name: string | null;
+  phone: string | null;
+  address: string | null;
+  city: string | null;
+  state: string | null;
+  country: string | null;
+}
+
+interface Cart Item {
   id: string;
   quantity: number;
   product_id: string;
@@ -90,7 +110,6 @@ const Checkout = () => {
       if (error) throw error;
       setCartItems(data || []);
     } catch (error) {
-      // Cart fetch error handled by loading state
       toast({
         title: "Error",
         description: "Failed to load cart items.",
@@ -112,8 +131,6 @@ const Checkout = () => {
         .maybeSingle();
 
       if (error) {
-        // Silently fail profile fetch - user can still checkout with manual entry
-        // Generic handling without exposing error details
         return;
       }
 
@@ -131,8 +148,6 @@ const Checkout = () => {
         }));
       }
     } catch (error) {
-      // Silently fail - user can manually enter information
-      // No information leakage through error messages
       return;
     }
   };
@@ -146,7 +161,7 @@ const Checkout = () => {
 
   const getShippingCost = () => {
     const total = getTotalPrice();
-    return total >= 150000 ? 0 : 5000; // Free shipping over ₦150,000
+    return total >= 150000 ? 0 : 5000;
   };
 
   const getFinalTotal = () => {
@@ -171,31 +186,85 @@ const Checkout = () => {
       return;
     }
 
+    // ===== SECURITY: Input Validation & Sanitization =====
+    
+    // 1. Sanitize all text inputs
+    const sanitizedFirstName = sanitizeInput(form.firstName);
+    const sanitizedLastName = sanitizeInput(form.lastName);
+    const sanitizedAddress = sanitizeInput(form.address);
+    const sanitizedCity = sanitizeInput(form.city);
+    const sanitizedState = sanitizeInput(form.state);
+    const sanitizedCountry = sanitizeInput(form.country);
+    const sanitizedPostalCode = sanitizeInput(form.postalCode);
+    const sanitizedNotes = sanitizeInput(form.notes);
+    
+    // 2. Validate phone number (Nigerian format)
+    const phoneValidation = validatePhoneNumber(form.phone);
+    if (!phoneValidation.isValid) {
+      toast({
+        title: "Invalid Phone Number",
+        description: phoneValidation.message,
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    // 3. Validate address
+    const addressValidation = validateAddress(sanitizedAddress);
+    if (!addressValidation.isValid) {
+      toast({
+        title: "Invalid Address",
+        description: addressValidation.message,
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    // 4. Check for suspicious patterns in text fields
+    const fieldsToCheck = [
+      { name: 'First Name', value: sanitizedFirstName },
+      { name: 'Last Name', value: sanitizedLastName },
+      { name: 'City', value: sanitizedCity },
+      { name: 'State', value: sanitizedState },
+      { name: 'Notes', value: sanitizedNotes }
+    ];
+    
+    for (const field of fieldsToCheck) {
+      if (detectSuspiciousInput(field.value)) {
+        toast({
+          title: "Invalid Input",
+          description: `${field.name} contains invalid characters. Please try again.`,
+          variant: "destructive"
+        });
+        return;
+      }
+    }
+
     setProcessing(true);
     
     try {
-      // Create order record
+      // Create order record with sanitized data
       const orderData = {
         user_id: user!.id,
-        order_number: `EB${Date.now()}`,
+        order_number: `EB-${Date.now()}`,
         total_amount: getFinalTotal(),
-        currency: 'NGN',
+        currency: 'NGE',
         status: 'pending',
         payment_status: 'pending',
         payment_method: 'paystack',
         delivery_slot_id: selectedDeliverySlot,
-        delivery_instructions: form.notes,
+        delivery_instructions: sanitizedNotes, // ✅ Sanitized
         shipping_address: {
-          firstName: form.firstName,
-          lastName: form.lastName,
-          email: form.email,
-          phone: form.phone,
-          address: form.address,
-          city: form.city,
-          state: form.state,
-          country: form.country,
-          postalCode: form.postalCode,
-          notes: form.notes
+          firstName: sanitizedFirstName,   // ✅ Sanitized
+          lastName: sanitizedLastName,     // ✅ Sanitized
+          email: form.email,               // ✅ HTML5 validated
+          phone: form.phone,               // ✅ Validated
+          address: sanitizedAddress,       // ✅ Sanitized & validated
+          city: sanitizedCity,             // ✅ Sanitized
+          state: sanitizedState,           // ✅ Sanitized
+          country: sanitizedCountry,       // ✅ Sanitized
+          postalCode: sanitizedPostalCode, // ✅ Sanitized
+          notes: sanitizedNotes            // ✅ Sanitized
         }
       };
 
@@ -230,11 +299,11 @@ const Checkout = () => {
 
       if (cartError) throw cartError;
 
-      // Track purchase for analytics
+      // Track purchase
       trackPurchase(
         order.id,
         getFinalTotal(),
-        'NGN',
+        'NGE',
         cartItems.map(item => ({
           product_id: item.product_id,
           quantity: item.quantity,
@@ -247,11 +316,10 @@ const Checkout = () => {
         description: `Order #${order.order_number} has been created.`
       });
 
-      // In a real implementation, redirect to payment gateway
+      // Redirect to orders
       navigate('/orders');
       
     } catch (error) {
-      // Checkout error handled by toast
       toast({
         title: "Error",
         description: "Failed to process your order. Please try again.",
@@ -283,9 +351,9 @@ const Checkout = () => {
     <>
       <Helmet>
         <title>Checkout - Ebeth Boutique & Exclusive Store</title>
-        <meta 
-          name="description" 
-          content="Complete your purchase at Ebeth Boutique with secure checkout." 
+        <meta
+          name="description"
+          content="Complete your purchase at Ebeth Boutique with secure checkout."
         />
       </Helmet>
 
@@ -294,7 +362,7 @@ const Checkout = () => {
         
         <main className="container mx-auto px-4 py-16">
           <div className="max-w-6xl mx-auto">
-            <div className="flex items-center space-x-4 mb-8">
+            <div className="mb-8">
               <Link to="/">
                 <Button variant="ghost" size="sm">
                   <ArrowLeft className="h-4 w-4 mr-2" />
@@ -315,7 +383,9 @@ const Checkout = () => {
             ) : cartItems.length === 0 ? (
               <Card className="p-8 text-center">
                 <h3 className="text-xl font-semibold mb-4">Your cart is empty</h3>
-                <p className="text-muted-foreground mb-6">Add some items to your cart to proceed with checkout.</p>
+                <p className="text-muted-foreground mb-6">
+                  Add some items to your cart to proceed with checkout.
+                </p>
                 <Link to="/">
                   <Button>Start Shopping</Button>
                 </Link>
@@ -331,32 +401,36 @@ const Checkout = () => {
                     </h2>
 
                     <form onSubmit={handleSubmit} className="space-y-4">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <Label htmlFor="firstName">First Name *</Label>
-                          <Input
-                            id="firstName"
-                            value={form.firstName}
-                            onChange={(e) => handleInputChange('firstName', e.target.value)}
-                            required
-                          />
-                        </div>
-                        <div>
-                          <Label htmlFor="lastName">Last Name *</Label>
-                          <Input
-                            id="lastName"
-                            value={form.lastName}
-                            onChange={(e) => handleInputChange('lastName', e.target.value)}
-                            required
-                          />
-                        </div>
+                      <div>
+                        <Label htmlFor="firstName">First Name</Label>
+                        <Input
+                          type="text"
+                          id="firstName"
+                          placeholder="John"
+                          value={form.firstName}
+                          onChange={(e) => handleInputChange('firstName', e.target.value)}
+                          required
+                        />
                       </div>
 
                       <div>
-                        <Label htmlFor="email">Email *</Label>
+                        <Label htmlFor="lastName">Last Name</Label>
                         <Input
-                          id="email"
+                          type="text"
+                          id="lastName"
+                          placeholder="Doe"
+                          value={form.lastName}
+                          onChange={(e) => handleInputChange('lastName', e.target.value)}
+                          required
+                        />
+                      </div>
+
+                      <div>
+                        <Label htmlFor="email">Email</Label>
+                        <Input
                           type="email"
+                          id="email"
+                          placeholder="john.doe@example.com"
                           value={form.email}
                           onChange={(e) => handleInputChange('email', e.target.value)}
                           required
@@ -364,77 +438,89 @@ const Checkout = () => {
                       </div>
 
                       <div>
-                        <Label htmlFor="phone">Phone Number *</Label>
+                        <Label htmlFor="phone">Phone Number</Label>
                         <Input
-                          id="phone"
                           type="tel"
+                          id="phone"
+                          placeholder="08012345678"
                           value={form.phone}
                           onChange={(e) => handleInputChange('phone', e.target.value)}
                           required
                         />
                       </div>
 
+                      <Separator />
+
                       <div>
-                        <Label htmlFor="address">Address *</Label>
+                        <Label htmlFor="address">Address</Label>
                         <Input
+                          type="text"
                           id="address"
+                          placeholder="123 Main Street"
                           value={form.address}
                           onChange={(e) => handleInputChange('address', e.target.value)}
                           required
                         />
                       </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <Label htmlFor="city">City *</Label>
-                          <Input
-                            id="city"
-                            value={form.city}
-                            onChange={(e) => handleInputChange('city', e.target.value)}
-                            required
-                          />
-                        </div>
-                        <div>
-                          <Label htmlFor="state">State *</Label>
-                          <Input
-                            id="state"
-                            value={form.state}
-                            onChange={(e) => handleInputChange('state', e.target.value)}
-                            required
-                          />
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <Label htmlFor="country">Country</Label>
-                          <Input
-                            id="country"
-                            value={form.country}
-                            onChange={(e) => handleInputChange('country', e.target.value)}
-                          />
-                        </div>
-                        <div>
-                          <Label htmlFor="postalCode">Postal Code</Label>
-                          <Input
-                            id="postalCode"
-                            value={form.postalCode}
-                            onChange={(e) => handleInputChange('postalCode', e.target.value)}
-                          />
-                        </div>
-                      </div>
-
                       <div>
-                        <Label htmlFor="notes">Order Notes (Optional)</Label>
-                        <Textarea
-                          id="notes"
-                          value={form.notes}
-                          onChange={(e) => handleInputChange('notes', e.target.value)}
-                          placeholder="Any special instructions for your order"
+                        <Label htmlFor="city">City</Label>
+                        <Input
+                          type="text"
+                          id="city"
+                          placeholder="Lagos"
+                          value={form.city}
+                          onChange={(e) => handleInputChange('city', e.target.value)}
+                          required
                         />
                       </div>
 
-                      {/* Delivery Slot Selection */}
+                      <div>
+                        <Label htmlFor="state">State</Label>
+                        <Input
+                          type="text"
+                          id="state"
+                          placeholder="Lagos State"
+                          value={form.state}
+                          onChange={(e) => handleInputChange('state', e.target.value)}
+                          required
+                        />
+                      </div>
+
+                      <div>
+                        <Label htmlFor="country">Country</Label>
+                        <Input
+                          type="text"
+                          id="country"
+                          value={form.country}
+                          onChange={(e) => handleInputChange('country', e.target.value)}
+                          readOnly
+                        />
+                      </div>
+
+                      <div>
+                        <Label htmlFor="postalCode">Postal Code</Label>
+                        <Input
+                          type="text"
+                          id="postalCode"
+                          placeholder="100001"
+                          value={form.postalCode}
+                          onChange={(e) => handleInputChange('postalCode', e.target.value)}
+                          required
+                        />
+                      </div>
+
+                      <div>
+                        <Label htmlFor="notes">Delivery Notes</Label>
+                        <Textarea
+                          id="notes"
+                          placeholder="Any special instructions for delivery?"
+                          value={form.notes}
+                          onChange={(e) => handleInputChange('notes', e.target.value)}
+                        />
+                      </div>
+                      
+                      {/* Delivery Slot */}
                       <div className="mt-6">
                         <DeliverySlotSelector
                           selectedSlotId={selectedDeliverySlot}
@@ -450,47 +536,46 @@ const Checkout = () => {
                   <Card className="p-6">
                     <h2 className="text-xl font-semibold mb-6">Order Summary</h2>
 
-                    <div className="space-y-4 mb-6">
-                      {cartItems.map((item) => (
-                        <div key={item.id} className="flex items-center space-x-4">
-                          {item.products?.image_url && (
+                    <div className="space-y-3">
+                      {cartItems.map(item => (
+                        <div key={item.id} className="flex items-center justify-between">
+                          <div className="flex items-center">
                             <img
-                              src={item.products.image_url}
-                              alt={item.products.name}
-                              className="w-16 h-16 object-cover rounded"
+                              src={item.products?.image_url}
+                              alt={item.products?.name}
+                              className="w-12 h-12 object-cover rounded mr-4"
                             />
-                          )}
-                          <div className="flex-1">
-                            <h4 className="font-medium">{item.products?.name}</h4>
-                            <p className="text-sm text-muted-foreground">
-                              Qty: {item.quantity} × {formatCurrency(item.products?.price || 0)}
-                            </p>
+                            <div>
+                              <p className="font-semibold">{item.products?.name}</p>
+                              <p className="text-sm text-muted-foreground">
+                                Quantity: {item.quantity}
+                              </p>
+                            </div>
                           </div>
-                          <p className="font-medium">
+                          <div>
                             {formatCurrency((item.products?.price || 0) * item.quantity)}
-                          </p>
+                          </div>
                         </div>
                       ))}
                     </div>
 
-                    <Separator className="my-6" />
+                    <Separator className="my-4" />
 
-                    <div className="space-y-2">
-                      <div className="flex justify-between">
-                        <span>Subtotal:</span>
-                        <span>{formatCurrency(getTotalPrice())}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Shipping:</span>
-                        <span>
-                          {getShippingCost() === 0 ? 'Free' : formatCurrency(getShippingCost())}
-                        </span>
-                      </div>
-                      <Separator />
-                      <div className="flex justify-between font-semibold text-lg">
-                        <span>Total:</span>
-                        <span>{formatCurrency(getFinalTotal())}</span>
-                      </div>
+                    <div className="flex justify-between font-semibold">
+                      <p>Subtotal</p>
+                      <p>{formatCurrency(getTotalPrice())}</p>
+                    </div>
+
+                    <div className="flex justify-between font-semibold">
+                      <p>Shipping</p>
+                      <p>{formatCurrency(getShippingCost())}</p>
+                    </div>
+
+                    <Separator className="my-4" />
+
+                    <div className="flex justify-between text-lg font-bold">
+                      <p>Total</p>
+                      <p>{formatCurrency(getFinalTotal())}</p>
                     </div>
 
                     <Button 
@@ -512,7 +597,7 @@ const Checkout = () => {
                     </Button>
 
                     <p className="text-xs text-muted-foreground mt-4 text-center">
-                      By placing this order, you agree to our Terms & Conditions and Privacy Policy.
+                      By placing this order, you agree to our Terms & Conditions.
                     </p>
                   </Card>
                 </div>
@@ -520,7 +605,7 @@ const Checkout = () => {
             )}
           </div>
         </main>
-        
+
         <Footer />
       </div>
     </>

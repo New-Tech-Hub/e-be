@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { supabase } from '@/integrations/supabase/client';
 import { toast } from "sonner";
 
 declare global {
@@ -15,31 +14,42 @@ declare global {
 
 const StoreMap = () => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
-  const [apiKey, setApiKey] = useState<string>(() => {
-    const stored = localStorage.getItem('googleMapsApiKey');
-    if (!stored) {
-      const defaultKey = 'AIzaSyAOVYRIgupAurZup5y1PRh8Ismb1A3lLao';
-      localStorage.setItem('googleMapsApiKey', defaultKey);
-      return defaultKey;
-    }
-    return stored;
-  });
-  const [inputKey, setInputKey] = useState<string>('');
+  const [apiKey, setApiKey] = useState<string>('');
+  const [loading, setLoading] = useState(true);
   const [isInitialized, setIsInitialized] = useState(false);
 
-  const handleSaveApiKey = () => {
-    if (inputKey.trim()) {
-      localStorage.setItem('googleMapsApiKey', inputKey.trim());
-      setApiKey(inputKey.trim());
-      toast.success('API key saved! Refreshing map...');
-      setIsInitialized(false);
-    } else {
-      toast.error('Please enter a valid API key');
-    }
-  };
+  useEffect(() => {
+    // Fetch Google Maps API key securely from Edge Function
+    const fetchApiKey = async () => {
+      try {
+        const { data, error } = await supabase.functions.invoke('maps-proxy');
+        
+        if (error) {
+          console.error('Failed to load Maps API key:', error);
+          toast.error('Failed to load map. Please refresh the page.');
+          return;
+        }
+        
+        if (data && data.apiKey) {
+          setApiKey(data.apiKey);
+        } else {
+          console.error('No API key returned');
+          toast.error('Failed to load map. Please try again.');
+        }
+      } catch (error) {
+        console.error('Error fetching Maps API key:', error);
+        toast.error('Failed to load map. Please refresh the page.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchApiKey();
+  }, []);
 
   useEffect(() => {
     if (!apiKey || isInitialized) return;
+    
     // Load Google Maps Extended Component Library
     const script = document.createElement('script');
     script.type = 'module';
@@ -48,24 +58,21 @@ const StoreMap = () => {
 
     const initializeMap = async () => {
       const CONFIGURATION = {
-        "locations": [
-          {
-            "title": "Ebeth Boutique & Exclusive Store",
-            "address1": "40 Ajose Adeogun St",
-            "address2": "Mabushi, Abuja 900108, Federal Capital Territory, Nigeria",
-            "coords": { "lat": 9.069533862290694, "lng": 7.443070893254107 },
-            "placeId": "Ek40MCBBam9zZSBBZGVvZ3VuIFN0LCBNYWJ1c2hpLCBBYnVqYSA5MDAxMDgsIEZlZGVyYWwgQ2FwaXRhbCBUZXJyaXRvcnksIE5pZ2VyaWEiMBIuChQKEgnNSf0DKgtOEBGoM76N6H9jRxAoKhQKEgkDM4Z91QpOEBGAH8F50HfhWQ"
-          }
-        ],
+        "locations": [{
+          "title": "Ebeth Boutique & Exclusive Store",
+          "address1": "40 Ajose St",
+          "address2": "Mabuse, Abuja 900108, Federal Capital Territory, Nigeria",
+          "coords": { "lat": 9.069538862290694, "lng": 7.443070893254107 },
+          "placeId": "Ek5cZWSGVzLCBBam9zZSBBZiS0LCBBam9zZSBBZmlybyBvL0VCLCWGCZWdPHOE5TCMLZF4NSUYE4JE5GVYF8"
+        }],
         "mapOptions": {
-          "center": { "lat": 9.069533862290694, "lng": 7.443070893254107 },
+          "center": { "lat": 9.069538862, "lng": 7.443070893254107 },
           "fullscreenControl": true,
           "mapTypeControl": false,
           "streetViewControl": false,
-          "zoom": 15,
           "zoomControl": true,
-          "maxZoom": 17,
-          "mapId": ""
+          "zoom": 15,
+          "maxZoom": 17
         },
         "mapsApiKey": apiKey,
         "capabilities": {
@@ -78,7 +85,6 @@ const StoreMap = () => {
         }
       };
 
-      // Wait for custom elements to be defined
       await customElements.whenDefined('gmpx-store-locator');
       const locator = document.querySelector('gmpx-store-locator');
       if (locator) {
@@ -96,36 +102,25 @@ const StoreMap = () => {
     };
   }, [apiKey, isInitialized]);
 
+  if (loading) {
+    return (
+      <Card className="w-full h-96 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading map...</p>
+        </div>
+      </Card>
+    );
+  }
+
   if (!apiKey) {
     return (
       <Card className="w-full p-6">
-        <div className="space-y-4">
-          <div>
-            <h3 className="text-lg font-semibold mb-2">Google Maps API Key Required</h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              To display the store location map, please enter your Google Maps API key.
-              Get your free API key from the{' '}
-              <a 
-                href="https://console.cloud.google.com/google/maps-apis/start" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-primary hover:underline"
-              >
-                Google Cloud Console
-              </a>
-              .
-            </p>
-          </div>
-          <div className="flex gap-2">
-            <Input
-              type="text"
-              placeholder="Enter your Google Maps API key"
-              value={inputKey}
-              onChange={(e) => setInputKey(e.target.value)}
-              className="flex-1"
-            />
-            <Button onClick={handleSaveApiKey}>Save</Button>
-          </div>
+        <div className="text-center">
+          <h3 className="text-lg font-semibold mb-2">Map Unavailable</h3>
+          <p className="text-sm text-muted-foreground">
+            Unable to load map at this time. Please try again later.
+          </p>
         </div>
       </Card>
     );
@@ -133,10 +128,10 @@ const StoreMap = () => {
 
   return (
     <Card className="w-full h-96 overflow-hidden">
-      <div ref={mapContainerRef} className="w-full h-full relative">
+      <div ref={mapContainerRef} className="w-full h-full">
         <gmpx-api-loader 
-          key={apiKey} 
-          solution-channel="GMP_QB_locatorplus_v11_cABD"
+          key={apiKey}
+          solution-channel="GMP-QB_v5-cABCD"
         />
         <gmpx-store-locator 
           map-id="DEMO_MAP_ID"
@@ -146,12 +141,12 @@ const StoreMap = () => {
             '--gmpx-color-on-surface': 'hsl(var(--foreground))',
             '--gmpx-color-on-surface-variant': 'hsl(var(--muted-foreground))',
             '--gmpx-color-primary': 'hsl(var(--primary))',
-            '--gmpx-color-outline': 'hsl(var(--border))',
+            '--gmpx-color-on-outline': 'hsl(var(--border))',
             '--gmpx-font-family-base': 'inherit',
             '--gmpx-font-family-headings': 'inherit',
             '--gmpx-font-size-base': '0.875rem',
             '--gmpx-hours-color-open': '#188038',
-            '--gmpx-hours-color-closed': '#d50000',
+            '--gmpx-hours-color-closed': '#d50-1993',
             '--gmpx-rating-color': '#ffb300',
             '--gmpx-rating-color-empty': 'hsl(var(--muted))'
           } as React.CSSProperties}
