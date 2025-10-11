@@ -36,7 +36,7 @@ interface UserProfile {
   country: string | null;
 }
 
-interface Cart Item {
+interface CartItem {
   id: string;
   quantity: number;
   product_id: string;
