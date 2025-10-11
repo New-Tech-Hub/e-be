@@ -100,15 +100,14 @@ const Admin = () => {
         `)
         .order('created_at', { ascending: false });
 
-      // Fetch customers count
-      const { data: customersData } = await supabase
-        .from('profiles')
-        .select('id');
+      // Fetch customers count via secure function
+      const { data: customerCount } = await supabase
+        .rpc('get_customer_count');
 
       // Calculate stats
       const totalProducts = productsData?.length || 0;
       const totalOrders = ordersData?.length || 0;
-      const totalCustomers = customersData?.length || 0;
+      const totalCustomers = customerCount || 0;
       const totalRevenue = ordersData?.reduce((sum, order) => 
         sum + (order.payment_status === 'paid' ? order.total_amount : 0), 0
       ) || 0;

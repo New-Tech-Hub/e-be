@@ -978,6 +978,10 @@ export type Database = {
         Args: { category_id: string }
         Returns: string[]
       }
+      get_customer_count: {
+        Args: Record<PropertyKey, never>
+        Returns: number
+      }
       get_major_categories: {
         Args: Record<PropertyKey, never>
         Returns: {
