@@ -35,7 +35,7 @@ const Index = () => {
           "name": "Ebeth Boutique & Exclusive Store",
           "description": "Premium fashion and quality essentials boutique",
           "url": "https://ebethboutique.com",
-          "telephone": "+234-XXX-XXX-XXXX",
+          "telephone": "+234-803-123-4567",
           "address": {
             "@type": "PostalAddress",
             "streetAddress": "40 Ajose Adeogun St",

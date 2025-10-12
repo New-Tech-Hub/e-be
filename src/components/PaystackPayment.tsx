@@ -36,7 +36,7 @@ const PaystackPayment = ({
   amount,
   currency = 'NGN',
   reference,
-  publicKey = 'pk_test_example', // Replace with actual public key
+  publicKey, // Paystack public key passed from parent component
   onSuccess,
   onCancel,
   onError,

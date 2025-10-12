@@ -45,7 +45,7 @@ const AdminSettings = () => {
     store_name: "Ebeth Boutique & Exclusive Store",
     store_description: "Your premier destination for fashion, beauty, and lifestyle products",
     store_address: "Lagos, Nigeria",
-    store_phone: "+234 XXX XXXX XXX",
+    store_phone: "+234 803 123 4567",
     store_email: "info@ebethboutique.com",
     store_website: "https://ebethboutique.com",
     currency: "NGN",

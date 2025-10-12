@@ -134,7 +134,6 @@ const StoreMap = () => {
           solution-channel="GMP-QB_v5-cABCD"
         />
         <gmpx-store-locator 
-          map-id="DEMO_MAP_ID"
           className="w-full h-full"
           style={{
             '--gmpx-color-surface': 'hsl(var(--background))',
