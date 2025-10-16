@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Mail, Phone, MapPin, Facebook, Instagram, Twitter, Youtube, Heart } from "lucide-react";
+import { Mail, Phone, MapPin, Facebook, Instagram, Twitter, Youtube } from "lucide-react";
 import logo from "@/assets/ebeth-logo.jpg";
 
 const Footer = () => {
@@ -177,9 +177,7 @@ const Footer = () => {
             </div>
             
             <div className="flex items-center space-x-2 text-sm text-white/80">
-              <span>Made with</span>
-              <Heart className="h-4 w-4 text-red-500 fill-red-500" />
-              <span>for our customers</span>
+              <span>By NewTech Hub Int'l.</span>
             </div>
           </div>
 
