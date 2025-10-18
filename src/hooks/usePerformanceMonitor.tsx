@@ -137,8 +137,9 @@ export const usePerformanceMonitor = () => {
         if (metrics.load_time) score -= Math.min(30, (metrics.load_time - 3000) / 100);
         metrics.performance_score = Math.max(0, Math.round(score));
 
-        // Send metrics to backend after a delay to ensure all observers fired
-        setTimeout(async () => {
+        // Defer metrics sending to avoid blocking critical path
+        // Use requestIdleCallback if available, otherwise defer significantly
+        const sendMetrics = async () => {
           try {
             await supabase.functions.invoke('performance-monitor', {
               body: {
@@ -150,7 +151,14 @@ export const usePerformanceMonitor = () => {
           } catch (error) {
             // Performance metrics failed to send - not critical
           }
-        }, 3000);
+        };
+
+        // Use requestIdleCallback to send during idle time, or defer by 10 seconds
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(sendMetrics, { timeout: 10000 });
+        } else {
+          setTimeout(sendMetrics, 10000);
+        }
 
       } catch (error) {
         // Performance monitoring error - not critical
