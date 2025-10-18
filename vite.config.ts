@@ -52,9 +52,38 @@ export default defineConfig(({ mode }) => ({
     cssMinify: true,
     rollupOptions: {
       output: {
-        manualChunks: {
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'ui-vendor': ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu'],
+        manualChunks: (id) => {
+          // Split React and core libraries
+          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) {
+            return 'react-core';
+          }
+          if (id.includes('node_modules/react-router-dom')) {
+            return 'react-router';
+          }
+          // Split Radix UI components
+          if (id.includes('node_modules/@radix-ui')) {
+            return 'radix-ui';
+          }
+          // Split Tanstack Query
+          if (id.includes('node_modules/@tanstack/react-query')) {
+            return 'react-query';
+          }
+          // Split Recharts (large charting library)
+          if (id.includes('node_modules/recharts')) {
+            return 'recharts';
+          }
+          // Split form libraries
+          if (id.includes('node_modules/react-hook-form') || id.includes('node_modules/@hookform')) {
+            return 'forms';
+          }
+          // Split Supabase
+          if (id.includes('node_modules/@supabase')) {
+            return 'supabase';
+          }
+          // Split other large vendors
+          if (id.includes('node_modules/')) {
+            return 'vendor';
+          }
         },
       },
     },
