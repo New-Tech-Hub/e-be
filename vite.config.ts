@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 import viteImagemin from "vite-plugin-imagemin";
+import { imagetools } from 'vite-imagetools';
 import type { Plugin } from 'vite';
 
 // Plugin to make CSS non-render-blocking
@@ -27,6 +28,28 @@ export default defineConfig(({ mode }) => ({
     react(), 
     mode === "development" && componentTagger(),
     mode === "production" && asyncCSSPlugin(),
+    imagetools({
+      defaultDirectives: (url) => {
+        const pathname = url.pathname;
+        // Generate responsive images for hero and category images
+        if (pathname.includes('hero-') || pathname.includes('category')) {
+          return new URLSearchParams({
+            format: 'webp;jpg',
+            w: '640;1024;1920',
+            as: 'picture'
+          });
+        }
+        // Generate smaller sizes for product thumbnails and logos
+        if (pathname.includes('products/') || pathname.includes('logo')) {
+          return new URLSearchParams({
+            format: 'webp;jpg',
+            w: '200;400',
+            as: 'picture'
+          });
+        }
+        return new URLSearchParams();
+      }
+    }),
     mode === "production" && viteImagemin({
       gifsicle: { optimizationLevel: 7 },
       optipng: { optimizationLevel: 7 },
