@@ -50,6 +50,7 @@ export default defineConfig(({ mode }) => ({
     target: 'esnext',
     minify: 'esbuild',
     cssMinify: true,
+    cssCodeSplit: true, // Enable CSS code splitting per chunk
     rollupOptions: {
       output: {
         manualChunks: (id) => {
