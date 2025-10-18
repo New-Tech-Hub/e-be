@@ -9,10 +9,10 @@ import type { Plugin } from 'vite';
 const asyncCSSPlugin = (): Plugin => ({
   name: 'async-css',
   transformIndexHtml(html) {
-    // Add preload for CSS and make it non-render-blocking
+    // Match both with and without crossorigin attribute
     return html.replace(
-      /<link rel="stylesheet" crossorigin href="([^"]+\.css)">/g,
-      '<link rel="preload" as="style" href="$1" onload="this.onload=null;this.rel=\'stylesheet\'" /><noscript><link rel="stylesheet" href="$1" /></noscript>'
+      /<link rel="stylesheet"([^>]*) href="([^"]+\.css)"([^>]*)>/g,
+      '<link rel="preload" as="style" href="$2" onload="this.onload=null;this.rel=\'stylesheet\'"$1$3><noscript><link rel="stylesheet" href="$2"$1$3></noscript>'
     );
   },
 });
