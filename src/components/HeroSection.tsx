@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight, ShoppingBag, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import OptimizedImage from "@/components/OptimizedImage";
 import heroImage2 from "@/assets/hero-ankara-native.jpg";
 import heroImage3 from "@/assets/hero-jewelry-collection.jpg";
 import heroImage4 from "@/assets/hero-designer-sunglasses.jpg";
@@ -86,14 +87,14 @@ const HeroSection = () => {
             index === currentSlide ? 'opacity-100' : 'opacity-0'
           }`}
         >
-          <img
+          <OptimizedImage
             src={slide.image}
             alt={slide.title}
             className="w-full h-full object-cover"
-            loading={index === 0 ? "eager" : "lazy"}
-            decoding="async"
-            fetchPriority={index === 0 ? "high" : "auto"}
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
+            priority={index === 0}
+            width={1920}
+            height={1080}
+            sizes="100vw"
           />
           <div className="absolute inset-0 bg-black/40" />
         </div>

@@ -12,6 +12,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
+import OptimizedImage from "@/components/OptimizedImage";
 import logo from "@/assets/ebeth-logo.jpg";
 import SignupModal from "./SignupModal";
 import LoginModal from "./LoginModal";
@@ -108,14 +109,13 @@ const Header = () => {
         <div className="flex items-center justify-between h-16 gap-4">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 flex-shrink-0 group">
-            <img 
+            <OptimizedImage 
               src={logo} 
               alt="Ebeth Boutique & Exclusive Store" 
               className="h-12 w-12 rounded-full object-cover transition-all duration-300 group-hover:shadow-lg group-hover:scale-105"
-              loading="eager"
-              decoding="async"
-              width="48"
-              height="48"
+              priority
+              width={48}
+              height={48}
             />
             <div className="hidden md:block">
               <h1 className="text-xl font-bold text-foreground group-hover:text-gold-dark transition-colors duration-300">Ebeth Boutique</h1>

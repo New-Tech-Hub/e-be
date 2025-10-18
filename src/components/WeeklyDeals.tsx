@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
+import OptimizedImage from "@/components/OptimizedImage";
 import luxurySkincareImage from "@/assets/products/luxury-skincare-set.jpg";
 import designerDressImage from "@/assets/products/designer-summer-dress-floral.jpg";
 import vitaminSupplementsImage from "@/assets/products/premium-vitamin-supplements.jpg";
@@ -128,14 +129,12 @@ const WeeklyDeals = () => {
             <Card key={deal.id} className="group overflow-hidden border-0 shadow-card hover:shadow-elegant transition-smooth">
               {/* Product Image */}
               <div className="relative overflow-hidden">
-                <img
+                <OptimizedImage
                   src={deal.image}
                   alt={`${deal.name} - ${deal.category} with ${deal.discount}% discount, rated ${deal.rating} stars`}
                   className="w-full h-48 object-cover group-hover:scale-110 transition-smooth"
-                  loading="lazy"
-                  decoding="async"
-                  width="200"
-                  height="200"
+                  width={250}
+                  height={250}
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 16.67vw"
                 />
                 <div className="absolute top-2 left-2">

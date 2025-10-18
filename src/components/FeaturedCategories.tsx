@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
+import OptimizedImage from "@/components/OptimizedImage";
 import clothingImage from "@/assets/categories/clothing-category.jpg";
 import accessoriesImage from "@/assets/categories/accessories-category.jpg";
 import householdImage from "@/assets/categories/household-category.jpg";
@@ -149,13 +150,13 @@ const FeaturedCategories = () => {
               <Link key={category.id} to={`/category/${category.slug}`} className="group">
                 <Card className="h-full border-0 shadow-card hover:shadow-elegant transition-smooth transform hover:-translate-y-1 bg-background overflow-hidden">
                   <div className="relative h-48 overflow-hidden">
-                    <img
+                    <OptimizedImage
                       src={getCategoryImage(category, category.slug)}
                       alt={category.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-smooth"
-                      onError={(e) => {
-                        e.currentTarget.src = defaultCategoryImage;
-                      }}
+                      width={450}
+                      height={300}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     />
                     <div className="absolute top-4 right-4">
                       <span className="text-xs font-semibold text-white bg-black/70 px-2 py-1 rounded-full backdrop-blur-sm">
