@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight, ShoppingBag, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import heroImage1 from "@/assets/hero-bags-collection.jpg";
 import heroImage2 from "@/assets/hero-ankara-native.jpg";
 import heroImage3 from "@/assets/hero-jewelry-collection.jpg";
 import heroImage4 from "@/assets/hero-designer-sunglasses.jpg";
@@ -14,7 +13,7 @@ const HeroSection = () => {
 
   const slides = [
     {
-      image: heroImage1,
+      image: "/hero-bags-collection.jpg",
       title: "Premium Bags & Travel Collection",
       subtitle: "Luxury traveling bags, elegant women's handbags, and premium luggage for every journey",
       cta: "Shop Bags",
