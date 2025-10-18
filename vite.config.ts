@@ -35,7 +35,10 @@ export default defineConfig(({ mode }) => ({
       svgo: {
         plugins: [{ name: 'removeViewBox', active: false }]
       },
-      webp: { quality: 80 }
+      webp: { 
+        quality: 80,
+        lossless: false
+      }
     })
   ].filter(Boolean),
   resolve: {
