@@ -93,6 +93,7 @@ const HeroSection = () => {
             className="w-full h-full object-cover"
             loading={index === 0 ? "eager" : "lazy"}
             decoding="async"
+            fetchPriority={index === 0 ? "high" : "auto"}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
           />
           <div className="absolute inset-0 bg-black/40" />
