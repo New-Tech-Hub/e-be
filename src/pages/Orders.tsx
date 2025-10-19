@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet-async";
+import SEOHead from "@/components/SEOHead";
 import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -116,13 +116,11 @@ const Orders = () => {
 
   return (
     <>
-      <Helmet>
-        <title>My Orders - Ebeth Boutique & Exclusive Store</title>
-        <meta 
-          name="description" 
-          content="View your order history and track current orders at Ebeth Boutique." 
-        />
-      </Helmet>
+      <SEOHead
+        title="My Orders - Order History & Tracking"
+        description="View your order history and track current orders at Ebeth Boutique"
+        noIndex={true}
+      />
 
       <div className="min-h-screen bg-background">
         <Header />

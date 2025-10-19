@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet-async";
+import SEOHead from "@/components/SEOHead";
 import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -139,13 +139,11 @@ const Profile = () => {
 
   return (
     <>
-      <Helmet>
-        <title>Edit Profile - Ebeth Boutique & Exclusive Store</title>
-        <meta 
-          name="description" 
-          content="Edit your profile information and preferences at Ebeth Boutique." 
-        />
-      </Helmet>
+      <SEOHead
+        title="Edit Profile - My Account"
+        description="Manage your personal information and preferences at Ebeth Boutique"
+        noIndex={true}
+      />
 
       <div className="min-h-screen bg-background">
         <Header />

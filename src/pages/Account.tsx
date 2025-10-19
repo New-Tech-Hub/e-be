@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet-async";
+import SEOHead from "@/components/SEOHead";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Card } from "@/components/ui/card";
@@ -17,13 +17,11 @@ const Account = () => {
   };
   return (
     <>
-      <Helmet>
-        <title>My Account - Ebeth Boutique & Exclusive Store</title>
-        <meta 
-          name="description" 
-          content="Manage your Ebeth Boutique account, view orders, and update your preferences." 
-        />
-      </Helmet>
+      <SEOHead
+        title="My Account - Dashboard & Settings"
+        description="Manage your Ebeth Boutique account, view orders, wishlist, and update your preferences"
+        noIndex={true}
+      />
 
       <div className="min-h-screen bg-background">
         <Header />

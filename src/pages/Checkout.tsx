@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet-async";
+import SEOHead from "@/components/SEOHead";
 import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -349,13 +349,11 @@ const Checkout = () => {
 
   return (
     <>
-      <Helmet>
-        <title>Checkout - Ebeth Boutique & Exclusive Store</title>
-        <meta
-          name="description"
-          content="Complete your purchase at Ebeth Boutique with secure checkout."
-        />
-      </Helmet>
+      <SEOHead
+        title="Secure Checkout - Complete Your Order"
+        description="Complete your purchase securely at Ebeth Boutique. Fast checkout with multiple payment options."
+        noIndex={true}
+      />
 
       <div className="min-h-screen bg-background">
         <Header />

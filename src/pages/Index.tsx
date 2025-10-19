@@ -3,7 +3,6 @@ import { useWishlist } from "@/hooks/useWishlist";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { usePerformanceMonitor } from "@/hooks/usePerformanceMonitor";
 import SEOHead from "@/components/SEOHead";
-import { Helmet } from "react-helmet-async";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import FeaturedCategories from "@/components/FeaturedCategories";

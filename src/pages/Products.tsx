@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
+import SEOHead from "@/components/SEOHead";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Card } from "@/components/ui/card";
@@ -233,9 +233,10 @@ const Products = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-background">
-        <Helmet>
-          <title>Products - Ebeth Boutique</title>
-        </Helmet>
+        <SEOHead
+          title="Loading Products"
+          description="Browse premium products at Ebeth Boutique & Exclusive Store"
+        />
         <Header />
         <main className="container mx-auto px-4 py-16">
           <div className="text-center">
@@ -251,9 +252,11 @@ const Products = () => {
   if (!getCategorySlug() || !categoryInfo) {
     return (
       <div className="min-h-screen bg-background">
-        <Helmet>
-          <title>Category Not Found - Ebeth Boutique</title>
-        </Helmet>
+        <SEOHead
+          title="Category Not Found"
+          description="The category you're looking for doesn't exist at Ebeth Boutique"
+          noIndex={true}
+        />
         <Header />
         <main className="container mx-auto px-4 py-16">
           <div className="text-center">
@@ -272,9 +275,10 @@ const Products = () => {
   if (products.length === 0) {
     return (
       <div className="min-h-screen bg-background">
-        <Helmet>
-          <title>{getCategoryTitle()} - Ebeth Boutique</title>
-        </Helmet>
+        <SEOHead
+          title={`${getCategoryTitle()} - Ebeth Boutique`}
+          description={categoryInfo.description || `Shop ${getCategoryTitle().toLowerCase()} at Ebeth Boutique`}
+        />
         <Header />
         <main className="container mx-auto px-4 py-16">
           <div className="text-center">
@@ -296,13 +300,38 @@ const Products = () => {
 
   return (
     <>
-      <Helmet>
-        <title>{getCategoryTitle()} - Ebeth Boutique</title>
-        <meta 
-          name="description" 
-          content={categoryInfo.description || `Shop ${getCategoryTitle().toLowerCase()} at Ebeth Boutique. Premium quality products with exclusive deals.`} 
-        />
-      </Helmet>
+      <SEOHead
+        title={`${getCategoryTitle()} - Premium Quality Products`}
+        description={categoryInfo.description || `Shop ${getCategoryTitle().toLowerCase()} at Ebeth Boutique. Premium quality products with exclusive deals in Nigeria.`}
+        keywords={`${getCategoryTitle()}, ${categoryInfo.slug}, ebeth boutique, atlantic mall abuja, nigeria shopping`}
+        canonicalUrl={`https://ebeth-boutique.lovable.app/category/${categoryInfo.slug}`}
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": getCategoryTitle(),
+          "description": categoryInfo.description,
+          "url": `https://ebeth-boutique.lovable.app/category/${categoryInfo.slug}`,
+          "numberOfItems": totalProducts,
+          "mainEntity": {
+            "@type": "ItemList",
+            "itemListElement": products.slice(0, 10).map((product, index) => ({
+              "@type": "ListItem",
+              "position": index + 1,
+              "item": {
+                "@type": "Product",
+                "name": product.name,
+                "image": product.image_url,
+                "offers": {
+                  "@type": "Offer",
+                  "price": product.price,
+                  "priceCurrency": "NGN",
+                  "availability": product.stock_quantity > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock"
+                }
+              }
+            }))
+          }
+        }}
+      />
 
       <div className="min-h-screen bg-background">
         <Header />

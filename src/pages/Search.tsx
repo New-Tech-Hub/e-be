@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
+import SEOHead from "@/components/SEOHead";
 import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -136,9 +136,11 @@ const Search = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-background">
-        <Helmet>
-          <title>Searching... - Ebeth Boutique</title>
-        </Helmet>
+        <SEOHead
+          title="Searching Products"
+          description="Search for premium products at Ebeth Boutique"
+          noIndex={true}
+        />
         <Header />
         <main className="container mx-auto px-4 py-8">
           <div className="flex justify-center items-center min-h-64">
@@ -152,10 +154,36 @@ const Search = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>{query ? `Search results for "${query}"` : 'Search'} - Ebeth Boutique</title>
-        <meta name="description" content={`Search results for "${query}" at Ebeth Boutique - Find the perfect products for you.`} />
-      </Helmet>
+      <SEOHead
+        title={query ? `Search: "${query}" - Find Products` : 'Search Products'}
+        description={query ? `Search results for "${query}" at Ebeth Boutique. Discover ${totalProducts} premium products matching your search.` : 'Search for premium products at Ebeth Boutique & Exclusive Store'}
+        noIndex={true}
+        structuredData={totalProducts > 0 ? {
+          "@context": "https://schema.org",
+          "@type": "SearchResultsPage",
+          "name": `Search Results for "${query}"`,
+          "url": `https://ebeth-boutique.lovable.app/search?q=${encodeURIComponent(query)}`,
+          "mainEntity": {
+            "@type": "ItemList",
+            "numberOfItems": totalProducts,
+            "itemListElement": products.slice(0, 5).map((product, index) => ({
+              "@type": "ListItem",
+              "position": index + 1,
+              "item": {
+                "@type": "Product",
+                "name": product.name,
+                "description": product.description,
+                "image": product.image_url,
+                "offers": {
+                  "@type": "Offer",
+                  "price": product.price,
+                  "priceCurrency": product.currency
+                }
+              }
+            }))
+          }
+        } : undefined}
+      />
       
       <Header />
       

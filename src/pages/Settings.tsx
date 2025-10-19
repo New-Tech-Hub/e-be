@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet-async";
+import SEOHead from "@/components/SEOHead";
 import { useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -56,13 +56,11 @@ const Settings = () => {
 
   return (
     <>
-      <Helmet>
-        <title>Account Settings - Ebeth Boutique & Exclusive Store</title>
-        <meta 
-          name="description" 
-          content="Manage your account settings, notifications, and preferences at Ebeth Boutique." 
-        />
-      </Helmet>
+      <SEOHead
+        title="Account Settings - Manage Preferences"
+        description="Manage your account settings, notifications, and privacy preferences at Ebeth Boutique"
+        noIndex={true}
+      />
 
       <div className="min-h-screen bg-background">
         <Header />

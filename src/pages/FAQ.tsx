@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet-async";
+import SEOHead from "@/components/SEOHead";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -50,15 +50,24 @@ const FAQ = () => {
 
   return (
     <>
-      <Helmet>
-        <title>Frequently Asked Questions - Ebeth Boutique & Exclusive Store</title>
-        <meta 
-          name="description" 
-          content="Find answers to common questions about shipping, returns, payments, and our services at Ebeth Boutique & Exclusive Store." 
-        />
-        <meta name="keywords" content="FAQ, help, shipping, returns, payment methods, store hours, Atlantic Mall Abuja" />
-        <link rel="canonical" href="https://ebethboutique.com/faq" />
-      </Helmet>
+      <SEOHead
+        title="FAQ - Frequently Asked Questions"
+        description="Find answers to common questions about shipping, returns, payments, store hours, and services at Ebeth Boutique Atlantic Mall Abuja."
+        keywords="FAQ, help, shipping, returns, payment methods, store hours, Atlantic Mall Abuja, customer support"
+        canonicalUrl="https://ebeth-boutique.lovable.app/faq"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": faqs.map(faq => ({
+            "@type": "Question",
+            "name": faq.question,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": faq.answer
+            }
+          }))
+        }}
+      />
 
       <div className="min-h-screen bg-background">
         <Header />

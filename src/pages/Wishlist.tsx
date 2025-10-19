@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import { useWishlist } from "@/hooks/useWishlist";
 import { useCart } from "@/hooks/useCart";
 import Header from "@/components/Header";
@@ -53,10 +52,11 @@ const Wishlist = () => {
   return (
     <>
       <SEOHead
-        title="My Wishlist"
-        description="View and manage your saved items. Never lose track of products you love at Ebeth Boutique."
-        keywords="wishlist, saved items, favorites, Ebeth Boutique"
-        canonicalUrl="https://ebethboutique.com/wishlist"
+        title="My Wishlist - Saved Items & Favorites"
+        description="View and manage your saved items at Ebeth Boutique. Never lose track of products you love."
+        keywords="wishlist, saved items, favorites, shopping list, Ebeth Boutique"
+        canonicalUrl="https://ebeth-boutique.lovable.app/wishlist"
+        noIndex={true}
       />
 
       <div className="min-h-screen bg-background">
