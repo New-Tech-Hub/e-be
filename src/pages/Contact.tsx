@@ -121,13 +121,18 @@ const Contact = () => {
 
   return (
     <>
-      <Helmet>
-        <title>Contact Us - Ebeth Boutique & Exclusive Store</title>
-        <meta 
-          name="description" 
-          content="Get in touch with Ebeth Boutique & Exclusive Store. Visit our Atlantic Mall location or contact us online for customer support." 
-        />
-      </Helmet>
+      <SEOHead
+        title="Contact Ebeth Boutique & Exclusive Store"
+        description="Contact Ebeth Boutique at Atlantic Mall, Utako-Abuja. Call 09092034816 or email us for customer support. Store hours: Mon-Sat 9AM-9PM."
+        keywords="contact ebeth boutique, atlantic mall abuja, utako store location, customer support nigeria, ebeth phone number"
+        canonicalUrl="https://ebeth-boutique.lovable.app/contact"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "ContactPage",
+          "name": "Contact Ebeth Boutique",
+          "description": "Get in touch with Ebeth Boutique & Exclusive Store"
+        }}
+      />
 
       <div className="min-h-screen bg-background">
         <Header />
