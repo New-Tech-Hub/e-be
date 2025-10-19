@@ -4,6 +4,7 @@ import path from "path";
 import { componentTagger } from "lovable-tagger";
 import viteImagemin from "vite-plugin-imagemin";
 import { imagetools } from 'vite-imagetools';
+import { VitePWA } from 'vite-plugin-pwa';
 import type { Plugin } from 'vite';
 
 // Plugin to make CSS non-render-blocking
@@ -28,6 +29,74 @@ export default defineConfig(({ mode }) => ({
     react(), 
     mode === "development" && componentTagger(),
     mode === "production" && asyncCSSPlugin(),
+    VitePWA({
+      registerType: 'autoUpdate',
+      includeAssets: ['favicon.ico', 'robots.txt', 'hero-bags-collection.jpg'],
+      manifest: {
+        name: 'Ebeth Boutique & Exclusive Store',
+        short_name: 'Ebeth Boutique',
+        description: 'Premium fashion, accessories, and fresh groceries at Ebeth Boutique. Where boutique elegance meets everyday convenience.',
+        theme_color: '#f7d794',
+        background_color: '#ffffff',
+        display: 'standalone',
+        orientation: 'portrait',
+        scope: '/',
+        start_url: '/',
+        icons: [
+          {
+            src: '/pwa-192x192.png',
+            sizes: '192x192',
+            type: 'image/png',
+            purpose: 'any maskable'
+          },
+          {
+            src: '/pwa-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'any maskable'
+          }
+        ],
+        categories: ['shopping', 'lifestyle'],
+        screenshots: [
+          {
+            src: '/hero-bags-collection.jpg',
+            sizes: '1920x1080',
+            type: 'image/jpeg',
+            form_factor: 'wide'
+          }
+        ]
+      },
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,jpg,jpeg,svg,webp}'],
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/qmwyysbjhehkjzaovhcl\.supabase\.co\/.*/i,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'supabase-api',
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60 * 24 // 24 hours
+              },
+              cacheableResponse: {
+                statuses: [0, 200]
+              }
+            }
+          },
+          {
+            urlPattern: /^https:\/\/images\.unsplash\.com\/.*/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'unsplash-images',
+              expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
+              }
+            }
+          }
+        ]
+      }
+    }),
     imagetools({
       defaultDirectives: (url) => {
         const pathname = url.pathname;

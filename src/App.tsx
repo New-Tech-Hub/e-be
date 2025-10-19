@@ -34,6 +34,7 @@ const AdminSettings = lazy(() => import("./pages/AdminSettings"));
 const Checkout = lazy(() => import("./pages/Checkout"));
 const ProductDetail = lazy(() => import("./pages/ProductDetail"));
 const Search = lazy(() => import("./pages/Search"));
+const InstallApp = lazy(() => import("./pages/InstallApp"));
 
 // Simple loading fallback
 const PageLoader = () => (
@@ -56,6 +57,7 @@ const App = () => (
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/search" element={<Search />} />
+                <Route path="/install" element={<InstallApp />} />
                 <Route path="/category/:slug" element={<CategoryView />} />
                 <Route path="/products/:category" element={<Products />} />
                 <Route path="/product/:productId" element={<ProductDetail />} />
