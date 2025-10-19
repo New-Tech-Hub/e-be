@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet-async";
+import SEOHead from "@/components/SEOHead";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Card } from "@/components/ui/card";
@@ -30,13 +30,18 @@ const About = () => {
 
   return (
     <>
-      <Helmet>
-        <title>About Us - Ebeth Boutique & Exclusive Store</title>
-        <meta 
-          name="description" 
-          content="Learn about Ebeth Boutique & Exclusive Store - where luxury fashion meets everyday convenience. Discover our story, values, and commitment to excellence." 
-        />
-      </Helmet>
+      <SEOHead
+        title="About Ebeth Boutique & Exclusive Store"
+        description="Discover Ebeth Boutique's story - Nigeria's premier destination for luxury fashion, designer accessories, and quality essentials. Located at Atlantic Mall Abuja."
+        keywords="about ebeth boutique, luxury store nigeria, atlantic mall abuja, fashion boutique story, premium shopping"
+        canonicalUrl="https://ebeth-boutique.lovable.app/about"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "AboutPage",
+          "name": "About Ebeth Boutique",
+          "description": "Learn about Ebeth Boutique & Exclusive Store - where luxury fashion meets everyday convenience"
+        }}
+      />
 
       <div className="min-h-screen bg-background">
         <Header />
