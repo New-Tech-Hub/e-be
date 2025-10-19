@@ -35,6 +35,7 @@ const Checkout = lazy(() => import("./pages/Checkout"));
 const ProductDetail = lazy(() => import("./pages/ProductDetail"));
 const Search = lazy(() => import("./pages/Search"));
 const InstallApp = lazy(() => import("./pages/InstallApp"));
+const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 
 // Simple loading fallback
 const PageLoader = () => (
@@ -58,6 +59,7 @@ const App = () => (
                 <Route path="/" element={<Index />} />
                 <Route path="/search" element={<Search />} />
                 <Route path="/install" element={<InstallApp />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="/category/:slug" element={<CategoryView />} />
                 <Route path="/products/:category" element={<Products />} />
                 <Route path="/product/:productId" element={<ProductDetail />} />

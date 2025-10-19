@@ -12,12 +12,13 @@ interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSwitchToSignup: () => void;
+  onSwitchToForgotPassword: () => void;
 }
 
 // Rate limiter: max 5 login attempts per minute
 const loginRateLimiter = createRateLimiter(5, 60 * 1000);
 
-const LoginModal = ({ isOpen, onClose, onSwitchToSignup }: LoginModalProps) => {
+const LoginModal = ({ isOpen, onClose, onSwitchToSignup, onSwitchToForgotPassword }: LoginModalProps) => {
   const [formData, setFormData] = useState({
     email: "",
     password: ""
@@ -152,6 +153,16 @@ const LoginModal = ({ isOpen, onClose, onSwitchToSignup }: LoginModalProps) => {
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground"
             >
               {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            </button>
+          </div>
+
+          <div className="flex justify-end">
+            <button
+              type="button"
+              onClick={onSwitchToForgotPassword}
+              className="text-sm text-primary hover:underline"
+            >
+              Forgot password?
             </button>
           </div>
 

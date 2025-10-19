@@ -16,6 +16,7 @@ import OptimizedImage from "@/components/OptimizedImage";
 import logo from "@/assets/ebeth-logo.jpg";
 import SignupModal from "./SignupModal";
 import LoginModal from "./LoginModal";
+import ForgotPasswordModal from "./ForgotPasswordModal";
 import CartButton from "./CartButton";
 import SearchBar from "./SearchBar";
 import { useAuth } from "@/hooks/useAuth";
@@ -33,6 +34,7 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSignupOpen, setIsSignupOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
   const { user, signOut, loading } = useAuth();
   const { isSuperAdmin } = useSuperAdminAuth();
   const navigate = useNavigate();
@@ -44,12 +46,20 @@ const Header = () => {
 
   const handleSwitchToLogin = () => {
     setIsSignupOpen(false);
+    setIsForgotPasswordOpen(false);
     setIsLoginOpen(true);
   };
 
   const handleSwitchToSignup = () => {
     setIsLoginOpen(false);
+    setIsForgotPasswordOpen(false);
     setIsSignupOpen(true);
+  };
+
+  const handleSwitchToForgotPassword = () => {
+    setIsLoginOpen(false);
+    setIsSignupOpen(false);
+    setIsForgotPasswordOpen(true);
   };
 
   const [categories, setCategories] = useState<Category[]>([]);
@@ -448,6 +458,12 @@ const Header = () => {
         isOpen={isLoginOpen} 
         onClose={() => setIsLoginOpen(false)}
         onSwitchToSignup={handleSwitchToSignup}
+        onSwitchToForgotPassword={handleSwitchToForgotPassword}
+      />
+      <ForgotPasswordModal
+        isOpen={isForgotPasswordOpen}
+        onClose={() => setIsForgotPasswordOpen(false)}
+        onBackToLogin={handleSwitchToLogin}
       />
     </header>
   );
