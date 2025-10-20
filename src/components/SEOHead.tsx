@@ -68,8 +68,8 @@ const SEOHead = ({
       )}
       
       {/* Favicon and App Icons */}
-      <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-      <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico" />
+      <link rel="icon" type="image/jpeg" href="/favicon.jpg" />
+      <link rel="apple-touch-icon" sizes="180x180" href="/favicon.jpg" />
     </Helmet>
   );
 };
