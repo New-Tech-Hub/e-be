@@ -1,7 +1,7 @@
 import { ImgHTMLAttributes, useState } from 'react';
 
 interface OptimizedImageProps extends ImgHTMLAttributes<HTMLImageElement> {
-  src: string;
+  src: string | any; // Allow both string and image objects from imports
   alt: string;
   width?: string | number;
   height?: string | number;
@@ -19,7 +19,20 @@ const OptimizedImage = ({
   className,
   ...props 
 }: OptimizedImageProps) => {
-  const [imgSrc, setImgSrc] = useState(src);
+  // Handle both string URLs and image objects from imports
+  const getImageSrc = (source: string | any): string => {
+    if (typeof source === 'string') {
+      return source;
+    }
+    // If it's an object (from image imports), get the default export
+    if (source && typeof source === 'object') {
+      return source.default || source.src || String(source);
+    }
+    return String(source);
+  };
+
+  const imageSrc = getImageSrc(src);
+  const [imgSrc, setImgSrc] = useState(imageSrc);
   const [hasError, setHasError] = useState(false);
 
   // Generate responsive srcset for local images
@@ -50,11 +63,11 @@ const OptimizedImage = ({
   const handleError = () => {
     if (!hasError) {
       setHasError(true);
-      setImgSrc(src);
+      setImgSrc(imageSrc);
     }
   };
 
-  const srcSet = generateSrcSet(src);
+  const srcSet = generateSrcSet(imageSrc);
 
   return (
     <img
