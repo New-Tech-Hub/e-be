@@ -9,8 +9,10 @@ import { lazy, Suspense } from "react";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import SuperAdminRoute from "@/components/SuperAdminRoute";
 
-// Lazy load all pages for better code splitting
-const Index = lazy(() => import("./pages/Index"));
+// Import Index directly - it's the entry point and should load immediately
+import Index from "./pages/Index";
+
+// Lazy load other pages for better code splitting
 const NotFound = lazy(() => import("./pages/NotFound"));
 const Products = lazy(() => import("./pages/Products"));
 const CategoryView = lazy(() => import("./pages/CategoryView"));

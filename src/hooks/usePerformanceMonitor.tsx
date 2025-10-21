@@ -165,12 +165,17 @@ export const usePerformanceMonitor = () => {
       }
     };
 
-    // Collect metrics after page load
+    // Collect metrics after page is fully loaded and settled
+    const initMetrics = () => {
+      // Wait additional 2 seconds after load for metrics to stabilize
+      setTimeout(collectMetrics, 2000);
+    };
+
     if (document.readyState === 'complete') {
-      collectMetrics();
+      initMetrics();
     } else {
-      window.addEventListener('load', collectMetrics);
-      return () => window.removeEventListener('load', collectMetrics);
+      window.addEventListener('load', initMetrics);
+      return () => window.removeEventListener('load', initMetrics);
     }
   }, []);
 };
