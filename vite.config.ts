@@ -31,6 +31,10 @@ export default defineConfig(({ mode }) => ({
     mode === "production" && asyncCSSPlugin(),
     VitePWA({
       registerType: 'autoUpdate',
+      injectRegister: 'auto',
+      devOptions: {
+        enabled: false
+      },
       includeAssets: ['favicon.ico', 'robots.txt', 'hero-bags-collection.jpg'],
       manifest: {
         name: 'Ebeth Boutique & Exclusive Store',
@@ -67,6 +71,9 @@ export default defineConfig(({ mode }) => ({
         ]
       },
       workbox: {
+        cleanupOutdatedCaches: true,
+        skipWaiting: true,
+        clientsClaim: true,
         globPatterns: ['**/*.{js,css,html,ico,png,jpg,jpeg,svg,webp}'],
         runtimeCaching: [
           {
