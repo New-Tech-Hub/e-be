@@ -141,15 +141,24 @@ export const usePerformanceMonitor = () => {
         // Use requestIdleCallback if available, otherwise defer significantly
         const sendMetrics = async () => {
           try {
+            // Get the current session to include auth token
+            const { data: { session } } = await supabase.auth.getSession();
+            
             await supabase.functions.invoke('performance-monitor', {
               body: {
                 url: window.location.href,
                 metrics,
                 issues: issues.length > 0 ? issues : null
-              }
+              },
+              headers: session?.access_token ? {
+                Authorization: `Bearer ${session.access_token}`
+              } : undefined
             });
           } catch (error) {
-            // Performance metrics failed to send - not critical
+            // Silently fail - performance monitoring shouldn't break the app
+            if (import.meta.env.DEV) {
+              console.error('Failed to send performance metrics');
+            }
           }
         };
 
@@ -161,7 +170,10 @@ export const usePerformanceMonitor = () => {
         }
 
       } catch (error) {
-        // Performance monitoring error - not critical
+        // Silently fail in production
+        if (import.meta.env.DEV) {
+          console.error('Error collecting performance metrics');
+        }
       }
     };
 

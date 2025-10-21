@@ -68,7 +68,7 @@ serve(async (req: Request) => {
       }
     );
   } catch (error) {
-    console.error('Error in maps-proxy:', error);
+    console.error('Maps proxy error:', error instanceof Error ? error.message : 'Unknown error');
     return new Response(
       JSON.stringify({ error: 'Internal server error' }),
       {
