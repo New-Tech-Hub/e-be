@@ -17,7 +17,7 @@ const HeroSection = () => {
       href: "/accessories"
     },
     {
-      image: "/placeholder.svg",
+      image: "/hero-ankara-native.jpg",
       title: "Celebrate Culture in Style",
       subtitle: "Bold Ankara prints and elegant wrappers for every occasion",
       cta: "Shop Attire",
@@ -25,7 +25,7 @@ const HeroSection = () => {
       href: "/clothing"
     },
     {
-      image: "/placeholder.svg",
+      image: "/hero-jewelry-collection.jpg",
       title: "Shine Beyond Measure",
       subtitle: "Elegant pieces that complete your look, day or night",
       cta: "Shop Jewelries",
@@ -33,7 +33,7 @@ const HeroSection = () => {
       href: "/accessories"
     },
     {
-      image: "/placeholder.svg",
+      image: "/hero-designer-sunglasses.jpg",
       title: "See the World in Style",
       subtitle: "Trendy designer shades for fashion and protection",
       cta: "Shop Sunglasses",
@@ -41,7 +41,7 @@ const HeroSection = () => {
       href: "/accessories"
     },
     {
-      image: "/placeholder.svg",
+      image: "/hero-gift-bags.jpg",
       title: "Perfect Wraps for Perfect Moments",
       subtitle: "Stylish gift bags that make every present unforgettable",
       cta: "Shop Gift Bags",
@@ -49,7 +49,7 @@ const HeroSection = () => {
       href: "/accessories"
     },
     {
-      image: "/placeholder.svg",
+      image: "/hero-bedding-collection.jpg",
       title: "Luxury Comfort for Every Night",
       subtitle: "Soft, premium-quality bedsheets and duvets for restful sleep",
       cta: "Shop Bedding",
