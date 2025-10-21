@@ -81,7 +81,7 @@ const OptimizedImage = ({
       height={height}
       sizes={sizes}
       onError={handleError}
-      {...(priority && { fetchPriority: "high" as const })}
+      {...(priority && { fetchpriority: "high" })}
       {...props}
     />
   );
