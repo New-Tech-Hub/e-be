@@ -3,19 +3,13 @@ import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight, ShoppingBag, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import OptimizedImage from "@/components/OptimizedImage";
-import heroImage1 from "@/assets/hero-bags-collection.jpg";
-import heroImage2 from "@/assets/hero-ankara-native.jpg";
-import heroImage3 from "@/assets/hero-jewelry-collection.jpg";
-import heroImage4 from "@/assets/hero-designer-sunglasses.jpg";
-import heroImage5 from "@/assets/hero-gift-bags.jpg";
-import heroImage6 from "@/assets/hero-bedding-collection.jpg";
 
 const HeroSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const slides = [
     {
-      image: heroImage1,
+      image: "/hero-bags-collection.jpg",
       title: "Premium Bags & Travel Collection",
       subtitle: "Luxury traveling bags, elegant women's handbags, and premium luggage for every journey",
       cta: "Shop Bags",
@@ -23,7 +17,7 @@ const HeroSection = () => {
       href: "/accessories"
     },
     {
-      image: heroImage2,
+      image: "/placeholder.svg",
       title: "Celebrate Culture in Style",
       subtitle: "Bold Ankara prints and elegant wrappers for every occasion",
       cta: "Shop Attire",
@@ -31,7 +25,7 @@ const HeroSection = () => {
       href: "/clothing"
     },
     {
-      image: heroImage3,
+      image: "/placeholder.svg",
       title: "Shine Beyond Measure",
       subtitle: "Elegant pieces that complete your look, day or night",
       cta: "Shop Jewelries",
@@ -39,7 +33,7 @@ const HeroSection = () => {
       href: "/accessories"
     },
     {
-      image: heroImage4,
+      image: "/placeholder.svg",
       title: "See the World in Style",
       subtitle: "Trendy designer shades for fashion and protection",
       cta: "Shop Sunglasses",
@@ -47,7 +41,7 @@ const HeroSection = () => {
       href: "/accessories"
     },
     {
-      image: heroImage5,
+      image: "/placeholder.svg",
       title: "Perfect Wraps for Perfect Moments",
       subtitle: "Stylish gift bags that make every present unforgettable",
       cta: "Shop Gift Bags",
@@ -55,7 +49,7 @@ const HeroSection = () => {
       href: "/accessories"
     },
     {
-      image: heroImage6,
+      image: "/placeholder.svg",
       title: "Luxury Comfort for Every Night",
       subtitle: "Soft, premium-quality bedsheets and duvets for restful sleep",
       cta: "Shop Bedding",
