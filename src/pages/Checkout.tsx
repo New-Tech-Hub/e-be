@@ -15,6 +15,7 @@ import { Link, useNavigate } from "react-router-dom";
 import DeliverySlotSelector from "@/components/DeliverySlotSelector";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { Textarea } from "@/components/ui/textarea";
+import OptimizedImage from "@/components/OptimizedImage";
 // Security utilities for input validation
 import { sanitizeInput, validatePhoneNumber, validateAddress, detectSuspiciousInput } from "@/utils/sanitize";
 
@@ -538,10 +539,12 @@ const Checkout = () => {
                       {cartItems.map(item => (
                         <div key={item.id} className="flex items-center justify-between">
                           <div className="flex items-center">
-                            <img
+                            <OptimizedImage
                               src={item.products?.image_url}
                               alt={item.products?.name}
                               className="w-12 h-12 object-cover rounded mr-4"
+                              width={48}
+                              height={48}
                             />
                             <div>
                               <p className="font-semibold">{item.products?.name}</p>

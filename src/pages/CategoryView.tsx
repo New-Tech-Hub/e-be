@@ -8,6 +8,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
+import OptimizedImage from "@/components/OptimizedImage";
 
 interface Category {
   id: string;
@@ -142,10 +143,14 @@ const CategoryView = () => {
         <main className="container mx-auto px-4 py-8">
           {/* Category Hero */}
           <div className="relative h-64 md:h-96 rounded-lg overflow-hidden mb-8">
-            <img
+            <OptimizedImage
               src={category.image_url || '/placeholder.svg'}
               alt={category.name}
               className="w-full h-full object-cover"
+              width={1200}
+              height={384}
+              sizes="100vw"
+              priority
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
               <div className="p-8">
@@ -173,10 +178,13 @@ const CategoryView = () => {
                   >
                     <Card className="group cursor-pointer hover:shadow-lg transition-shadow overflow-hidden">
                       <div className="aspect-square overflow-hidden bg-muted">
-                        <img
+                        <OptimizedImage
                           src={subcategory.image_url || '/placeholder.svg'}
                           alt={subcategory.name}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          width={200}
+                          height={200}
+                          sizes="(max-width: 768px) 50vw, (max-width: 1024px) 25vw, 16.67vw"
                         />
                       </div>
                       <div className="p-3">
