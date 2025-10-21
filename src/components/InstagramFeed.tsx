@@ -6,13 +6,6 @@ import { ExternalLink, Heart, MessageCircle, ShoppingBag } from "lucide-react";
 import { useCart } from "@/hooks/useCart";
 import OptimizedImage from "@/components/OptimizedImage";
 
-// Import Instagram post images
-import fashionHero from "@/assets/hero-fashion-collection.jpg";
-import jewelryHero from "@/assets/hero-jewelry-gifts.jpg";
-import boutiqueFashion from "@/assets/fashion-hero.jpg";
-import bagsCollection from "@/assets/hero-bags-collection.jpg";
-import boutiqueHero from "@/assets/hero-boutique.jpg";
-
 interface InstagramPost {
   id: string;
   image_url: string;
@@ -34,7 +27,7 @@ const InstagramFeed = () => {
   const mockPosts: InstagramPost[] = [
     {
       id: "1",
-      image_url: fashionHero,
+      image_url: "/placeholder.svg",
       caption: "New arrivals from our premium collection! ✨ Perfect for any occasion. Shop now! #EbethBoutique #Fashion",
       likes: 245,
       comments: 18,
@@ -45,7 +38,7 @@ const InstagramFeed = () => {
     },
     {
       id: "3",
-      image_url: jewelryHero,
+      image_url: "/placeholder.svg",
       caption: "Accessorize in style! These handcrafted jewelry pieces are flying off our shelves 💎 #Jewelry #Handcrafted",
       likes: 312,
       comments: 25,
@@ -56,7 +49,7 @@ const InstagramFeed = () => {
     },
     {
       id: "4",
-      image_url: boutiqueFashion,
+      image_url: "/placeholder.svg",
       caption: "Weekend vibes with our casual collection! Comfort meets style 👗 #WeekendWear #Casual",
       likes: 156,
       comments: 8,
@@ -67,7 +60,7 @@ const InstagramFeed = () => {
     },
     {
       id: "5",
-      image_url: boutiqueHero,
+      image_url: "/placeholder.svg",
       caption: "Behind the scenes at Ebeth Boutique! Our team curating the best products for you 📦 #BehindTheScenes",
       likes: 98,
       comments: 15,
@@ -75,7 +68,7 @@ const InstagramFeed = () => {
     },
     {
       id: "6",
-      image_url: bagsCollection,
+      image_url: "/placeholder.svg",
       caption: "Customer favorite! Our luxury bag collection is perfect for every occasion 👜 #LuxuryBags #Fashion",
       likes: 203,
       comments: 11,

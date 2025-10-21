@@ -5,11 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import OptimizedImage from "@/components/OptimizedImage";
-import clothingImage from "@/assets/categories/clothing-category.jpg";
-import accessoriesImage from "@/assets/categories/accessories-category.jpg";
-import householdImage from "@/assets/categories/household-category.jpg";
-import specialsImage from "@/assets/categories/specials-category.jpg";
-import defaultCategoryImage from "@/assets/default-category.jpg";
 
 interface Category {
   id: string;
@@ -24,14 +19,14 @@ const FeaturedCategories = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Fallback categories with local images
+  // Fallback categories with public folder images
   const fallbackCategories = [
     {
       id: "clothing",
       name: "Clothing",
       slug: "clothing",
       description: "Fashion-forward pieces for every occasion",
-      image_url: clothingImage,
+      image_url: "/placeholder.svg",
       product_count: 500
     },
     {
@@ -39,7 +34,7 @@ const FeaturedCategories = () => {
       name: "Accessories",
       slug: "accessories",
       description: "Complete your look with premium accessories",
-      image_url: accessoriesImage,
+      image_url: "/placeholder.svg",
       product_count: 200
     },
     {
@@ -47,7 +42,7 @@ const FeaturedCategories = () => {
       name: "Household Essentials",
       slug: "household", 
       description: "Everything you need for your home",
-      image_url: householdImage,
+      image_url: "/placeholder.svg",
       product_count: 300
     },
     {
@@ -55,7 +50,7 @@ const FeaturedCategories = () => {
       name: "Specials & Deals",
       slug: "specials",
       description: "Weekly offers and exclusive discounts",
-      image_url: specialsImage,
+      image_url: "/placeholder.svg",
       product_count: 0
     }
   ];
@@ -70,18 +65,8 @@ const FeaturedCategories = () => {
       return category.image_url;
     }
     
-    // Map category slug to fallback images
-    const imageMap: Record<string, string> = {
-      'accessories': accessoriesImage,
-      'fashion-clothing': clothingImage,
-      'clothing': clothingImage,
-      'beauty-personal-care': householdImage,
-      'bags-luggage': accessoriesImage,
-      'household': householdImage,
-      'specials': specialsImage
-    };
-    
-    return imageMap[slug] || defaultCategoryImage;
+    // Use placeholder for all missing images
+    return "/placeholder.svg";
   };
 
   const fetchCategories = async () => {
