@@ -3,37 +3,14 @@ import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight, ShoppingBag, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import OptimizedImage from "@/components/OptimizedImage";
-
-// Lazy load hero images to improve initial load
-const heroImages = {
-  2: () => import("@/assets/hero-ankara-native.jpg"),
-  3: () => import("@/assets/hero-jewelry-collection.jpg"),
-  4: () => import("@/assets/hero-designer-sunglasses.jpg"),
-  5: () => import("@/assets/hero-gift-bags.jpg"),
-  6: () => import("@/assets/hero-bedding-collection.jpg"),
-};
+import heroImage2 from "@/assets/hero-ankara-native.jpg";
+import heroImage3 from "@/assets/hero-jewelry-collection.jpg";
+import heroImage4 from "@/assets/hero-designer-sunglasses.jpg";
+import heroImage5 from "@/assets/hero-gift-bags.jpg";
+import heroImage6 from "@/assets/hero-bedding-collection.jpg";
 
 const HeroSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [loadedImages, setLoadedImages] = useState<Record<number, string>>({});
-
-  // Preload next and previous images
-  useEffect(() => {
-    const preloadImage = async (index: number) => {
-      if (index > 0 && !loadedImages[index] && heroImages[index as keyof typeof heroImages]) {
-        const imageModule = await heroImages[index as keyof typeof heroImages]();
-        setLoadedImages(prev => ({ ...prev, [index]: imageModule.default }));
-      }
-    };
-
-    // Preload current, next, and previous images
-    const nextIndex = (currentSlide + 1) % 6;
-    const prevIndex = (currentSlide - 1 + 6) % 6;
-    
-    preloadImage(currentSlide);
-    preloadImage(nextIndex);
-    preloadImage(prevIndex);
-  }, [currentSlide, loadedImages]);
 
   const slides = [
     {
@@ -45,7 +22,7 @@ const HeroSection = () => {
       href: "/accessories"
     },
     {
-      image: loadedImages[1] || "",
+      image: heroImage2,
       title: "Celebrate Culture in Style",
       subtitle: "Bold Ankara prints and elegant wrappers for every occasion",
       cta: "Shop Attire",
@@ -53,7 +30,7 @@ const HeroSection = () => {
       href: "/clothing"
     },
     {
-      image: loadedImages[2] || "",
+      image: heroImage3,
       title: "Shine Beyond Measure",
       subtitle: "Elegant pieces that complete your look, day or night",
       cta: "Shop Jewelries",
@@ -61,7 +38,7 @@ const HeroSection = () => {
       href: "/accessories"
     },
     {
-      image: loadedImages[3] || "",
+      image: heroImage4,
       title: "See the World in Style",
       subtitle: "Trendy designer shades for fashion and protection",
       cta: "Shop Sunglasses",
@@ -69,7 +46,7 @@ const HeroSection = () => {
       href: "/accessories"
     },
     {
-      image: loadedImages[4] || "",
+      image: heroImage5,
       title: "Perfect Wraps for Perfect Moments",
       subtitle: "Stylish gift bags that make every present unforgettable",
       cta: "Shop Gift Bags",
@@ -77,7 +54,7 @@ const HeroSection = () => {
       href: "/accessories"
     },
     {
-      image: loadedImages[5] || "",
+      image: heroImage6,
       title: "Luxury Comfort for Every Night",
       subtitle: "Soft, premium-quality bedsheets and duvets for restful sleep",
       cta: "Shop Bedding",
@@ -110,17 +87,15 @@ const HeroSection = () => {
             index === currentSlide ? 'opacity-100' : 'opacity-0'
           }`}
         >
-          {slide.image && (
-            <OptimizedImage
-              src={slide.image}
-              alt={slide.title}
-              className="w-full h-full object-cover"
-              priority={index === 0}
-              width={1920}
-              height={1080}
-              sizes="100vw"
-            />
-          )}
+          <OptimizedImage
+            src={slide.image}
+            alt={slide.title}
+            className="w-full h-full object-cover"
+            priority={index === 0}
+            width={1920}
+            height={1080}
+            sizes="100vw"
+          />
           <div className="absolute inset-0 bg-black/40" />
         </div>
       ))}
