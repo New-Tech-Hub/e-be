@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ExternalLink, Heart, MessageCircle, ShoppingBag } from "lucide-react";
 import { useCart } from "@/hooks/useCart";
+import OptimizedImage from "@/components/OptimizedImage";
 
 // Import Instagram post images
 import fashionHero from "@/assets/hero-fashion-collection.jpg";
@@ -163,14 +164,12 @@ const InstagramFeed = () => {
         {posts.map((post) => (
           <Card key={post.id} className="overflow-hidden hover:shadow-elegant transition-smooth">
             <div className="relative">
-              <img
+              <OptimizedImage
                 src={post.image_url}
                 alt="Instagram post"
                 className="w-full aspect-square object-cover"
-                loading="lazy"
-                decoding="async"
-                width="400"
-                height="400"
+                width={400}
+                height={400}
                 sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33.33vw"
               />
               {post.product_id && (

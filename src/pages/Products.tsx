@@ -80,15 +80,43 @@ const Products = () => {
 
   const fetchProducts = async (reset = false) => {
     const categorySlug = getCategorySlug();
-    if (!categorySlug) {
-      setLoading(false);
-      return;
-    }
     
+    // If no category, fetch all products
     const pageToFetch = reset ? 1 : currentPage;
     setLoading(true);
     
     try {
+      if (!categorySlug) {
+        // Fetch all products if no category specified
+        let query = supabase
+          .from('products')
+          .select('*, categories(name, slug)', { count: 'exact' })
+          .eq('is_active', true);
+
+        // Apply sorting
+        if (sortBy === 'price-low') {
+          query = query.order('price', { ascending: true });
+        } else if (sortBy === 'price-high') {
+          query = query.order('price', { ascending: false });
+        } else if (sortBy === 'name') {
+          query = query.order('name', { ascending: true });
+        } else {
+          query = query.order('created_at', { ascending: false });
+        }
+
+        const { data: productsData, error: productsError, count } = await query
+          .range((pageToFetch - 1) * PRODUCTS_PER_PAGE, pageToFetch * PRODUCTS_PER_PAGE - 1);
+
+        if (productsError) throw productsError;
+
+        setProducts(reset ? productsData || [] : [...products, ...(productsData || [])]);
+        setTotalProducts(count || 0);
+        setHasMore((productsData?.length || 0) === PRODUCTS_PER_PAGE);
+        setCategoryInfo({ name: 'All Products', description: 'Browse our complete collection' });
+        setLoading(false);
+        return;
+      }
+      
       // Fetching category data
       
       // Single optimized query combining category and products

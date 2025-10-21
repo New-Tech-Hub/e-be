@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import OptimizedImage from "@/components/OptimizedImage";
 import zainabAvatar from "@/assets/avatars/zainab-avatar.jpg";
 import emekaAvatar from "@/assets/avatars/emeka-avatar.jpg";
 import aminuAvatar from "@/assets/avatars/aminu-avatar.jpg";
@@ -98,14 +99,12 @@ const Testimonials = () => {
               <div className="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8">
                 {/* Avatar */}
                 <div className="flex-shrink-0">
-                  <img
+                  <OptimizedImage
                     src={currentTestimonialData.avatar}
                     alt={currentTestimonialData.name}
                     className="w-20 h-20 rounded-full object-cover shadow-card"
-                    loading="lazy"
-                    decoding="async"
-                    width="80"
-                    height="80"
+                    width={80}
+                    height={80}
                   />
                 </div>
 

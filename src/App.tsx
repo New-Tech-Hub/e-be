@@ -63,6 +63,7 @@ const App = () => (
                 <Route path="/install" element={<InstallApp />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="/category/:slug" element={<CategoryView />} />
+                <Route path="/products" element={<Products />} />
                 <Route path="/products/:category" element={<Products />} />
                 <Route path="/product/:productId" element={<ProductDetail />} />
               <Route path="/about" element={<About />} />

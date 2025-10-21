@@ -21,13 +21,26 @@ const OptimizedImage = ({
 }: OptimizedImageProps) => {
   // Handle both string URLs and image objects from imports
   const getImageSrc = (source: string | any): string => {
+    // If it's a string URL, return it directly
     if (typeof source === 'string') {
       return source;
     }
-    // If it's an object (from image imports), get the default export
+    
+    // If it's an image import object, extract the URL
     if (source && typeof source === 'object') {
-      return source.default || source.src || String(source);
+      // Vite returns { default: url } for image imports
+      if (source.default && typeof source.default === 'string') {
+        return source.default;
+      }
+      // Sometimes it's { src: url }
+      if (source.src && typeof source.src === 'string') {
+        return source.src;
+      }
+      // Fallback: convert object to string
+      return String(source);
     }
+    
+    // Last resort: convert to string
     return String(source);
   };
 
@@ -63,7 +76,8 @@ const OptimizedImage = ({
   const handleError = () => {
     if (!hasError) {
       setHasError(true);
-      setImgSrc(imageSrc);
+      // Use a data URL for a simple gray placeholder
+      setImgSrc('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300"%3E%3Crect width="400" height="300" fill="%23f0f0f0"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="18" fill="%23999"%3EImage unavailable%3C/text%3E%3C/svg%3E');
     }
   };
 
