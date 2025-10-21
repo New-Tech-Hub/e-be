@@ -6,12 +6,6 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import OptimizedImage from "@/components/OptimizedImage";
-import luxurySkincareImage from "@/assets/products/luxury-skincare-set.jpg";
-import designerDressImage from "@/assets/products/designer-summer-dress-floral.jpg";
-import vitaminSupplementsImage from "@/assets/products/premium-vitamin-supplements.jpg";
-import coffeeBeansImage from "@/assets/products/artisan-coffee-beans.jpg";
-import goldNecklaceImage from "@/assets/products/gold-layered-necklace-set.jpg";
-import cleaningKitImage from "@/assets/products/eco-friendly-cleaning-kit.jpg";
 
 const WeeklyDeals = () => {
   const [likedItems, setLikedItems] = useState<string[]>([]);
@@ -27,7 +21,7 @@ const WeeklyDeals = () => {
       discount: 30,
       rating: 4.8,
       reviews: 124,
-      image: designerDressImage,
+      image: "/products/designer-summer-dress-floral.jpg",
       badge: "Limited Edition",
       timeLeft: "2 days left"
     },
@@ -40,7 +34,7 @@ const WeeklyDeals = () => {
       discount: 35,
       rating: 4.8,
       reviews: 156,
-      image: vitaminSupplementsImage,
+      image: "/products/premium-vitamin-supplements.jpg",
       badge: "Health Boost",
       timeLeft: "Today only"
     },
@@ -53,7 +47,7 @@ const WeeklyDeals = () => {
       discount: 30,
       rating: 4.9,
       reviews: 67,
-      image: luxurySkincareImage,
+      image: "/products/luxury-skincare-set.jpg",
       badge: "Bestseller",
       timeLeft: "3 days left"
     },
@@ -66,7 +60,7 @@ const WeeklyDeals = () => {
       discount: 28,
       rating: 4.7,
       reviews: 203,
-      image: coffeeBeansImage,
+      image: "/products/artisan-coffee-beans.jpg",
       badge: "Premium Quality",
       timeLeft: "5 days left"
     },
@@ -79,7 +73,7 @@ const WeeklyDeals = () => {
       discount: 39,
       rating: 4.5,
       reviews: 156,
-      image: goldNecklaceImage,
+      image: "/products/gold-layered-necklace-set.jpg",
       badge: "Trending",
       timeLeft: "1 day left"
     },
@@ -92,7 +86,7 @@ const WeeklyDeals = () => {
       discount: 39,
       rating: 4.4,
       reviews: 91,
-      image: cleaningKitImage,
+      image: "/products/eco-friendly-cleaning-kit.jpg",
       badge: "Eco-Friendly",
       timeLeft: "4 days left"
     }

@@ -26,7 +26,7 @@ const FeaturedCategories = () => {
       name: "Clothing",
       slug: "clothing",
       description: "Fashion-forward pieces for every occasion",
-      image_url: "/placeholder.svg",
+      image_url: "/categories/clothing-category.jpg",
       product_count: 500
     },
     {
@@ -34,7 +34,7 @@ const FeaturedCategories = () => {
       name: "Accessories",
       slug: "accessories",
       description: "Complete your look with premium accessories",
-      image_url: "/placeholder.svg",
+      image_url: "/categories/accessories-category.jpg",
       product_count: 200
     },
     {
@@ -42,7 +42,7 @@ const FeaturedCategories = () => {
       name: "Household Essentials",
       slug: "household", 
       description: "Everything you need for your home",
-      image_url: "/placeholder.svg",
+      image_url: "/categories/household-category.jpg",
       product_count: 300
     },
     {
@@ -50,7 +50,7 @@ const FeaturedCategories = () => {
       name: "Specials & Deals",
       slug: "specials",
       description: "Weekly offers and exclusive discounts",
-      image_url: "/placeholder.svg",
+      image_url: "/categories/specials-category.jpg",
       product_count: 0
     }
   ];
@@ -65,8 +65,15 @@ const FeaturedCategories = () => {
       return category.image_url;
     }
     
-    // Use placeholder for all missing images
-    return "/placeholder.svg";
+    // Map slug to category images in public folder
+    const categoryImageMap: Record<string, string> = {
+      'clothing': '/categories/clothing-category.jpg',
+      'accessories': '/categories/accessories-category.jpg',
+      'household': '/categories/household-category.jpg',
+      'specials': '/categories/specials-category.jpg'
+    };
+    
+    return categoryImageMap[slug] || '/placeholder.svg';
   };
 
   const fetchCategories = async () => {
