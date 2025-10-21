@@ -141,24 +141,15 @@ export const usePerformanceMonitor = () => {
         // Use requestIdleCallback if available, otherwise defer significantly
         const sendMetrics = async () => {
           try {
-            // Get the current session to include auth token
-            const { data: { session } } = await supabase.auth.getSession();
-            
             await supabase.functions.invoke('performance-monitor', {
               body: {
                 url: window.location.href,
                 metrics,
                 issues: issues.length > 0 ? issues : null
-              },
-              headers: session?.access_token ? {
-                Authorization: `Bearer ${session.access_token}`
-              } : undefined
+              }
             });
           } catch (error) {
-            // Silently fail - performance monitoring shouldn't break the app
-            if (import.meta.env.DEV) {
-              console.error('Failed to send performance metrics');
-            }
+            // Performance metrics failed to send - not critical
           }
         };
 
@@ -170,24 +161,16 @@ export const usePerformanceMonitor = () => {
         }
 
       } catch (error) {
-        // Silently fail in production
-        if (import.meta.env.DEV) {
-          console.error('Error collecting performance metrics');
-        }
+        // Performance monitoring error - not critical
       }
     };
 
-    // Collect metrics after page is fully loaded and settled
-    const initMetrics = () => {
-      // Wait additional 2 seconds after load for metrics to stabilize
-      setTimeout(collectMetrics, 2000);
-    };
-
+    // Collect metrics after page load
     if (document.readyState === 'complete') {
-      initMetrics();
+      collectMetrics();
     } else {
-      window.addEventListener('load', initMetrics);
-      return () => window.removeEventListener('load', initMetrics);
+      window.addEventListener('load', collectMetrics);
+      return () => window.removeEventListener('load', collectMetrics);
     }
   }, []);
 };

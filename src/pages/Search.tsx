@@ -11,7 +11,6 @@ import { ShoppingCart, Star } from "lucide-react";
 import { useCart } from "@/hooks/useCart";
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
-import OptimizedImage from "@/components/OptimizedImage";
 
 interface Product {
   id: string;
@@ -223,13 +222,10 @@ const Search = () => {
                   <Link to={`/product/${product.id}`} className="block">
                     <div className="aspect-square mb-4 overflow-hidden rounded-lg bg-muted">
                       {product.image_url ? (
-                        <OptimizedImage
+                        <img
                           src={product.image_url}
                           alt={product.name}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                          width={300}
-                          height={300}
-                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                         />
                       ) : (
                         <div className="w-full h-full bg-muted flex items-center justify-center">

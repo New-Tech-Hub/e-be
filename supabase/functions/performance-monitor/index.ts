@@ -27,43 +27,16 @@ serve(async (req) => {
   }
 
   try {
-    // Verify authentication
-    const authHeader = req.headers.get('Authorization');
-    if (!authHeader) {
-      return new Response(
-        JSON.stringify({ error: 'Authentication required' }),
-        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-    const supabaseKey = Deno.env.get('SUPABASE_ANON_KEY')!;
-    const supabase = createClient(supabaseUrl, supabaseKey, {
-      global: { headers: { Authorization: authHeader } }
-    });
-
-    // Verify the user is authenticated
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-    if (authError || !user) {
-      console.log('Authentication failed');
-      return new Response(
-        JSON.stringify({ error: 'Invalid authentication' }),
-        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
+    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
     const { metrics, url, issues } = await req.json();
 
-    console.log('Received performance metrics for user:', user.id);
-
-    // Use service role for database operations
-    const supabaseAdmin = createClient(
-      Deno.env.get('SUPABASE_URL')!,
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
-    );
+    console.log('Received performance metrics:', { url, metrics });
 
     // Store metrics in database
-    const { data: metricData, error: metricError } = await supabaseAdmin
+    const { data: metricData, error: metricError } = await supabase
       .from('performance_metrics')
       .insert({
         url: url || 'https://ebethboutique.com',
@@ -84,11 +57,8 @@ serve(async (req) => {
       .single();
 
     if (metricError) {
-      console.error('Database error storing metrics');
-      return new Response(
-        JSON.stringify({ error: 'Failed to store metrics' }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+      console.error('Error storing metrics:', metricError);
+      throw metricError;
     }
 
     // Store any issues detected
@@ -101,20 +71,20 @@ serve(async (req) => {
         recommendation: issue.recommendation,
       }));
 
-      const { error: issuesError } = await supabaseAdmin
+      const { error: issuesError } = await supabase
         .from('performance_issues')
         .insert(issueRecords);
 
       if (issuesError) {
-        console.error('Database error storing issues');
+        console.error('Error storing issues:', issuesError);
       }
     }
 
     // Check if performance score is below threshold (70)
     if (metrics?.performance_score && metrics.performance_score < 70) {
-      console.log('Performance score below threshold');
+      console.log('Performance score below threshold, creating alert');
       
-      await supabaseAdmin
+      await supabase
         .from('performance_alerts')
         .insert({
           metric_id: metricData.id,
@@ -139,9 +109,9 @@ serve(async (req) => {
     );
 
   } catch (error) {
-    console.error('Performance monitor error:', error instanceof Error ? error.message : 'Unknown error');
+    console.error('Error in performance-monitor:', error);
     return new Response(
-      JSON.stringify({ error: 'An error occurred while processing performance metrics' }),
+      JSON.stringify({ error: error.message }),
       { 
         status: 500, 
         headers: { 

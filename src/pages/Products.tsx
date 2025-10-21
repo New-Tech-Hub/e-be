@@ -14,7 +14,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import CustomerCare from "@/components/CustomerCare";
 import { Link } from "react-router-dom";
-import OptimizedImage from "@/components/OptimizedImage";
 
 interface Product {
   id: string;
@@ -374,13 +373,10 @@ const Products = () => {
             {products.map((product) => (
               <Card key={product.id} className="group overflow-hidden border-0 shadow-card hover:shadow-elegant transition-smooth">
                 <div className="relative">
-                  <OptimizedImage
+                  <img
                     src={product.image_url || '/placeholder.svg'}
                     alt={product.name}
                     className="w-full h-64 object-cover group-hover:scale-105 transition-smooth"
-                    width={300}
-                    height={256}
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                   />
                   
                   <button

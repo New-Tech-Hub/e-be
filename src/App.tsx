@@ -9,10 +9,8 @@ import { lazy, Suspense } from "react";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import SuperAdminRoute from "@/components/SuperAdminRoute";
 
-// Import Index directly - it's the entry point and should load immediately
-import Index from "./pages/Index";
-
-// Lazy load other pages for better code splitting
+// Lazy load all pages for better code splitting
+const Index = lazy(() => import("./pages/Index"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const Products = lazy(() => import("./pages/Products"));
 const CategoryView = lazy(() => import("./pages/CategoryView"));
@@ -55,7 +53,7 @@ const App = () => (
         <TooltipProvider>
           <Toaster />
           <Sonner />
-          <BrowserRouter future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
+          <BrowserRouter>
             <Suspense fallback={<PageLoader />}>
               <Routes>
                 <Route path="/" element={<Index />} />

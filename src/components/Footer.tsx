@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Mail, Phone, MapPin, Facebook, Instagram, Twitter, Youtube } from "lucide-react";
+import logo from "@/assets/ebeth-logo.jpg";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -46,7 +47,7 @@ const Footer = () => {
           <div className="lg:col-span-1">
             <Link to="/" className="flex items-center space-x-3 mb-6">
               <img 
-                src="/favicon.jpg"
+                src={logo} 
                 alt="Ebeth Boutique & Exclusive Store" 
                 className="h-12 w-12 rounded-full object-cover"
               />

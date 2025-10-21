@@ -1,7 +1,7 @@
 import { ImgHTMLAttributes, useState } from 'react';
 
 interface OptimizedImageProps extends ImgHTMLAttributes<HTMLImageElement> {
-  src: string | any; // Allow both string and image objects from imports
+  src: string;
   alt: string;
   width?: string | number;
   height?: string | number;
@@ -19,20 +19,7 @@ const OptimizedImage = ({
   className,
   ...props 
 }: OptimizedImageProps) => {
-  // Handle both string URLs and image objects from imports
-  const getImageSrc = (source: string | any): string => {
-    if (typeof source === 'string') {
-      return source;
-    }
-    // If it's an object (from image imports), get the default export
-    if (source && typeof source === 'object') {
-      return source.default || source.src || String(source);
-    }
-    return String(source);
-  };
-
-  const imageSrc = getImageSrc(src);
-  const [imgSrc, setImgSrc] = useState(imageSrc);
+  const [imgSrc, setImgSrc] = useState(src);
   const [hasError, setHasError] = useState(false);
 
   // Generate responsive srcset for local images
@@ -63,11 +50,11 @@ const OptimizedImage = ({
   const handleError = () => {
     if (!hasError) {
       setHasError(true);
-      setImgSrc(imageSrc);
+      setImgSrc(src);
     }
   };
 
-  const srcSet = generateSrcSet(imageSrc);
+  const srcSet = generateSrcSet(src);
 
   return (
     <img
@@ -81,7 +68,7 @@ const OptimizedImage = ({
       height={height}
       sizes={sizes}
       onError={handleError}
-      {...(priority && { fetchpriority: "high" })}
+      fetchPriority={priority ? "high" : "auto"}
       {...props}
     />
   );
