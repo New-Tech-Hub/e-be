@@ -11,10 +11,15 @@ export const useAnalytics = () => {
 
   const trackEvent = async (event: AnalyticsEvent) => {
     try {
+      // Only track if user is authenticated
+      if (!user?.id) {
+        return;
+      }
+
       const { error } = await supabase
         .from('analytics_events')
         .insert({
-          user_id: user?.id,
+          user_id: user.id,
           event_type: event.event_type,
           event_data: event.event_data || {}
         });

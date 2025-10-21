@@ -13,7 +13,6 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import OptimizedImage from "@/components/OptimizedImage";
-import logo from "@/assets/ebeth-logo.jpg";
 import SignupModal from "./SignupModal";
 import LoginModal from "./LoginModal";
 import ForgotPasswordModal from "./ForgotPasswordModal";
@@ -120,7 +119,7 @@ const Header = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 flex-shrink-0 group">
             <OptimizedImage 
-              src={logo} 
+              src="/favicon.jpg" 
               alt="Ebeth Boutique & Exclusive Store" 
               className="h-12 w-12 rounded-full object-cover transition-all duration-300 group-hover:shadow-lg group-hover:scale-105"
               priority

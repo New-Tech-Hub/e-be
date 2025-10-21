@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Heart, ShoppingCart, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import SEOHead from "@/components/SEOHead";
+import OptimizedImage from "@/components/OptimizedImage";
 
 const Wishlist = () => {
   const { wishlistItems, loading, removeFromWishlist } = useWishlist();
@@ -95,10 +96,13 @@ const Wishlist = () => {
                     <Card key={item.id} className="group overflow-hidden hover:shadow-elegant transition-all duration-300">
                       <div className="relative aspect-square overflow-hidden">
                         {item.products?.image_url && (
-                          <img
+                          <OptimizedImage
                             src={item.products.image_url}
                             alt={item.products.name}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            width={300}
+                            height={300}
+                            sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                           />
                         )}
                         <button
