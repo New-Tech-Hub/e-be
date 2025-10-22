@@ -35,6 +35,7 @@ export default defineConfig(({ mode }) => ({
       devOptions: {
         enabled: false
       },
+      strategies: 'generateSW',
       includeAssets: ['favicon.ico', 'robots.txt', 'hero-bags-collection.jpg'],
       manifest: {
         name: 'Ebeth Boutique & Exclusive Store',
@@ -74,7 +75,10 @@ export default defineConfig(({ mode }) => ({
         cleanupOutdatedCaches: true,
         skipWaiting: true,
         clientsClaim: true,
+        navigationPreload: true,
         globPatterns: ['**/*.{js,css,html,ico,png,jpg,jpeg,svg,webp}'],
+        navigateFallback: 'index.html',
+        navigateFallbackDenylist: [/^\/api/],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/qmwyysbjhehkjzaovhcl\.supabase\.co\/.*/i,
